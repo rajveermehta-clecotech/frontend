@@ -243,7 +243,6 @@ const AppLayout = ({ children, title }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { md: `calc(100% - ${isDrawerExpanded ? DRAWER_WIDTH : DRAWER_SHRUNK_WIDTH}px)` },
           minHeight: '100vh',
           bgcolor: theme.palette.background.default,
