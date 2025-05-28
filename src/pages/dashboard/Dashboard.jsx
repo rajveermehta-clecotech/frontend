@@ -54,11 +54,11 @@ const KPICard = React.memo(({ title, value, growth, icon, color }) => {
             {title}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <TrendingUpIcon sx={{ color: "#4CAF50", fontSize: 14, mr: 0.5 }} />
+            <TrendingUpIcon sx={{ color: "#10B981", fontSize: 14, mr: 0.5 }} />
             <Typography
               variant="caption"
               sx={{ 
-                color: "#4CAF50", 
+                color: "#10B981", 
                 fontWeight: 600, 
                 fontSize: "0.75rem" 
               }}
@@ -233,11 +233,11 @@ const Dashboard = () => {
           bgcolor: "#f5f5f5"
         }}
       >
-        {/* Welcome Header with Blue Gradient matching the image */}
+        {/* Welcome Header with Dark Gradient matching the new theme */}
         <Box sx={{ p: { xs: 2, sm: 3 }, pb: 0 }}>
           <Box
             sx={{
-              background: "linear-gradient(135deg, #4285F4 0%, #1976D2 100%)",
+              background: "linear-gradient(135deg, #1F2937 0%, #111827 100%)",
               borderRadius: 2,
               p: { xs: 3, sm: 4 },
               mb: 3,
@@ -275,7 +275,7 @@ const Dashboard = () => {
                 value={dashboardData.totalProducts}
                 growth={dashboardData.productGrowth}
                 icon={<ProductsIcon />}
-                color="#4285F4"
+                color="#1F2937"
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -284,7 +284,7 @@ const Dashboard = () => {
                 value={dashboardData.activeEnquiries}
                 growth={dashboardData.enquiryGrowth}
                 icon={<EnquiriesIcon />}
-                color="#4CAF50"
+                color="#10B981"
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -293,7 +293,7 @@ const Dashboard = () => {
                 value={dashboardData.profileStatus}
                 growth={dashboardData.profileCompletion}
                 icon={<VerifiedIcon />}
-                color="#4CAF50"
+                color="#10B981"
               />
             </Grid>
           </Grid>
@@ -328,7 +328,7 @@ const Dashboard = () => {
                     title="In Stock"
                     count={dashboardData.stockOverview.inStock.count}
                     percentage={dashboardData.stockOverview.inStock.percentage}
-                    color="#4CAF50"
+                    color="#10B981"
                     icon={<CheckCircleOutline />}
                   />
                 </Grid>
@@ -337,7 +337,7 @@ const Dashboard = () => {
                     title="Low Stock"
                     count={dashboardData.stockOverview.lowStock.count}
                     percentage={dashboardData.stockOverview.lowStock.percentage}
-                    color="#FF9800"
+                    color="#F59E0B"
                     icon={<Warning />}
                   />
                 </Grid>
@@ -346,7 +346,7 @@ const Dashboard = () => {
                     title="Out of Stock"
                     count={dashboardData.stockOverview.outOfStock.count}
                     percentage={dashboardData.stockOverview.outOfStock.percentage}
-                    color="#F44336"
+                    color="#EF4444"
                     icon={<Cancel />}
                   />
                 </Grid>
@@ -384,7 +384,7 @@ const Dashboard = () => {
                   label="2 New"
                   size="small"
                   sx={{
-                    bgcolor: "#4285F4",
+                    bgcolor: "#1F2937",
                     color: "white",
                     fontWeight: 600,
                     fontSize: "0.75rem",
@@ -433,7 +433,7 @@ const Dashboard = () => {
                             label="new"
                             size="small"
                             sx={{
-                              bgcolor: "#4285F4",
+                              bgcolor: "#1F2937",
                               color: "white",
                               fontWeight: 600,
                               fontSize: "0.65rem",
@@ -447,8 +447,8 @@ const Dashboard = () => {
                             label="responded"
                             size="small"
                             sx={{
-                              bgcolor: "#E8F5E8",
-                              color: "#4CAF50",
+                              bgcolor: "#D1FAE5",
+                              color: "#065F46",
                               fontWeight: 600,
                               fontSize: "0.65rem",
                               height: 18,
@@ -496,8 +496,8 @@ const Dashboard = () => {
                         fontSize: "0.75rem",
                         textTransform: "none",
                         "&:hover": {
-                          borderColor: "#4285F4",
-                          color: "#4285F4",
+                          borderColor: "#1F2937",
+                          color: "#1F2937",
                           bgcolor: "transparent",
                         },
                       }}

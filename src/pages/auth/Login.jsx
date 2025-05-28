@@ -1,67 +1,500 @@
-// src/pages/auth/Login.jsx
 import React, { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
-import AuthForm from '../../components/auth/AuthForm';
+import { Navigate, useNavigate, Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Link,
+  CircularProgress,
+  Alert,
+  InputAdornment,
+  IconButton,
+  Divider,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import {
+  Visibility,
+  VisibilityOff,
+  Google as GoogleIcon,
+} from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
+import { isValidEmail } from '../../utils/common';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, loading, error, user } = useAuth();
-  const [loginError, setLoginError] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const { login, loginWithGoogle, isAuthenticated, loading, user } = useAuth();
 
-  // If still checking authentication, show loading
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh'
-        }}
-      >
-        <CircularProgress size={40} color="primary" />
-      </Box>
-    );
-  }
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   // Redirect if already authenticated
   if (isAuthenticated) {
-    // For vendors with incomplete profile, redirect to profile completion
     if (user?.role === 'vendor' && user?.vendorProfile?.profileCompletion < 100) {
       return <Navigate to="/profile-completion" />;
     }
     return <Navigate to="/dashboard" />;
   }
 
-  const handleSubmit = async (formData) => {
-    const { email, password } = formData;
-    
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
     setLoginError(null);
-    
-    const result = await login(email, password);
-    
-    if (result.success) {
-      // Navigate based on user role and profile completion
-      if (user?.role === 'vendor' && user?.vendorProfile?.profileCompletion < 100) {
-        navigate('/profile-completion');
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setLoginError(null);
+
+    try {
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        if (user?.role === 'vendor' && user?.vendorProfile?.profileCompletion < 100) {
+          navigate('/profile-completion');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
-        navigate('/dashboard');
+        setLoginError(result.error || 'Invalid email or password');
       }
-    } else {
-      setLoginError(result.error || 'Invalid email or password');
+    } catch (error) {
+      setLoginError('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    setLoginError(null);
+    try {
+      // Implement Google sign-in logic here
+      console.log('Google sign-in clicked');
+    } catch (error) {
+      setLoginError('Google sign-in failed. Please try again.');
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
   return (
-    <AuthForm
-      type="login"
-      onSubmit={handleSubmit}
-      loading={loading}
-      error={loginError || error}
-      showSocialLogin={true}
-    />
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        bgcolor: theme.palette.background.auth,
+      }}
+    >
+      {/* Left Panel - Branding */}
+      {!isMobile && (
+        <Box
+          sx={{
+            flex: '0 0 45%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            px: { lg: 6, xl: 8 },
+            py: 12,
+            bgcolor: theme.palette.background.auth,
+          }}
+        >
+          <Box sx={{ maxWidth: 520 }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 700,
+                color: '#1F2937',
+                mb: 3,
+                fontSize: { lg: '2rem', xl: '2.25rem' },
+                lineHeight: 1.2,
+              }}
+            >
+              Multi-Vendor Marketplace
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#6B7280',
+                mb: 8,
+                fontSize: { lg: '1rem', xl: '1.125rem' },
+                lineHeight: 1.6,
+                maxWidth: 480,
+              }}
+            >
+              Connect with verified vendors and buyers in our trusted B2B platform
+            </Typography>
+
+            {/* Features List */}
+            <Box sx={{ space: 6 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 6 }}>
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    bgcolor: theme.palette.features.verified,
+                    mt: 0.75,
+                    mr: 4,
+                    flexShrink: 0,
+                  }}
+                />
+                <Box>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      color: '#1F2937',
+                      mb: 1,
+                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                    }}
+                  >
+                    Verified Vendors
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#6B7280',
+                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    All vendors go through our strict verification process
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 6 }}>
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    bgcolor: theme.palette.features.secure,
+                    mt: 0.75,
+                    mr: 4,
+                    flexShrink: 0,
+                  }}
+                />
+                <Box>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      color: '#1F2937',
+                      mb: 1,
+                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                    }}
+                  >
+                    Secure Transactions
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#6B7280',
+                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Protected communication and secure payment processing
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                <Box
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    bgcolor: theme.palette.features.global,
+                    mt: 0.75,
+                    mr: 4,
+                    flexShrink: 0,
+                  }}
+                />
+                <Box>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      color: '#1F2937',
+                      mb: 1,
+                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                    }}
+                  >
+                    Global Reach
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#6B7280',
+                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Connect with suppliers and buyers worldwide
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
+      {/* Right Panel - Login Form */}
+      <Box
+        sx={{
+          flex: isMobile ? 1 : '0 0 55%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          px: isMobile ? 4 : { lg: 8, xl: 12 },
+          py: 12,
+          bgcolor: 'white',
+        }}
+      >
+        <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              color: '#1F2937',
+              mb: 2,
+              textAlign: 'center',
+              fontSize: { xs: '1.75rem', lg: '1.875rem', xl: '2rem' },
+            }}
+          >
+            Welcome Back
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#6B7280',
+              mb: 8,
+              textAlign: 'center',
+              fontSize: { xs: '0.875rem', lg: '0.9rem' },
+            }}
+          >
+            Sign in to your vendor account
+          </Typography>
+
+          {/* Google Sign-in Button */}
+          <Button
+            fullWidth
+            variant="outlined"
+            size="large"
+            startIcon={<GoogleIcon />}
+            onClick={handleGoogleSignIn}
+            disabled={googleLoading || isLoading}
+            sx={{
+              mb: 6,
+              py: 2,
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              borderColor: '#E5E7EB',
+              color: '#374151',
+              '&:hover': {
+                borderColor: '#D1D5DB',
+                bgcolor: '#F9FAFB',
+              },
+            }}
+          >
+            {googleLoading ? 'Signing in...' : 'Continue with Google'}
+          </Button>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 6 }}>
+            <Divider sx={{ flex: 1 }} />
+            <Typography
+              variant="caption"
+              sx={{
+                px: 3,
+                color: '#9CA3AF',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}
+            >
+              OR CONTINUE WITH
+            </Typography>
+            <Divider sx={{ flex: 1 }} />
+          </Box>
+
+          {/* Error Alert */}
+          {loginError && (
+            <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
+              {loginError}
+            </Alert>
+          )}
+
+          {/* Login Form */}
+          <Box component="form" onSubmit={handleSubmit}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#374151',
+                mb: 2,
+                fontWeight: 500,
+                fontSize: '0.875rem',
+              }}
+            >
+              Email
+            </Typography>
+            <TextField
+              fullWidth
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              sx={{
+                mb: 4,
+                '& .MuiOutlinedInput-root': {
+                  height: 48,
+                },
+              }}
+            />
+
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#374151',
+                mb: 2,
+                fontWeight: 500,
+                fontSize: '0.875rem',
+              }}
+            >
+              Password
+            </Typography>
+            <TextField
+              fullWidth
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              error={!!errors.password}
+              helperText={errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      size="small"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                mb: 3,
+                '& .MuiOutlinedInput-root': {
+                  height: 48,
+                },
+              }}
+            />
+
+            <Link
+              component={RouterLink}
+              to="/forgot-password"
+              sx={{
+                display: 'block',
+                textAlign: 'right',
+                color: '#6B7280',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                mb: 6,
+                '&:hover': {
+                  color: '#1F2937',
+                  textDecoration: 'underline',
+                },
+              }}
+            >
+              Forgot your password?
+            </Link>
+
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isLoading || googleLoading}
+              sx={{
+                py: 2,
+                mb: 6,
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                bgcolor: '#1F2937',
+                '&:hover': {
+                  bgcolor: '#111827',
+                },
+              }}
+            >
+              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+            </Button>
+
+            <Typography
+              variant="body2"
+              sx={{
+                textAlign: 'center',
+                color: '#6B7280',
+                fontSize: '0.875rem',
+              }}
+            >
+              Don't have an account?{' '}
+              <Link
+                component={RouterLink}
+                to="/signup"
+                sx={{
+                  color: '#1F2937',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                Sign up
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
