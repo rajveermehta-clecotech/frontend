@@ -15,7 +15,6 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Profile from "./pages/profile/Profile";
-import Projects from "./pages/projects/Projects";
 import ProfileCompletion from "./pages/profile/ProfileCompletion";
 import Settings from "./pages/settings/Settings";
 import NotFound from "./pages/NotFound";
@@ -43,7 +42,7 @@ function App() {
                 path="/dashboard"
                 element={
                   // <ProtectedRoute>
-                    <Dashboard />
+                  <Dashboard />
                   // </ProtectedRoute>
                 }
               />
@@ -51,23 +50,15 @@ function App() {
                 path="/profile"
                 element={
                   // <ProtectedRoute>
-                    <Profile />
+                  <Profile />
                   // </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/projects"
-                element={
-                  <ProtectedRoute>
-                    <Projects />
-                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/profile-completion"
                 element={
                   // <ProtectedRoute>
-                    <ProfileCompletion />
+                  <ProfileCompletion />
                   // </ProtectedRoute>
                 }
               />
@@ -75,7 +66,7 @@ function App() {
                 path="/products"
                 element={
                   // <ProtectedRoute>
-                    <Products />
+                  <Products />
                   // </ProtectedRoute>
                 }
               />
@@ -83,7 +74,7 @@ function App() {
                 path="/products/new"
                 element={
                   // <ProtectedRoute>
-                    <AddProduct />
+                  <AddProduct />
                   // </ProtectedRoute>
                 }
               />
@@ -91,7 +82,7 @@ function App() {
                 path="/products/:id"
                 element={
                   // <ProtectedRoute>
-                    <ProductDetails />
+                  <ProductDetails />
                   // </ProtectedRoute>
                 }
               />
@@ -99,7 +90,7 @@ function App() {
                 path="/products/:id/edit"
                 element={
                   // <ProtectedRoute>
-                    <ProductDetails />
+                  <ProductDetails />
                   // </ProtectedRoute>
                 }
               />
@@ -107,7 +98,7 @@ function App() {
                 path="/settings"
                 element={
                   // <ProtectedRoute>
-                    <Settings />
+                  <Settings />
                   // </ProtectedRoute>
                 }
               />

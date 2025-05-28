@@ -1,347 +1,262 @@
-// src/components/layout/AppLayout.jsx
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
 import {
-  Box,
+  AppBar,
+  Toolbar,
+  Typography,
   Drawer,
   List,
   ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
-  Avatar,
+  Box,
   IconButton,
   useMediaQuery,
   useTheme,
-  Toolbar,
-  AppBar,
-} from "@mui/material";
+  Divider,
+  Avatar,
+  Menu,
+  MenuItem,
+  CssBaseline,
+} from '@mui/material';
 import {
-  Dashboard as DashboardIcon,
-  Inventory2 as ProductsIcon,
-  Settings as SettingsIcon,
   Menu as MenuIcon,
-} from "@mui/icons-material";
-import { useAuth } from "../../context/AuthContext";
+  Dashboard as DashboardIcon,
+  Inventory as ProductsIcon,
+  Assignment as ProjectsIcon,
+  Settings as SettingsIcon,
+  AccountCircle as ProfileIcon,
+  Logout as LogoutIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from '@mui/icons-material';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { getInitials } from '../../utils/common';
 
 const DRAWER_WIDTH = 240;
+const DRAWER_SHRUNK_WIDTH = 60;
+const APPBAR_HEIGHT = 64;
 
 const AppLayout = ({ children, title }) => {
-  const { user, logout } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Navigation items
-  const navigationItems = [
-    {
-      text: "Dashboard",
-      icon: <DashboardIcon />,
-      path: "/dashboard",
-    },
-    {
-      text: "Products",
-      icon: <ProductsIcon />,
-      path: "/products",
-    },
-    {
-      text: "Settings",
-      icon: <SettingsIcon />,
-      path: "/settings",
-    },
-  ];
+  const [isDrawerExpanded, setIsDrawerExpanded] = useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleNavigation = (path) => {
-    navigate(path);
-    if (isMobile) {
-      setMobileOpen(false);
-    }
+  const handleDesktopDrawerToggle = () => {
+    setIsDrawerExpanded(!isDrawerExpanded);
   };
 
-  const getUserInitial = () => {
-    if (user?.name) {
-      return user.name.charAt(0).toUpperCase();
-    }
-    if (user?.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
-    return "U";
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const drawer = (
-    <Box sx={{ 
-      height: "100vh", 
-      display: "flex", 
-      flexDirection: "column",
-      overflow: "hidden"
-    }}>
-      {/* Logo Section */}
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+    handleProfileMenuClose();
+  };
+
+  const menuItems = [
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'Products', icon: <ProductsIcon />, path: '/products' },
+    { text: 'Projects', icon: <ProjectsIcon />, path: '/projects' },
+    { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
+    { text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
+  ];
+
+  const drawerContent = (
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* Scrollable Menu Items */}
+      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+        <List>
+          {menuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              component={Link}
+              to={item.path}
+              onClick={isMobileOrTablet ? handleDrawerToggle : undefined}
+              sx={{
+                justifyContent: isMobileOrTablet || isDrawerExpanded ? 'initial' : 'center',
+                px: isMobileOrTablet || isDrawerExpanded ? 2 : 1,
+                '&:hover': { bgcolor: theme.palette.action.hover },
+                '&.Mui-selected': { bgcolor: theme.palette.action.selected },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: isMobileOrTablet || isDrawerExpanded ? 'auto' : 'auto',
+                  mr: isMobileOrTablet || isDrawerExpanded ? 2 : 0,
+                  justifyContent: isMobileOrTablet || isDrawerExpanded ? 'initial' : 'center',
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              {(isMobileOrTablet || isDrawerExpanded) && <ListItemText primary={item.text} />}
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+      <Divider />
+      {/* User Info */}
       <Box
         sx={{
-          p: 3,
-          borderBottom: "1px solid #F0F0F0",
-          display: "flex",
-          alignItems: "center",
-          minHeight: 80,
-          flexShrink: 0,
+          p: isMobileOrTablet || isDrawerExpanded ? 2 : 1,
+          display: 'flex',
+          justifyContent: isMobileOrTablet || isDrawerExpanded ? 'flex-start' : 'center',
+          alignItems: 'center',
         }}
       >
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            borderRadius: 1,
-            bgcolor: "#4285F4",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mr: 2,
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{ color: "white", fontWeight: 700, fontSize: "1.2rem" }}
-          >
-            M
-          </Typography>
-        </Box>
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              color: "#1A1A1A",
-              fontSize: "1.1rem",
-              lineHeight: 1.2,
-            }}
-          >
-            MarketPlace
-          </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              color: "#666",
-              fontSize: "0.75rem",
-              lineHeight: 1,
-            }}
-          >
-            Vendor Portal
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Navigation */}
-      <Box sx={{ 
-        flexGrow: 1, 
-        pt: 2, 
-        overflowY: "auto",
-        overflowX: "hidden"
-      }}>
-        <List sx={{ px: 2 }}>
-          {navigationItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            
-            return (
-              <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
-                <ListItemButton
-                  onClick={() => handleNavigation(item.path)}
-                  sx={{
-                    borderRadius: 2,
-                    py: 1.5,
-                    px: 2,
-                    bgcolor: isActive ? "#1976D2" : "transparent",
-                    color: isActive ? "white" : "#666",
-                    "&:hover": {
-                      bgcolor: isActive ? "#1976D2" : "#F5F5F5",
-                    },
-                    transition: "all 0.2s",
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      color: isActive ? "white" : "#666",
-                      minWidth: 36,
-                    }}
-                  >
-                    {React.cloneElement(item.icon, {
-                      fontSize: "small",
-                    })}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    primaryTypographyProps={{
-                      fontSize: "0.9rem",
-                      fontWeight: isActive ? 600 : 500,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+        <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 32, height: 32 }}>
+          {getInitials(user?.name || 'User')}
+        </Avatar>
+        {(isMobileOrTablet || isDrawerExpanded) && (
+          <Typography variant="body2" sx={{ ml: 2 }}>{user?.name || 'User'}</Typography>
+        )}
       </Box>
     </Box>
   );
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#FAFAFA" }}>
-      {/* Mobile App Bar */}
-      {isMobile && (
-        <AppBar
-          position="fixed"
-          sx={{
-            width: "100%",
-            bgcolor: "white",
-            color: "#1A1A1A",
-            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-            zIndex: theme.zIndex.drawer + 1,
-          }}
-        >
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-            >
-              <MenuIcon />
-            </IconButton>
-            
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: 700, color: "#1A1A1A", mr: 2 }}
-              >
-                MarketPlace
-              </Typography>
-              <Avatar
-                sx={{
-                  width: 32,
-                  height: 32,
-                  bgcolor: "#4285F4",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                }}
-              >
-                {getUserInitial()}
-              </Avatar>
-            </Box>
-          </Toolbar>
-        </AppBar>
-      )}
-
-      {/* Sidebar Navigation */}
-      <Box
-        component="nav"
-        sx={{ 
-          width: { xs: 0, md: DRAWER_WIDTH }, 
-          flexShrink: 0 
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      {/* Fixed Navbar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          height: APPBAR_HEIGHT,
+          bgcolor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         }}
       >
-        {isMobile ? (
-          <Drawer
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: "block", md: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: DRAWER_WIDTH,
-                bgcolor: "white",
-                borderRight: "1px solid #F0F0F0",
-                height: "100vh",
-              },
-            }}
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { md: 'none' } }}
           >
-            {drawer}
-          </Drawer>
-        ) : (
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: "none", md: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: DRAWER_WIDTH,
-                bgcolor: "white",
-                borderRight: "1px solid #F0F0F0",
-                position: "relative",
-                height: "100vh",
-              },
-            }}
-            open
+            <MenuIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label={isDrawerExpanded ? 'shrink drawer' : 'expand drawer'}
+            edge="start"
+            onClick={handleDesktopDrawerToggle}
+            sx={{ mr: 2, display: { xs: 'none', md: 'block' } }}
           >
-            {drawer}
-          </Drawer>
-        )}
+            {isDrawerExpanded ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+            {title || 'Dashboard'}
+          </Typography>
+          <IconButton onClick={handleProfileMenuOpen}>
+            <Avatar sx={{ bgcolor: theme.palette.primary.main, width: 32, height: 32 }}>
+              {getInitials(user?.name || 'User')}
+            </Avatar>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleProfileMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            <MenuItem onClick={() => { navigate('/profile'); handleProfileMenuClose(); }}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </Toolbar>
+      </AppBar>
+      {/* Drawer */}
+      <Box
+        component="nav"
+        sx={{ width: { md: isDrawerExpanded ? DRAWER_WIDTH : DRAWER_SHRUNK_WIDTH }, flexShrink: { md: 0 } }}
+      >
+        {/* Mobile/Tablet Drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': {
+              width: DRAWER_WIDTH,
+              bgcolor: theme.palette.background.paper,
+              height: `calc(100vh - ${APPBAR_HEIGHT}px)`,
+              top: APPBAR_HEIGHT,
+              overflowY: 'hidden',
+              transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+            },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
+        {/* Desktop Drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': {
+              width: isDrawerExpanded ? DRAWER_WIDTH : DRAWER_SHRUNK_WIDTH,
+              bgcolor: theme.palette.background.paper,
+              height: `calc(100vh - ${APPBAR_HEIGHT}px)`,
+              top: APPBAR_HEIGHT,
+              overflowY: 'hidden',
+              borderRight: `1px solid ${theme.palette.divider}`,
+              transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+            },
+          }}
+          open
+        >
+          {drawerContent}
+        </Drawer>
       </Box>
-
       {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          width: { xs: "100%", md: `calc(100% - ${DRAWER_WIDTH}px)` },
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
+          p: 3,
+          width: { md: `calc(100% - ${isDrawerExpanded ? DRAWER_WIDTH : DRAWER_SHRUNK_WIDTH}px)` },
+          minHeight: '100vh',
+          bgcolor: theme.palette.background.default,
+          mt: `${APPBAR_HEIGHT}px`,
+          overflowY: 'auto',
+          transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         }}
       >
-        {/* Top Bar with User Profile - Desktop Only */}
-        {!isMobile && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              px: 3,
-              py: 2,
-              bgcolor: "white",
-              borderBottom: "1px solid #F0F0F0",
-              minHeight: 64,
-              flexShrink: 0,
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 36,
-                height: 36,
-                bgcolor: "#4285F4",
-                fontSize: "1rem",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-              onClick={() => navigate("/profile")}
-            >
-              {getUserInitial()}
-            </Avatar>
-          </Box>
-        )}
-
-        {/* Page Content */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            p: { xs: 2, sm: 3 },
-            pt: isMobile ? 10 : 3,
-            bgcolor: "#FAFAFA",
-            minHeight: "calc(100vh - 64px)",
-            overflow: "auto",
-          }}
-        >
-          {children}
-        </Box>
+        {children}
       </Box>
     </Box>
   );
