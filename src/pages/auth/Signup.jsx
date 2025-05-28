@@ -317,7 +317,7 @@ const Signup = () => {
             sx={{
               fontWeight: 700,
               color: '#1F2937',
-              mb: 2, // Changed from 1 to 2 to match login
+              mb: 1, // Changed from 1 to 2 to match login
               textAlign: 'center',
               fontSize: { xs: '1.75rem', lg: '1.875rem', xl: '2rem' }, // Updated to match login
             }}
@@ -328,55 +328,13 @@ const Signup = () => {
             variant="body2"
             sx={{
               color: '#6B7280',
-              mb: 8, // Changed from 6 to 8 to match login
+              mb: 4, // Changed from 6 to 8 to match login
               textAlign: 'center',
               fontSize: { xs: '0.875rem', lg: '0.9rem' }, // Updated to match login
             }}
           >
             Join our marketplace platform
           </Typography>
-
-          {/* Google Sign-in Button */}
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<GoogleIcon />}
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading || isLoading}
-            sx={{
-              mb: 6, // Changed from 4 to 6 to match login
-              py: 2, // Updated to match login
-              fontSize: '0.875rem', // Added to match login
-              fontWeight: 500, // Added to match login
-              borderColor: '#E5E7EB',
-              color: '#374151',
-              '&:hover': {
-                borderColor: '#D1D5DB',
-                bgcolor: '#F9FAFB',
-              },
-            }}
-          >
-            {googleLoading ? 'Signing up...' : 'Continue with Google'}
-          </Button>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 6 }}> {/* Changed from 4 to 6 */}
-            <Divider sx={{ flex: 1 }} />
-            <Typography
-              variant="caption"
-              sx={{
-                px: 3, // Changed from 2 to 3 to match login
-                color: '#9CA3AF',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                textTransform: 'uppercase', // Added to match login
-                letterSpacing: '0.05em', // Added to match login
-              }}
-            >
-              OR CONTINUE WITH
-            </Typography>
-            <Divider sx={{ flex: 1 }} />
-          </Box>
 
           {/* Error Alert */}
           {signupError && (
@@ -391,7 +349,7 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2, // Changed from 1 to 2 to match login
+                mb: 1, // Changed from 1 to 2 to match login
                 fontWeight: 500, // Changed from 400 to 500 to match login
                 fontSize: '0.875rem',
               }}
@@ -407,7 +365,7 @@ const Signup = () => {
               error={!!errors.fullName}
               helperText={errors.fullName}
               sx={{
-                mb: 4, // Changed from 3 to 4 to match login
+                mb: 3, // Changed from 3 to 4 to match login
                 '& .MuiOutlinedInput-root': { // Added to match login
                   height: 48,
                 },
@@ -418,7 +376,7 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2, // Changed from 1 to 2 to match login
+                mb: 1, // Changed from 1 to 2 to match login
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -435,7 +393,7 @@ const Signup = () => {
               error={!!errors.email}
               helperText={errors.email}
               sx={{
-                mb: 4, // Changed from 3 to 4 to match login
+                mb: 3, // Changed from 3 to 4 to match login
                 '& .MuiOutlinedInput-root': { // Added to match login
                   height: 48,
                 },
@@ -453,7 +411,7 @@ const Signup = () => {
             >
               Account Type
             </Typography>
-            <FormControl sx={{ mb: 4 }}> {/* Changed from 3 to 4 */}
+            <FormControl sx={{ mb: 3 }}> {/* Changed from 3 to 4 */}
               <RadioGroup
                 name="role"
                 value={formData.role}
@@ -486,7 +444,7 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2, // Changed from 1 to 2 to match login
+                mb: 1, // Changed from 1 to 2 to match login
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -523,47 +481,6 @@ const Signup = () => {
               }}
             />
 
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#374151',
-                mb: 2, // Changed from 1 to 2 to match login
-                fontWeight: 500,
-                fontSize: '0.875rem',
-              }}
-            >
-              Confirm Password
-            </Typography>
-            <TextField
-              fullWidth
-              name="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                      size="small"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                mb: 6, // Changed from 4 to 6 to match login
-                '& .MuiOutlinedInput-root': { // Added to match login
-                  height: 48,
-                },
-              }}
-            />
-
             <Button
               fullWidth
               type="submit"
@@ -572,7 +489,7 @@ const Signup = () => {
               disabled={isLoading || googleLoading}
               sx={{
                 py: 2, // Updated to match login
-                mb: 6, // Changed from 4 to 6 to match login
+                mb: 3, // Changed from 4 to 6 to match login
                 fontSize: '0.875rem', // Added to match login
                 fontWeight: 600, // Added to match login
                 bgcolor: '#1F2937',
@@ -583,6 +500,50 @@ const Signup = () => {
             >
               {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
             </Button>
+
+            {/* Google Sign-in Button */}
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}> {/* Changed from 4 to 6 */}
+              <Divider sx={{ flex: 1 }} />
+              <Typography
+                variant="caption"
+                sx={{
+                  px: 3, // Changed from 2 to 3 to match login
+                  color: '#9CA3AF',
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  textTransform: 'uppercase', // Added to match login
+                  letterSpacing: '0.05em', // Added to match login
+                }}
+              >
+                OR CONTINUE WITH
+              </Typography>
+              <Divider sx={{ flex: 1 }} />
+            </Box>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              startIcon={<GoogleIcon />}
+              onClick={handleGoogleSignIn}
+              disabled={googleLoading || isLoading}
+              sx={{
+                mb: 3, // Changed from 4 to 6 to match login
+                py: 2, // Updated to match login
+                fontSize: '0.875rem', // Added to match login
+                fontWeight: 500, // Added to match login
+                borderColor: '#E5E7EB',
+                color: '#374151',
+                '&:hover': {
+                  borderColor: '#D1D5DB',
+                  bgcolor: '#F9FAFB',
+                },
+              }}
+            >
+              {googleLoading ? 'Signing up...' : 'Continue with Google'}
+            </Button>
+
+
 
             <Typography
               variant="body2"

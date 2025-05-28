@@ -119,24 +119,23 @@ const Login = () => {
       {!isMobile && (
         <Box
           sx={{
-            flex: '0 0 45%',
+            flex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            px: { lg: 6, xl: 8 },
+            px: 8,
             py: 12,
             bgcolor: theme.palette.background.auth,
           }}
         >
-          <Box sx={{ maxWidth: 520 }}>
+          <Box sx={{ maxWidth: 400 }}>
             <Typography
               variant="h3"
               sx={{
                 fontWeight: 700,
                 color: '#1F2937',
                 mb: 3,
-                fontSize: { lg: '2rem', xl: '2.25rem' },
-                lineHeight: 1.2,
+                fontSize: '2.25rem',
               }}
             >
               Multi-Vendor Marketplace
@@ -145,26 +144,25 @@ const Login = () => {
               variant="body1"
               sx={{
                 color: '#6B7280',
-                mb: 8,
-                fontSize: { lg: '1rem', xl: '1.125rem' },
+                mb: 6,
+                fontSize: '1.125rem',
                 lineHeight: 1.6,
-                maxWidth: 480,
               }}
             >
               Connect with verified vendors and buyers in our trusted B2B platform
             </Typography>
 
             {/* Features List */}
-            <Box sx={{ space: 6 }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 6 }}>
+            <Box sx={{ space: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
                 <Box
                   sx={{
-                    width: 10,
-                    height: 10,
+                    width: 8,
+                    height: 8,
                     borderRadius: '50%',
                     bgcolor: theme.palette.features.verified,
                     mt: 0.75,
-                    mr: 4,
+                    mr: 3,
                     flexShrink: 0,
                   }}
                 />
@@ -174,8 +172,8 @@ const Login = () => {
                     sx={{
                       fontWeight: 600,
                       color: '#1F2937',
-                      mb: 1,
-                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                      mb: 0.5,
+                      fontSize: '1.125rem',
                     }}
                   >
                     Verified Vendors
@@ -184,8 +182,7 @@ const Login = () => {
                     variant="body2"
                     sx={{
                       color: '#6B7280',
-                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
-                      lineHeight: 1.5,
+                      fontSize: '0.875rem',
                     }}
                   >
                     All vendors go through our strict verification process
@@ -193,15 +190,15 @@ const Login = () => {
                 </Box>
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 6 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
                 <Box
                   sx={{
-                    width: 10,
-                    height: 10,
+                    width: 8,
+                    height: 8,
                     borderRadius: '50%',
                     bgcolor: theme.palette.features.secure,
                     mt: 0.75,
-                    mr: 4,
+                    mr: 3,
                     flexShrink: 0,
                   }}
                 />
@@ -211,8 +208,8 @@ const Login = () => {
                     sx={{
                       fontWeight: 600,
                       color: '#1F2937',
-                      mb: 1,
-                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                      mb: 0.5,
+                      fontSize: '1.125rem',
                     }}
                   >
                     Secure Transactions
@@ -221,8 +218,7 @@ const Login = () => {
                     variant="body2"
                     sx={{
                       color: '#6B7280',
-                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
-                      lineHeight: 1.5,
+                      fontSize: '0.875rem',
                     }}
                   >
                     Protected communication and secure payment processing
@@ -233,12 +229,12 @@ const Login = () => {
               <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                 <Box
                   sx={{
-                    width: 10,
-                    height: 10,
+                    width: 8,
+                    height: 8,
                     borderRadius: '50%',
                     bgcolor: theme.palette.features.global,
                     mt: 0.75,
-                    mr: 4,
+                    mr: 3,
                     flexShrink: 0,
                   }}
                 />
@@ -248,8 +244,8 @@ const Login = () => {
                     sx={{
                       fontWeight: 600,
                       color: '#1F2937',
-                      mb: 1,
-                      fontSize: { lg: '1rem', xl: '1.125rem' },
+                      mb: 0.5,
+                      fontSize: '1.125rem',
                     }}
                   >
                     Global Reach
@@ -258,8 +254,7 @@ const Login = () => {
                     variant="body2"
                     sx={{
                       color: '#6B7280',
-                      fontSize: { lg: '0.875rem', xl: '0.9rem' },
-                      lineHeight: 1.5,
+                      fontSize: '0.875rem',
                     }}
                   >
                     Connect with suppliers and buyers worldwide
@@ -270,6 +265,7 @@ const Login = () => {
           </Box>
         </Box>
       )}
+
 
       {/* Right Panel - Login Form */}
       <Box
@@ -300,7 +296,7 @@ const Login = () => {
             variant="body2"
             sx={{
               color: '#6B7280',
-              mb: 8,
+              mb: 6,
               textAlign: 'center',
               fontSize: { xs: '0.875rem', lg: '0.9rem' },
             }}
@@ -308,51 +304,9 @@ const Login = () => {
             Sign in to your vendor account
           </Typography>
 
-          {/* Google Sign-in Button */}
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<GoogleIcon />}
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading || isLoading}
-            sx={{
-              mb: 6,
-              py: 2,
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              borderColor: '#E5E7EB',
-              color: '#374151',
-              '&:hover': {
-                borderColor: '#D1D5DB',
-                bgcolor: '#F9FAFB',
-              },
-            }}
-          >
-            {googleLoading ? 'Signing in...' : 'Continue with Google'}
-          </Button>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 6 }}>
-            <Divider sx={{ flex: 1 }} />
-            <Typography
-              variant="caption"
-              sx={{
-                px: 3,
-                color: '#9CA3AF',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              OR CONTINUE WITH
-            </Typography>
-            <Divider sx={{ flex: 1 }} />
-          </Box>
-
           {/* Error Alert */}
           {loginError && (
-            <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
+            <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
               {loginError}
             </Alert>
           )}
@@ -428,7 +382,8 @@ const Login = () => {
               }}
             />
 
-            <Link
+
+            {/* <Link
               component={RouterLink}
               to="/forgot-password"
               sx={{
@@ -445,7 +400,7 @@ const Login = () => {
               }}
             >
               Forgot your password?
-            </Link>
+            </Link> */}
 
             <Button
               fullWidth
@@ -455,7 +410,7 @@ const Login = () => {
               disabled={isLoading || googleLoading}
               sx={{
                 py: 2,
-                mb: 6,
+                mb: 3,
                 fontSize: '0.875rem',
                 fontWeight: 600,
                 bgcolor: '#1F2937',
@@ -465,6 +420,47 @@ const Login = () => {
               }}
             >
               {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+            </Button>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Divider sx={{ flex: 1 }} />
+              <Typography
+                variant="caption"
+                sx={{
+                  px: 3,
+                  color: '#9CA3AF',
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                OR CONTINUE WITH
+              </Typography>
+              <Divider sx={{ flex: 1 }} />
+            </Box>
+
+            {/* Google Sign-in Button */}
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              startIcon={<GoogleIcon />}
+              onClick={handleGoogleSignIn}
+              disabled={googleLoading || isLoading}
+              sx={{
+                mb: 6,
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                borderColor: '#E5E7EB',
+                color: '#374151',
+                '&:hover': {
+                  borderColor: '#D1D5DB',
+                  bgcolor: '#F9FAFB',
+                },
+              }}
+            >
+              {googleLoading ? 'Signing in...' : 'Continue with Google'}
             </Button>
 
             <Typography
@@ -492,6 +488,10 @@ const Login = () => {
               </Link>
             </Typography>
           </Box>
+
+
+
+
         </Box>
       </Box>
     </Box>
