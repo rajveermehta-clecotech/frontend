@@ -1,5 +1,4 @@
-// src/pages/dashboard/Dashboard.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -28,16 +27,142 @@ import { useAuth } from "../../context/AuthContext";
 import AppLayout from "../../components/layout/AppLayout";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 
+// Memoized KPI Card Component
+const KPICard = React.memo(({ title, value, growth, icon, color }) => {
+  return (
+    <Card
+      sx={{
+        borderRadius: 2,
+        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #e0e0e0",
+        height: "100%",
+        bgcolor: "white",
+      }}
+    >
+      <CardContent sx={{ p: 2.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          {React.cloneElement(icon, { sx: { color, fontSize: 20, mr: 1 } })}
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              color: "#666", 
+              fontWeight: 500,
+              fontSize: "0.875rem",
+              flexGrow: 1
+            }}
+          >
+            {title}
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <TrendingUpIcon sx={{ color: "#4CAF50", fontSize: 14, mr: 0.5 }} />
+            <Typography
+              variant="caption"
+              sx={{ 
+                color: "#4CAF50", 
+                fontWeight: 600, 
+                fontSize: "0.75rem" 
+              }}
+            >
+              +{growth}%
+            </Typography>
+          </Box>
+        </Box>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            color: "#1A1A1A",
+            mb: 0.5,
+            fontSize: "2rem",
+          }}
+        >
+          {value}
+        </Typography>
+        <Typography 
+          variant="caption" 
+          sx={{ 
+            color: "#999", 
+            fontSize: "0.75rem" 
+          }}
+        >
+          {title === "Total Products" ? "Active listings" : 
+           title === "Active Enquiries" ? "Pending responses" : 
+           "Profile complete"}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+});
+
+KPICard.displayName = "KPICard";
+
+// Memoized Stock Overview Card Component
+const StockOverviewCard = React.memo(({ title, count, percentage, color, icon }) => {
+  return (
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        {React.cloneElement(icon, { sx: { color, mr: 1, fontSize: 20 } })}
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: 500, color: "#666" }}
+        >
+          {title}
+        </Typography>
+      </Box>
+      <Typography
+        variant="h4"
+        sx={{ 
+          fontWeight: 700, 
+          color: "#1A1A1A", 
+          mb: 2, 
+          fontSize: "2rem"
+        }}
+      >
+        {count}
+      </Typography>
+      <Box sx={{ width: "100%", mb: 1 }}>
+        <LinearProgress
+          variant="determinate"
+          value={percentage}
+          sx={{
+            height: 6,
+            borderRadius: 3,
+            bgcolor: `${color}20`,
+            "& .MuiLinearProgress-bar": {
+              bgcolor: color,
+              borderRadius: 3,
+            },
+          }}
+        />
+      </Box>
+      <Typography
+        variant="caption"
+        sx={{ color: "#999", fontSize: "0.75rem" }}
+      >
+        {percentage}% of total products
+      </Typography>
+    </Box>
+  );
+});
+
+StockOverviewCard.displayName = "StockOverviewCard";
+
+// Main Dashboard Component
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   const [loading, setLoading] = useState(true);
 
-  // Dashboard data
-  const [dashboardData, setDashboardData] = useState({
+  // Memoized dashboard data
+  const dashboardData = useMemo(() => ({
     totalProducts: 3,
     productGrowth: 12,
     activeEnquiries: 2,
@@ -76,10 +201,9 @@ const Dashboard = () => {
         responded: true,
       },
     ],
-  });
+  }), []);
 
   useEffect(() => {
-    // Simulate API call
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -87,10 +211,10 @@ const Dashboard = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleReplyEnquiry = (enquiryId) => {
+  const handleReplyEnquiry = React.useCallback((enquiryId) => {
     console.log("Reply to enquiry:", enquiryId);
     // Handle reply logic here
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -109,7 +233,7 @@ const Dashboard = () => {
           bgcolor: "#f5f5f5"
         }}
       >
-        {/* Welcome Header */}
+        {/* Welcome Header with Blue Gradient matching the image */}
         <Box sx={{ p: { xs: 2, sm: 3 }, pb: 0 }}>
           <Box
             sx={{
@@ -145,193 +269,32 @@ const Dashboard = () => {
         {/* KPI Cards */}
         <Box sx={{ px: { xs: 2, sm: 3 }, pb: 3 }}>
           <Grid container spacing={2}>
-            {/* Total Products */}
             <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  borderRadius: 2,
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-                  border: "1px solid #e0e0e0",
-                  height: "100%",
-                  bgcolor: "white",
-                }}
-              >
-                <CardContent sx={{ p: 2.5 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <ProductsIcon sx={{ color: "#4285F4", fontSize: 20, mr: 1 }} />
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        color: "#666", 
-                        fontWeight: 500,
-                        fontSize: "0.875rem",
-                        flexGrow: 1
-                      }}
-                    >
-                      Total Products
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <TrendingUpIcon sx={{ color: "#4CAF50", fontSize: 14, mr: 0.5 }} />
-                      <Typography
-                        variant="caption"
-                        sx={{ 
-                          color: "#4CAF50", 
-                          fontWeight: 600, 
-                          fontSize: "0.75rem" 
-                        }}
-                      >
-                        +{dashboardData.productGrowth}%
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#1A1A1A",
-                      mb: 0.5,
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {dashboardData.totalProducts}
-                  </Typography>
-                  <Typography 
-                    variant="caption" 
-                    sx={{ 
-                      color: "#999", 
-                      fontSize: "0.75rem" 
-                    }}
-                  >
-                    Active listings
-                  </Typography>
-                </CardContent>
-              </Card>
+              <KPICard
+                title="Total Products"
+                value={dashboardData.totalProducts}
+                growth={dashboardData.productGrowth}
+                icon={<ProductsIcon />}
+                color="#4285F4"
+              />
             </Grid>
-
-            {/* Active Enquiries */}
             <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  borderRadius: 2,
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-                  border: "1px solid #e0e0e0",
-                  height: "100%",
-                  bgcolor: "white",
-                }}
-              >
-                <CardContent sx={{ p: 2.5 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <EnquiriesIcon sx={{ color: "#4CAF50", fontSize: 20, mr: 1 }} />
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        color: "#666", 
-                        fontWeight: 500,
-                        fontSize: "0.875rem",
-                        flexGrow: 1
-                      }}
-                    >
-                      Active Enquiries
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <TrendingUpIcon sx={{ color: "#4CAF50", fontSize: 14, mr: 0.5 }} />
-                      <Typography
-                        variant="caption"
-                        sx={{ 
-                          color: "#4CAF50", 
-                          fontWeight: 600, 
-                          fontSize: "0.75rem" 
-                        }}
-                      >
-                        +{dashboardData.enquiryGrowth}%
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#1A1A1A",
-                      mb: 0.5,
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {dashboardData.activeEnquiries}
-                  </Typography>
-                  <Typography 
-                    variant="caption" 
-                    sx={{ 
-                      color: "#999", 
-                      fontSize: "0.75rem" 
-                    }}
-                  >
-                    Pending responses
-                  </Typography>
-                </CardContent>
-              </Card>
+              <KPICard
+                title="Active Enquiries"
+                value={dashboardData.activeEnquiries}
+                growth={dashboardData.enquiryGrowth}
+                icon={<EnquiriesIcon />}
+                color="#4CAF50"
+              />
             </Grid>
-
-            {/* Profile Status */}
             <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  borderRadius: 2,
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-                  border: "1px solid #e0e0e0",
-                  height: "100%",
-                  bgcolor: "white",
-                }}
-              >
-                <CardContent sx={{ p: 2.5 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <VerifiedIcon sx={{ color: "#4CAF50", fontSize: 20, mr: 1 }} />
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        color: "#666", 
-                        fontWeight: 500,
-                        fontSize: "0.875rem",
-                        flexGrow: 1
-                      }}
-                    >
-                      Profile Status
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <TrendingUpIcon sx={{ color: "#4CAF50", fontSize: 14, mr: 0.5 }} />
-                      <Typography
-                        variant="caption"
-                        sx={{ 
-                          color: "#4CAF50", 
-                          fontWeight: 600, 
-                          fontSize: "0.75rem" 
-                        }}
-                      >
-                        {dashboardData.profileCompletion}%
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontWeight: 700,
-                      color: "#1A1A1A",
-                      mb: 0.5,
-                      fontSize: "1.5rem",
-                    }}
-                  >
-                    {dashboardData.profileStatus}
-                  </Typography>
-                  <Typography 
-                    variant="caption" 
-                    sx={{ 
-                      color: "#999", 
-                      fontSize: "0.75rem" 
-                    }}
-                  >
-                    Profile complete
-                  </Typography>
-                </CardContent>
-              </Card>
+              <KPICard
+                title="Profile Status"
+                value={dashboardData.profileStatus}
+                growth={dashboardData.profileCompletion}
+                icon={<VerifiedIcon />}
+                color="#4CAF50"
+              />
             </Grid>
           </Grid>
         </Box>
@@ -360,163 +323,32 @@ const Dashboard = () => {
               </Typography>
 
               <Grid container spacing={3}>
-                {/* In Stock */}
                 <Grid item xs={12} sm={4}>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 2,
-                      }}
-                    >
-                      <CheckCircleOutline sx={{ color: "#4CAF50", mr: 1, fontSize: 20 }} />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, color: "#666" }}
-                      >
-                        In Stock
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="h4"
-                      sx={{ 
-                        fontWeight: 700, 
-                        color: "#1A1A1A", 
-                        mb: 2, 
-                        fontSize: "2rem"
-                      }}
-                    >
-                      {dashboardData.stockOverview.inStock.count}
-                    </Typography>
-                    <Box sx={{ width: "100%", mb: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={dashboardData.stockOverview.inStock.percentage}
-                        sx={{
-                          height: 6,
-                          borderRadius: 3,
-                          bgcolor: "#E8F5E8",
-                          "& .MuiLinearProgress-bar": {
-                            bgcolor: "#4CAF50",
-                            borderRadius: 3,
-                          },
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "#999", fontSize: "0.75rem" }}
-                    >
-                      {dashboardData.stockOverview.inStock.percentage}% of total products
-                    </Typography>
-                  </Box>
+                  <StockOverviewCard
+                    title="In Stock"
+                    count={dashboardData.stockOverview.inStock.count}
+                    percentage={dashboardData.stockOverview.inStock.percentage}
+                    color="#4CAF50"
+                    icon={<CheckCircleOutline />}
+                  />
                 </Grid>
-
-                {/* Low Stock */}
                 <Grid item xs={12} sm={4}>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 2,
-                      }}
-                    >
-                      <Warning sx={{ color: "#FF9800", mr: 1, fontSize: 20 }} />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, color: "#666" }}
-                      >
-                        Low Stock
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="h4"
-                      sx={{ 
-                        fontWeight: 700, 
-                        color: "#1A1A1A", 
-                        mb: 2, 
-                        fontSize: "2rem"
-                      }}
-                    >
-                      {dashboardData.stockOverview.lowStock.count}
-                    </Typography>
-                    <Box sx={{ width: "100%", mb: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={dashboardData.stockOverview.lowStock.percentage}
-                        sx={{
-                          height: 6,
-                          borderRadius: 3,
-                          bgcolor: "#FFF3E0",
-                          "& .MuiLinearProgress-bar": {
-                            bgcolor: "#FF9800",
-                            borderRadius: 3,
-                          },
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "#999", fontSize: "0.75rem" }}
-                    >
-                      {dashboardData.stockOverview.lowStock.percentage}% of total products
-                    </Typography>
-                  </Box>
+                  <StockOverviewCard
+                    title="Low Stock"
+                    count={dashboardData.stockOverview.lowStock.count}
+                    percentage={dashboardData.stockOverview.lowStock.percentage}
+                    color="#FF9800"
+                    icon={<Warning />}
+                  />
                 </Grid>
-
-                {/* Out of Stock */}
                 <Grid item xs={12} sm={4}>
-                  <Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 2,
-                      }}
-                    >
-                      <Cancel sx={{ color: "#F44336", mr: 1, fontSize: 20 }} />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 500, color: "#666" }}
-                      >
-                        Out of Stock
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="h4"
-                      sx={{ 
-                        fontWeight: 700, 
-                        color: "#1A1A1A", 
-                        mb: 2, 
-                        fontSize: "2rem"
-                      }}
-                    >
-                      {dashboardData.stockOverview.outOfStock.count}
-                    </Typography>
-                    <Box sx={{ width: "100%", mb: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={dashboardData.stockOverview.outOfStock.percentage}
-                        sx={{
-                          height: 6,
-                          borderRadius: 3,
-                          bgcolor: "#FFEBEE",
-                          "& .MuiLinearProgress-bar": {
-                            bgcolor: "#F44336",
-                            borderRadius: 3,
-                          },
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: "#999", fontSize: "0.75rem" }}
-                    >
-                      {dashboardData.stockOverview.outOfStock.percentage}% of total products
-                    </Typography>
-                  </Box>
+                  <StockOverviewCard
+                    title="Out of Stock"
+                    count={dashboardData.stockOverview.outOfStock.count}
+                    percentage={dashboardData.stockOverview.outOfStock.percentage}
+                    color="#F44336"
+                    icon={<Cancel />}
+                  />
                 </Grid>
               </Grid>
             </CardContent>
@@ -554,7 +386,7 @@ const Dashboard = () => {
                   sx={{
                     bgcolor: "#4285F4",
                     color: "white",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     fontSize: "0.75rem",
                     height: 24,
                   }}
@@ -603,7 +435,7 @@ const Dashboard = () => {
                             sx={{
                               bgcolor: "#4285F4",
                               color: "white",
-                              fontWeight: 500,
+                              fontWeight: 600,
                               fontSize: "0.65rem",
                               height: 18,
                               mr: 1,
@@ -617,7 +449,7 @@ const Dashboard = () => {
                             sx={{
                               bgcolor: "#E8F5E8",
                               color: "#4CAF50",
-                              fontWeight: 500,
+                              fontWeight: 600,
                               fontSize: "0.65rem",
                               height: 18,
                             }}

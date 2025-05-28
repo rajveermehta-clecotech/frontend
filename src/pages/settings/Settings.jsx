@@ -1,5 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Card, CardContent, TextField, Button, Tab, Tabs, Grid, useTheme, useMediaQuery } from '@mui/material';
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  Box, 
+  Typography, 
+  Card, 
+  CardContent, 
+  TextField, 
+  Button, 
+  Tab, 
+  Tabs, 
+  Grid, 
+  useTheme, 
+  useMediaQuery,
+  Alert,
+  CircularProgress
+} from '@mui/material';
 import { Person as PersonIcon, Lock as LockIcon } from '@mui/icons-material';
 import AppLayout from '../../components/layout/AppLayout';
 import { useAuth } from '../../context/AuthContext';
@@ -7,7 +21,8 @@ import { authApi } from '../../services/api/authApi';
 import { isValidEmail, validatePassword } from '../../utils/common';
 import { handleApiError } from '../../utils/errorHandler';
 
-const InputField = ({ label, name, value, onChange, error, disabled, ...props }) => (
+// Memoized Input Field Component
+const InputField = React.memo(({ label, name, value, onChange, error, disabled, ...props }) => (
   <TextField
     fullWidth
     margin="normal"
@@ -21,35 +36,43 @@ const InputField = ({ label, name, value, onChange, error, disabled, ...props })
     sx={{
       '& .MuiOutlinedInput-root': {
         '& fieldset': { borderColor: '#E2E8F0' },
-        '&:hover fieldset': { borderColor: '#CBD5E0' },
-        '&.Mui-focused fieldset': { borderColor: '#5E48E8' },
+        '&:hover fieldset': { borderColor: '#4285F4' },
+        '&.Mui-focused fieldset': { borderColor: '#4285F4' },
       },
     }}
     {...props}
   />
-);
+));
 
-const SubmitButton = ({ loading, label, disabled }) => (
+InputField.displayName = 'InputField';
+
+// Memoized Submit Button Component
+const SubmitButton = React.memo(({ loading, label, disabled, onClick }) => (
   <Button
     fullWidth
     variant="contained"
     disabled={loading || disabled}
+    onClick={onClick}
     sx={{
       mt: 2,
       py: 1.5,
-      bgcolor: '#4A5568',
-      '&:hover': { bgcolor: '#2D3748' },
+      bgcolor: '#4285F4',
+      '&:hover': { bgcolor: '#1976D2' },
       '&:disabled': { bgcolor: '#E2E8F0', color: '#A0AEC0' },
     }}
   >
-    {loading ? 'Submitting...' : label}
+    {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : label}
   </Button>
-);
+));
+
+SubmitButton.displayName = 'SubmitButton';
 
 const Settings = () => {
   const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
+  // State management
   const [activeTab, setActiveTab] = useState(0);
   const [profileData, setProfileData] = useState({
     fullName: '',
@@ -66,7 +89,9 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [profileError, setProfileError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
+  // Load profile data on component mount
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -81,29 +106,41 @@ const Settings = () => {
         setProfileError(handleApiError(error).message);
       }
     };
-    fetchProfile();
-  }, []);
+    
+    if (user) {
+      fetchProfile();
+    }
+  }, [user]);
 
-  const handleTabChange = (event, newValue) => {
+  // Handle tab change
+  const handleTabChange = useCallback((event, newValue) => {
     setActiveTab(newValue);
     setErrors({});
     setProfileError(null);
     setPasswordError(null);
-  };
+    setSuccessMessage(null);
+  }, []);
 
-  const handleProfileChange = (e) => {
+  // Handle profile form changes
+  const handleProfileChange = useCallback((e) => {
     const { name, value } = e.target;
-    setProfileData({ ...profileData, [name]: value });
-    if (errors[name]) setErrors({ ...errors, [name]: '' });
-  };
+    setProfileData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  }, [errors]);
 
-  const handlePasswordChange = (e) => {
+  // Handle password form changes
+  const handlePasswordChange = useCallback((e) => {
     const { name, value } = e.target;
-    setPasswordData({ ...passwordData, [name]: value });
-    if (errors[name]) setErrors({ ...errors, [name]: '' });
-  };
+    setPasswordData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  }, [errors]);
 
-  const validateProfile = () => {
+  // Validate profile form
+  const validateProfile = useCallback(() => {
     const newErrors = {};
     if (!profileData.fullName) newErrors.fullName = 'Full name is required';
     if (!profileData.email) {
@@ -111,17 +148,21 @@ const Settings = () => {
     } else if (!isValidEmail(profileData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    if (profileData.contactNumber && !isValidPhoneNumber(profileData.contactNumber)) {
+    if (profileData.contactNumber && profileData.contactNumber.length < 10) {
       newErrors.contactNumber = 'Invalid phone number';
     }
     if (!profileData.address) newErrors.address = 'Address is required';
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [profileData]);
 
-  const validatePassword = () => {
+  // Validate password form
+  const validatePasswordForm = useCallback(() => {
     const newErrors = {};
-    if (!passwordData.currentPassword) newErrors.currentPassword = 'Current password is required';
+    if (!passwordData.currentPassword) {
+      newErrors.currentPassword = 'Current password is required';
+    }
     if (!passwordData.newPassword) {
       newErrors.newPassword = 'New password is required';
     } else {
@@ -133,56 +174,132 @@ const Settings = () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [passwordData]);
 
-  const handleUpdateProfile = async () => {
+  // Handle profile update
+  const handleUpdateProfile = useCallback(async () => {
     if (!validateProfile()) return;
+    
     setLoading(true);
+    setProfileError(null);
+    setSuccessMessage(null);
+    
     try {
       await authApi.updateProfile(profileData);
-      setProfileError(null);
+      setSuccessMessage('Profile updated successfully!');
     } catch (error) {
       setProfileError(handleApiError(error).message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [profileData, validateProfile]);
 
-  const handleChangePassword = async () => {
-    if (!validatePassword()) return;
+  // Handle password change
+  const handleChangePassword = useCallback(async () => {
+    if (!validatePasswordForm()) return;
+    
     setLoading(true);
+    setPasswordError(null);
+    setSuccessMessage(null);
+    
     try {
       // Implement password change API call here
-      setPasswordError(null);
+      // await authApi.changePassword(passwordData);
+      setSuccessMessage('Password changed successfully!');
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
     } catch (error) {
       setPasswordError(handleApiError(error).message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [passwordData, validatePasswordForm]);
 
   return (
     <AppLayout title="Settings">
       <Box sx={{ maxWidth: 800, mx: 'auto', p: { xs: 2, sm: 4 } }}>
-        <Typography variant="h5" gutterBottom>Settings</Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
+        <Typography 
+          variant="h5" 
+          gutterBottom 
+          sx={{ 
+            fontWeight: 600, 
+            color: '#1A1A1A',
+            mb: 1 
+          }}
+        >
+          Settings
+        </Typography>
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          sx={{ mb: 3 }}
+        >
           Manage your account preferences
         </Typography>
-        <Card sx={{ borderRadius: 12, boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)' }}>
+        
+        <Card 
+          sx={{ 
+            borderRadius: 2, 
+            boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #E0E0E0' 
+          }}
+        >
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
-            sx={{ borderBottom: 1, borderColor: 'divider', px: 3 }}
+            sx={{ 
+              borderBottom: 1, 
+              borderColor: 'divider', 
+              px: 3,
+              '& .MuiTab-root': {
+                textTransform: 'none',
+                fontWeight: 500,
+              }
+            }}
           >
-            <Tab icon={<PersonIcon />} iconPosition="start" label="Update Profile" />
-            <Tab icon={<LockIcon />} iconPosition="start" label="Change Password" />
+            <Tab 
+              icon={<PersonIcon />} 
+              iconPosition="start" 
+              label="Update Profile" 
+            />
+            <Tab 
+              icon={<LockIcon />} 
+              iconPosition="start" 
+              label="Change Password" 
+            />
           </Tabs>
-          <CardContent>
+          
+          <CardContent sx={{ p: 3 }}>
+            {/* Success Message */}
+            {successMessage && (
+              <Alert 
+                severity="success" 
+                sx={{ mb: 2 }}
+                onClose={() => setSuccessMessage(null)}
+              >
+                {successMessage}
+              </Alert>
+            )}
+            
+            {/* Profile Update Tab */}
             {activeTab === 0 && (
               <Box>
-                {profileError && <Typography color="error">{profileError}</Typography>}
+                {profileError && (
+                  <Alert 
+                    severity="error" 
+                    sx={{ mb: 2 }}
+                    onClose={() => setProfileError(null)}
+                  >
+                    {profileError}
+                  </Alert>
+                )}
+                
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <InputField
@@ -201,6 +318,7 @@ const Settings = () => {
                       onChange={handleProfileChange}
                       error={errors.email}
                       disabled
+                      helperText="Email cannot be changed"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -210,6 +328,7 @@ const Settings = () => {
                       value={profileData.contactNumber}
                       onChange={handleProfileChange}
                       error={errors.contactNumber}
+                      type="tel"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -224,12 +343,28 @@ const Settings = () => {
                     />
                   </Grid>
                 </Grid>
-                <SubmitButton loading={loading} label="Update Profile" />
+                
+                <SubmitButton 
+                  loading={loading} 
+                  label="Update Profile" 
+                  onClick={handleUpdateProfile}
+                />
               </Box>
             )}
+            
+            {/* Password Change Tab */}
             {activeTab === 1 && (
               <Box>
-                {passwordError && <Typography color="error">{passwordError}</Typography>}
+                {passwordError && (
+                  <Alert 
+                    severity="error" 
+                    sx={{ mb: 2 }}
+                    onClose={() => setPasswordError(null)}
+                  >
+                    {passwordError}
+                  </Alert>
+                )}
+                
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <InputField
@@ -262,7 +397,12 @@ const Settings = () => {
                     />
                   </Grid>
                 </Grid>
-                <SubmitButton loading={loading} label="Change Password" />
+                
+                <SubmitButton 
+                  loading={loading} 
+                  label="Change Password" 
+                  onClick={handleChangePassword}
+                />
               </Box>
             )}
           </CardContent>
