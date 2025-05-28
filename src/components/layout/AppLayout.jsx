@@ -75,7 +75,6 @@ const AppLayout = ({ children, title }) => {
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Products', icon: <ProductsIcon />, path: '/products' },
-    { text: 'Projects', icon: <ProjectsIcon />, path: '/projects' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
     { text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
   ];
