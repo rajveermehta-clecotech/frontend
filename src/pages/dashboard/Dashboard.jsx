@@ -1,3 +1,4 @@
+// src/pages/dashboard/Dashboard.jsx
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import Enquiry from "../../components/ui/Enquiry";
@@ -9,9 +10,7 @@ const Dashboard = () => {
   return (
     <Box
       sx={{
-        p: { xs: 2, sm: 3 },
-        minHeight: "calc(100vh - 70px)",
-        bgcolor: "#fafafa",
+        p: 3,
       }}
     >
       {/* Page Header */}
@@ -24,14 +23,10 @@ const Dashboard = () => {
         </Typography>
       </Box>
 
-      {/* Dashboard Cards with mt */}
-      <Box sx={{ mt: 2 }}>
+      {/* Dashboard Cards */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Statistics />
-      </Box>
-      <Box sx={{ mt: 2 }}>
         <Stock />
-      </Box>
-      <Box sx={{ mt: 2 }}>
         <Enquiry />
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-// src/components/NotificationAlert.jsx
+// src/components/ui/NotificationAlert.jsx
 import React from 'react';
 import { Alert, AlertTitle, IconButton, Box } from '@mui/material';
 import { Warning, Error, Info, CheckCircle, ArrowForward } from '@mui/icons-material';
@@ -12,31 +12,23 @@ const NotificationAlert = ({
   actionIcon = <ArrowForward />,
   sx = {}
 }) => {
-  // Map severity to icon and color
+  // Map severity to icon
   const severityMap = {
     warning: {
       icon: <Warning />,
-      bgColor: '#FACC15', // Amber from theme
-      textColor: '#202020',
     },
     error: {
       icon: <Error />,
-      bgColor: '#EF4444', // Error from theme
-      textColor: '#FFFFFF',
     },
     info: {
       icon: <Info />,
-      bgColor: '#7B61FF', // Primary from theme
-      textColor: '#FFFFFF',
     },
     success: {
       icon: <CheckCircle />,
-      bgColor: '#22C55E', // Success from theme
-      textColor: '#FFFFFF',
     }
   };
   
-  const { icon, bgColor, textColor } = severityMap[type] || severityMap.warning;
+  const { icon } = severityMap[type] || severityMap.warning;
 
   return (
     <Alert 
@@ -58,12 +50,10 @@ const NotificationAlert = ({
       sx={{ 
         mb: 4, 
         cursor: showActionButton ? 'pointer' : 'default',
-        bgcolor: bgColor,
-        color: textColor,
-        '& .MuiAlert-icon': {
-          color: textColor
-        },
         borderRadius: 2,
+        '& .MuiAlert-icon': {
+          color: 'inherit'
+        },
         ...sx
       }}
     >

@@ -5,15 +5,15 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/error/ErrorBoundary";
 
-// Import the new MainLayout instead of AppLayout
-import MainLayout from "./components/layout/MainLayout";
+// Import the new DashboardLayout instead of MainLayout
+import DashboardLayoutWrapper from "./components/layout/DashboardLayoutWrapper";
 
-// Update these import paths to match your actual file structure
+// Updated import paths for theme-aware auth pages
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -22,7 +22,6 @@ import ProfileCompletion from "./pages/profile/ProfileCompletion";
 import Settings from "./pages/settings/Settings";
 import NotFound from "./pages/NotFound";
 
-import theme from "./theme";
 import "./index.css";
 import Products from "./pages/products/Products";
 import AddProduct from "./pages/products/AddProduct";
@@ -30,7 +29,7 @@ import ProductDetails from "./pages/products/ProductDetails";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <ErrorBoundary>
         <AuthProvider>
@@ -41,35 +40,33 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile-completion" element={<ProfileCompletion />} />
 
-              {/* Protected Routes - With MainLayout */}
+              {/* Protected Routes - With DashboardLayout */}
               <Route path="/*" element={
                 // <ProtectedRoute>
-                <MainLayout>
-                  <Routes>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/products/new" element={<AddProduct />} />
-                    <Route path="/products/:id" element={<ProductDetails />} />
-                    <Route path="/products/:id/edit" element={<ProductDetails />} />
-                    {/* <Route path="/profile" element={<Profile />} />
-                       */}
+                  <DashboardLayoutWrapper>
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/products/new" element={<AddProduct />} />
+                      <Route path="/products/:id" element={<ProductDetails />} />
+                      <Route path="/products/:id/edit" element={<ProductDetails />} />
 
-                    {/* Default Route */}
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                      {/* Default Route */}
+                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-                    {/* 404 Page */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </MainLayout>
-                // </ProtectedRoute>
+                      {/* 404 Page */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </DashboardLayoutWrapper>
+                // </ProtectedRoute> 
               } />
             </Routes>
           </Router>
         </AuthProvider>
       </ErrorBoundary>
-    </ThemeProvider>
+    </>
   );
 }
 

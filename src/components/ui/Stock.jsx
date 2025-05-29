@@ -1,3 +1,4 @@
+// src/components/ui/Stock.jsx
 import React from 'react';
 import { Box, Typography, Paper, LinearProgress } from '@mui/material';
 import { CheckCircle, Warning, Cancel } from '@mui/icons-material';
@@ -30,14 +31,20 @@ const Stock = () => {
   return (
     <Paper elevation={0} sx={{ 
       p: { xs: 2, sm: 2.5, md: 3 }, 
-      backgroundColor: '#fff', 
-      borderRadius: 1,
-      mx: { xs: 1, sm: 0 }
+      backgroundColor: 'var(--mui-palette-background-paper)',
+      color: 'var(--mui-palette-text-primary)',
+      borderRadius: 2,
+      border: '1px solid var(--mui-palette-divider)',
+      mx: { xs: 1, sm: 0 },
+      transition: 'box-shadow 0.2s ease',
+      '&:hover': {
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      }
     }}>
       <Typography variant="h6" sx={{ 
         fontWeight: 600, 
         mb: { xs: 2, sm: 2.5, md: 3 }, 
-        color: '#333',
+        color: 'var(--mui-palette-text-primary)',
         fontSize: { xs: '1.1rem', sm: '1.25rem' }
       }}>
         Stock Overview
@@ -52,10 +59,17 @@ const Stock = () => {
           <Box key={index} sx={{ flex: 1, minWidth: { xs: '100%', sm: 'auto' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               {item.icon}
-              <Typography variant="body2" sx={{ color: '#666', fontSize: '14px' }}>
+              <Typography variant="body2" sx={{ 
+                color: 'var(--mui-palette-text-secondary)', 
+                fontSize: '14px' 
+              }}>
                 {item.title}
               </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 600, ml: 'auto', color: '#333' }}>
+              <Typography variant="h6" sx={{ 
+                fontWeight: 600, 
+                ml: 'auto', 
+                color: 'var(--mui-palette-text-primary)' 
+              }}>
                 {item.count}
               </Typography>
             </Box>
@@ -66,16 +80,22 @@ const Stock = () => {
               sx={{
                 height: 8,
                 borderRadius: 4,
-                backgroundColor: '#e0e0e0',
+                backgroundColor: 'var(--mui-palette-grey-200)',
                 mb: 1,
                 '& .MuiLinearProgress-bar': {
                   backgroundColor: item.color,
                   borderRadius: 4,
+                },
+                '[data-toolpad-color-scheme="dark"] &': {
+                  backgroundColor: 'var(--mui-palette-grey-800)',
                 }
               }}
             />
             
-            <Typography variant="caption" sx={{ color: '#999', fontSize: '12px' }}>
+            <Typography variant="caption" sx={{ 
+              color: 'var(--mui-palette-text-secondary)', 
+              fontSize: '12px' 
+            }}>
               {item.percentage}% of total products
             </Typography>
           </Box>

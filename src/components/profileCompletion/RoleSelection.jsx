@@ -39,12 +39,12 @@ const RoleSelection = ({
       {/* Step Header */}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <BusinessIcon sx={{ color: "#4A90E2", mr: 2, fontSize: 24 }} />
+          <BusinessIcon sx={{ color: "var(--mui-palette-primary-main)", mr: 2, fontSize: 24 }} />
           <Typography
             variant="h5"
             sx={{
               fontWeight: 700,
-              color: "#1A202C",
+              color: "var(--mui-palette-text-primary)",
               fontSize: "1.5rem",
             }}
           >
@@ -54,7 +54,7 @@ const RoleSelection = ({
         <Typography
           variant="body1"
           sx={{
-            color: "#718096",
+            color: "var(--mui-palette-text-secondary)",
             fontSize: "1rem",
           }}
         >
@@ -68,7 +68,7 @@ const RoleSelection = ({
           variant="subtitle1"
           sx={{
             fontWeight: 600,
-            color: "#2D3748",
+            color: "var(--mui-palette-text-primary)",
             mb: 3,
             fontSize: "1.1rem",
           }}
@@ -98,13 +98,14 @@ const RoleSelection = ({
                     border: "2px solid",
                     borderColor: 
                       formData.vendorType === type.value 
-                        ? "#4A90E2" 
-                        : "#E2E8F0",
+                        ? "var(--mui-palette-primary-main)" 
+                        : "var(--mui-palette-divider)",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
+                    bgcolor: "var(--mui-palette-background-paper)",
                     "&:hover": {
-                      borderColor: "#4A90E2",
-                      boxShadow: "0 4px 12px rgba(74, 144, 226, 0.15)",
+                      borderColor: "var(--mui-palette-primary-main)",
+                      boxShadow: "0 4px 12px rgba(33, 150, 243, 0.15)",
                     },
                     height: "100%",
                   }}
@@ -129,9 +130,9 @@ const RoleSelection = ({
                       control={
                         <Radio
                           sx={{
-                            color: "#E2E8F0",
+                            color: "var(--mui-palette-divider)",
                             "&.Mui-checked": {
-                              color: "#4A90E2",
+                              color: "var(--mui-palette-primary-main)",
                             },
                             mb: 2,
                           }}
@@ -151,7 +152,7 @@ const RoleSelection = ({
                       variant="h6"
                       sx={{
                         fontWeight: 600,
-                        color: "#2D3748",
+                        color: "var(--mui-palette-text-primary)",
                         mb: 1,
                         fontSize: "1.1rem",
                       }}
@@ -162,7 +163,7 @@ const RoleSelection = ({
                     <Typography
                       variant="body2"
                       sx={{
-                        color: "#718096",
+                        color: "var(--mui-palette-text-secondary)",
                         fontSize: "0.9rem",
                       }}
                     >

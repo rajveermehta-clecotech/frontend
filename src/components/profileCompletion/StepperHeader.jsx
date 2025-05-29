@@ -38,24 +38,25 @@ const StepperHeader = ({
                 justifyContent: "center",
                 bgcolor: 
                   index < activeStep 
-                    ? "#4A90E2" 
+                    ? "var(--mui-palette-primary-main)" 
                     : index === activeStep 
-                    ? "#4A90E2" 
-                    : "#E2E8F0",
+                    ? "var(--mui-palette-primary-main)" 
+                    : "var(--mui-palette-action-disabled)",
                 color: 
                   index < activeStep 
                     ? "white" 
                     : index === activeStep 
                     ? "white" 
-                    : "#A0AEC0",
+                    : "var(--mui-palette-text-disabled)",
                 fontWeight: 600,
                 fontSize: "1rem",
                 position: "relative",
                 zIndex: 2,
+                border: index <= activeStep ? "none" : "2px solid var(--mui-palette-divider)",
               }}
             >
               {index < activeStep ? (
-                <CheckCircle sx={{ fontSize: 24 }} />
+                <CheckCircle sx={{ fontSize: 24, color: "white" }} />
               ) : (
                 step.label
               )}
@@ -67,17 +68,19 @@ const StepperHeader = ({
                 sx={{
                   width: { xs: 80, sm: 120, md: 160 },
                   height: 4,
-                  bgcolor: "#E2E8F0",
+                  bgcolor: "var(--mui-palette-action-disabled)",
                   position: "relative",
                   mx: 2,
+                  borderRadius: 2,
                 }}
               >
                 <Box
                   sx={{
                     width: index < activeStep ? "100%" : "0%",
                     height: "100%",
-                    bgcolor: "#4A90E2",
+                    bgcolor: "var(--mui-palette-primary-main)",
                     transition: "width 0.3s ease",
+                    borderRadius: 2,
                   }}
                 />
               </Box>
@@ -92,7 +95,7 @@ const StepperHeader = ({
           sx={{
             width: "100%",
             height: 8,
-            bgcolor: "#E2E8F0",
+            bgcolor: "var(--mui-palette-action-disabled)",
             borderRadius: 4,
             overflow: "hidden",
           }}
@@ -101,7 +104,7 @@ const StepperHeader = ({
             sx={{
               width: `${calculateProgress()}%`,
               height: "100%",
-              bgcolor: "#4A90E2",
+              bgcolor: "var(--mui-palette-primary-main)",
               transition: "width 0.3s ease",
             }}
           />

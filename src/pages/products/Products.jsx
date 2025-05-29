@@ -170,10 +170,7 @@ const Products = () => {
 
   return (
     <Box sx={{ 
-      flexGrow: 1, 
-      p: { xs: 2, sm: 3 },
-      minHeight: 'calc(100vh - 70px)', // Account for header height
-      bgcolor: '#f5f5f5'
+      p: 3,
     }}>
       {/* Page Header */}
       <Box

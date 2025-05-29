@@ -1,167 +1,45 @@
 import React, { useState } from 'react';
 import {
   Box,
+  Typography,
+  Grid,
   Card,
   CardContent,
+  Button,
   TextField,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
-  Typography,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Button,
-  Paper,
+  Select,
+  MenuItem,
   FormHelperText,
-  useTheme,
-  useMediaQuery
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  InputAdornment,
+  IconButton,
+  Paper
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  backgroundColor: 'white',
-  borderRadius: '12px',
-  border: '1px solid #e0e0e0',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-  transition: 'box-shadow 0.2s ease',
-  '&:hover': {
-    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-  },
-}));
-
-const ImageUploadArea = styled(Paper)(({ theme }) => ({
-  border: '2px dashed #d0d0d0',
-  borderRadius: '12px',
-  padding: '32px 16px',
-  textAlign: 'center',
-  backgroundColor: '#fafafa',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
-  marginBottom: '16px',
-  minHeight: '180px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  '&:hover': {
-    borderColor: '#1976d2',
-    backgroundColor: '#f3f8ff',
-    transform: 'translateY(-2px)',
-  },
-  [theme.breakpoints.down('sm')]: {
-    padding: '24px 12px',
-    minHeight: '150px',
-  },
-}));
-
-const ImagePreview = styled('img')(({ theme }) => ({
-  width: '100%',
-  height: '200px',
-  objectFit: 'cover',
-  borderRadius: '12px',
-  border: '1px solid #e0e0e0',
-  [theme.breakpoints.down('sm')]: {
-    height: '160px',
-  },
-}));
-
-const RequiredSpan = styled('span')({
-  color: '#d32f2f',
-});
-
-const CategoriesContainer = styled(Box)(({ theme }) => ({
-  maxHeight: '280px',
-  overflowY: 'auto',
-  padding: '4px',
-  '&::-webkit-scrollbar': {
-    width: '6px',
-  },
-  '&::-webkit-scrollbar-track': {
-    background: '#f1f1f1',
-    borderRadius: '10px',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    background: '#c1c1c1',
-    borderRadius: '10px',
-    '&:hover': {
-      background: '#a8a8a8',
-    },
-  },
-}));
-
-const ResponsiveContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: '32px',
-  alignItems: 'flex-start',
-  [theme.breakpoints.down('lg')]: {
-    gap: '24px',
-  },
-  [theme.breakpoints.down('md')]: {
-    flexDirection: 'column',
-    gap: '24px',
-  },
-}));
-
-const MainContent = styled(Box)(({ theme }) => ({
-  flex: '1 1 65%',
-  minWidth: 0,
-  [theme.breakpoints.down('md')]: {
-    flex: '1 1 100%',
-  },
-}));
-
-const Sidebar = styled(Box)(({ theme }) => ({
-  flex: '1 1 35%',
-  minWidth: '280px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '24px',
-  [theme.breakpoints.down('md')]: {
-    flex: '1 1 100%',
-    minWidth: 'unset',
-  },
-  [theme.breakpoints.down('sm')]: {
-    gap: '20px',
-  },
-}));
-
-const ActionButtonsContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: '16px',
-  marginTop: '32px',
-  [theme.breakpoints.down('sm')]: {
-    flexDirection: 'column-reverse',
-    gap: '12px',
-    marginTop: '24px',
-  },
-}));
+import {
+  KeyboardArrowDown,
+  CloudUpload,
+  Add
+} from '@mui/icons-material';
 
 const AddProduct = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
   const [formData, setFormData] = useState({
     productName: '',
     subheading: '',
     description: '',
     price: '',
     stockStatus: 'In Stock',
-    categories: [],
-    image: null
+    categories: []
   });
 
-  const [imagePreview, setImagePreview] = useState('');
-  const [categoriesError, setCategoriesError] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('https://images.unsplash.com/photo-1518709479606-2c47f0ff2a95?w=400&h=300&fit=crop');
 
   const categories = [
     'Electronics',
-    'Computers',
+    'Computers', 
     'Industrial Equipment',
     'IoT',
     'Sensors',
@@ -170,25 +48,22 @@ const AddProduct = () => {
     'Automation'
   ];
 
-  const handleInputChange = (field) => (event) => {
+  const stockOptions = ['In Stock', 'Out of Stock', 'Limited Stock'];
+
+  const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [field]: event.target.value
+      [field]: value
     }));
   };
 
-  const handleCategoryChange = (category) => (event) => {
-    const isChecked = event.target.checked;
+  const handleCategoryToggle = (category) => {
     setFormData(prev => ({
       ...prev,
-      categories: isChecked 
-        ? [...prev.categories, category]
-        : prev.categories.filter(cat => cat !== category)
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter(cat => cat !== category)
+        : [...prev.categories, category]
     }));
-    
-    if (isChecked && categoriesError) {
-      setCategoriesError(false);
-    }
   };
 
   const handleImageUpload = (event) => {
@@ -196,415 +71,359 @@ const AddProduct = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target.result);
-        setFormData(prev => ({
-          ...prev,
-          image: file
-        }));
+        setSelectedImage(e.target.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const validateCategories = () => {
-    if (formData.categories.length === 0) {
-      setCategoriesError(true);
-      return false;
-    }
-    setCategoriesError(false);
-    return true;
-  };
-
-  const handleSave = () => {
-    const isValid = validateCategories();
-    
-    if (isValid) {
-      alert('Product saved successfully!');
-      console.log('Form data:', formData);
-    }
-  };
-
-  const handleCancel = () => {
-    setFormData({
-      productName: '',
-      subheading: '',
-      description: '',
-      price: '',
-      stockStatus: 'In Stock',
-      categories: [],
-      image: null
-    });
-    setImagePreview('');
-    setCategoriesError(false);
-  };
-
-  const textFieldStyles = {
-    '& .MuiOutlinedInput-root': {
-      fontSize: '14px',
-      borderRadius: '8px',
-      '&:hover fieldset': {
-        borderColor: '#1976d2',
-      },
-      '&.Mui-focused fieldset': {
-        borderWidth: '2px',
-        borderColor: '#1976d2',
-      },
-    },
-    '& .MuiInputLabel-root': {
-      fontSize: '14px',
-      fontWeight: 500,
-      color: '#555',
-    },
-  };
-
   return (
-    <Box
-      sx={{
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-        backgroundColor: '#f8fafc',
-        padding: { xs: '16px', sm: '24px', md: '32px' },
-        minHeight: '100vh',
-        maxWidth: '100%',
-        overflow: 'hidden',
-      }}
-    >
-      <ResponsiveContainer>
-        {/* Main Content - Product Information */}
-        <MainContent>
-          <StyledCard>
-            <CardContent sx={{ 
-              padding: { xs: '20px', sm: '24px', md: '32px' },
-            }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: { xs: '16px', sm: '18px' },
-                  fontWeight: 600,
-                  color: '#1a202c',
-                  marginBottom: { xs: '20px', sm: '24px' },
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                📝 Product Information
-              </Typography>
-
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: { xs: '20px', sm: '24px' } 
-              }}>
-                <TextField
-                  fullWidth
-                  label={
-                    <span>
-                      Product Name <RequiredSpan>*</RequiredSpan>
-                    </span>
-                  }
-                  placeholder="Enter product name"
-                  value={formData.productName}
-                  onChange={handleInputChange('productName')}
-                  sx={textFieldStyles}
-                />
-
-                <TextField
-                  fullWidth
-                  label={
-                    <span>
-                      Subheading <RequiredSpan>*</RequiredSpan>
-                    </span>
-                  }
-                  placeholder="Brief description or tagline"
-                  value={formData.subheading}
-                  onChange={handleInputChange('subheading')}
-                  sx={textFieldStyles}
-                />
-
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={isMobile ? 4 : 5}
-                  label={
-                    <span>
-                      Description <RequiredSpan>*</RequiredSpan>
-                    </span>
-                  }
-                  placeholder="Detailed product description"
-                  value={formData.description}
-                  onChange={handleInputChange('description')}
-                  sx={textFieldStyles}
-                />
-
-                <Box sx={{ 
-                  display: 'flex', 
-                  flexDirection: { xs: 'column', sm: 'row' },
-                  gap: { xs: '20px', sm: '16px' }
-                }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', p: 3 }}>
+      <Box sx={{ maxWidth: '100%', mx: 'auto' }}>
+        <Grid container spacing={3}>
+          {/* Left Column - Product Information */}
+          <Grid item xs={12} md={8}>
+            <Card 
+              sx={{ 
+                borderRadius: 2, 
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                border: '1px solid',
+                borderColor: 'grey.200'
+              }}
+            >
+              <CardContent sx={{ p: 3 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, color: 'grey.900' }}>
+                  Product Information
+                </Typography>
+                
+                {/* Product Name */}
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
+                    Product Name <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                  </Typography>
                   <TextField
                     fullWidth
-                    type="number"
-                    label={
-                      <span>
-                        Price ($) <RequiredSpan>*</RequiredSpan>
-                      </span>
-                    }
-                    placeholder="0"
-                    value={formData.price}
-                    onChange={handleInputChange('price')}
-                    sx={textFieldStyles}
+                    value={formData.productName}
+                    onChange={(e) => handleInputChange('productName', e.target.value)}
+                    placeholder="Enter product name"
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: 'grey.300',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'grey.400',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'primary.main',
+                          borderWidth: 2,
+                        },
+                      },
+                    }}
                   />
-                  
-                  <FormControl fullWidth>
-                    <InputLabel
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 500,
-                        color: '#555',
-                      }}
-                    >
-                      Stock Status <RequiredSpan>*</RequiredSpan>
-                    </InputLabel>
-                    <Select
-                      value={formData.stockStatus}
-                      onChange={handleInputChange('stockStatus')}
-                      sx={{
-                        fontSize: '14px',
-                        borderRadius: '8px',
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#1976d2',
-                        },
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderWidth: '2px',
-                          borderColor: '#1976d2',
-                        },
-                      }}
-                    >
-                      <MenuItem value="In Stock">✅ In Stock</MenuItem>
-                      <MenuItem value="Out of Stock">❌ Out of Stock</MenuItem>
-                      <MenuItem value="Limited Stock">⚠️ Limited Stock</MenuItem>
-                    </Select>
-                  </FormControl>
                 </Box>
-              </Box>
-            </CardContent>
-          </StyledCard>
-        </MainContent>
 
-        {/* Sidebar - Categories and Product Image */}
-        <Sidebar>
-          {/* Categories */}
-          <StyledCard>
-            <CardContent sx={{ 
-              padding: { xs: '20px', sm: '24px' },
-            }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: { xs: '16px', sm: '18px' },
-                  fontWeight: 600,
-                  color: '#1a202c',
-                  marginBottom: { xs: '16px', sm: '20px' },
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                🏷️ Categories <RequiredSpan>*</RequiredSpan>
-              </Typography>
+                {/* Subheading */}
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
+                    Subheading <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    value={formData.subheading}
+                    onChange={(e) => handleInputChange('subheading', e.target.value)}
+                    placeholder="Brief description or tagline"
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: 'grey.300',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'grey.400',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'primary.main',
+                          borderWidth: 2,
+                        },
+                      },
+                    }}
+                  />
+                </Box>
 
-              <CategoriesContainer>
-                <FormGroup>
-                  {categories.map((category) => (
-                    <FormControlLabel
-                      key={category}
-                      control={
-                        <Checkbox
-                          checked={formData.categories.includes(category)}
-                          onChange={handleCategoryChange(category)}
-                          sx={{
-                            '& .MuiSvgIcon-root': {
-                              fontSize: 18,
-                            },
-                            '&.Mui-checked': {
-                              color: '#1976d2',
-                            },
-                          }}
-                        />
-                      }
-                      label={
-                        <Typography
-                          sx={{
-                            fontSize: '14px',
-                            color: '#4a5568',
-                            fontWeight: formData.categories.includes(category) ? 500 : 400,
-                          }}
-                        >
-                          {category}
-                        </Typography>
-                      }
-                      sx={{ 
-                        marginBottom: '8px',
-                        marginLeft: 0,
-                        '& .MuiFormControlLabel-label': {
-                          marginLeft: '8px',
+                {/* Description */}
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
+                    Description <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    placeholder="Detailed product description"
+                    multiline
+                    rows={6}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: 'grey.300',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'grey.400',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'primary.main',
+                          borderWidth: 2,
+                        },
+                      },
+                    }}
+                  />
+                </Box>
+
+                {/* Price and Stock Status */}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
+                      Price ($) <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      type="number"
+                      value={formData.price}
+                      onChange={(e) => handleInputChange('price', e.target.value)}
+                      placeholder="0"
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: 'grey.300',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'grey.400',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: 'primary.main',
+                            borderWidth: 2,
+                          },
                         },
                       }}
                     />
-                  ))}
-                </FormGroup>
-              </CategoriesContainer>
+                  </Grid>
 
-              {categoriesError && (
-                <FormHelperText
-                  error
-                  sx={{
-                    fontSize: '12px',
-                    marginTop: '12px',
-                    marginLeft: 0,
-                  }}
-                >
-                  Please select at least one category
-                </FormHelperText>
-              )}
-            </CardContent>
-          </StyledCard>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
+                      Stock Status <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                    </Typography>
+                    <FormControl fullWidth size="small">
+                      <Select
+                        value={formData.stockStatus}
+                        onChange={(e) => handleInputChange('stockStatus', e.target.value)}
+                        IconComponent={KeyboardArrowDown}
+                        sx={{
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'grey.300',
+                          },
+                          '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'grey.400',
+                          },
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'primary.main',
+                            borderWidth: 2,
+                          },
+                        }}
+                      >
+                        {stockOptions.map(option => (
+                          <MenuItem key={option} value={option}>{option}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
 
-          {/* Product Image */}
-          <StyledCard>
-            <CardContent sx={{ 
-              padding: { xs: '20px', sm: '24px' },
-            }}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: { xs: '16px', sm: '18px' },
-                  fontWeight: 600,
-                  color: '#1a202c',
-                  marginBottom: { xs: '16px', sm: '20px' },
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
+          {/* Right Column - Categories and Product Image */}
+          <Grid item xs={12} md={4}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {/* Categories */}
+              <Card 
+                sx={{ 
+                  borderRadius: 2, 
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  border: '1px solid',
+                  borderColor: 'grey.200'
                 }}
               >
-                🖼️ Product Image
-              </Typography>
-
-              {!imagePreview ? (
-                <ImageUploadArea
-                  onClick={() => document.getElementById('imageInput').click()}
-                >
-                  <PhotoCameraIcon
-                    sx={{
-                      fontSize: { xs: '40px', sm: '48px' },
-                      color: '#a0aec0',
-                      marginBottom: '12px',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '13px', sm: '14px' },
-                      color: '#4a5568',
-                      marginBottom: '4px',
-                      fontWeight: 500,
-                    }}
-                  >
-                    Click to upload image
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'grey.900' }}>
+                    Categories <Box component="span" sx={{ color: 'error.main' }}>*</Box>
                   </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '11px', sm: '12px' },
-                      color: '#718096',
-                    }}
-                  >
-                    PNG, JPG, GIF up to 10MB
-                  </Typography>
-                </ImageUploadArea>
-              ) : (
-                <Box sx={{ marginBottom: '16px' }}>
-                  <ImagePreview src={imagePreview} alt="Product preview" />
-                </Box>
-              )}
+                  
+                  <FormGroup sx={{ maxHeight: 250, overflowY: 'auto' }}>
+                    {categories.map((category) => (
+                      <FormControlLabel
+                        key={category}
+                        control={
+                          <Checkbox
+                            checked={formData.categories.includes(category)}
+                            onChange={() => handleCategoryToggle(category)}
+                            size="small"
+                            sx={{
+                              color: 'grey.400',
+                              '&.Mui-checked': {
+                                color: 'primary.main',
+                              },
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" sx={{ color: 'grey.700' }}>
+                            {category}
+                          </Typography>
+                        }
+                        sx={{ mb: 0.5 }}
+                      />
+                    ))}
+                  </FormGroup>
+                  
+                  {formData.categories.length === 0 && (
+                    <Typography variant="body2" sx={{ color: 'error.main', mt: 1 }}>
+                      Please select at least one category
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
 
-              <input
-                type="file"
-                id="imageInput"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleImageUpload}
-              />
-
-              <Button
-                variant="outlined"
-                startIcon={<CloudUploadIcon />}
-                onClick={() => document.getElementById('imageInput').click()}
-                fullWidth={isMobile}
-                sx={{
-                  color: '#4a5568',
-                  borderColor: '#e2e8f0',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  borderRadius: '8px',
-                  padding: '10px 20px',
-                  '&:hover': {
-                    backgroundColor: '#f7fafc',
-                    borderColor: '#cbd5e0',
-                    transform: 'translateY(-1px)',
-                  },
-                  transition: 'all 0.2s ease',
+              {/* Product Image */}
+              <Card 
+                sx={{ 
+                  borderRadius: 2, 
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  border: '1px solid',
+                  borderColor: 'grey.200'
                 }}
               >
-                {imagePreview ? 'Change Image' : 'Choose File'}
-              </Button>
-            </CardContent>
-          </StyledCard>
-        </Sidebar>
-      </ResponsiveContainer>
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'grey.900' }}>
+                    Product Image
+                  </Typography>
+                  
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: 200,
+                        border: '2px dashed',
+                        borderColor: 'grey.300',
+                        borderRadius: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'grey.50',
+                        mb: 2,
+                        cursor: 'pointer',
+                        '&:hover': {
+                          borderColor: 'primary.main',
+                          bgcolor: 'primary.50',
+                        }
+                      }}
+                      onClick={() => document.getElementById('image-upload').click()}
+                    >
+                      {selectedImage ? (
+                        <Box
+                          component="img"
+                          src={selectedImage}
+                          alt="Product"
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            borderRadius: 1
+                          }}
+                        />
+                      ) : (
+                        <>
+                          <CloudUpload sx={{ fontSize: 48, color: 'grey.400', mb: 1 }} />
+                          <Typography variant="body2" sx={{ color: 'grey.600' }}>
+                            Click to upload image
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: 'grey.500', mt: 0.5 }}>
+                            PNG, JPG, GIF up to 10MB
+                          </Typography>
+                        </>
+                      )}
+                    </Box>
+                    
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      style={{ display: 'none' }}
+                    />
+                    
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<CloudUpload />}
+                      onClick={() => document.getElementById('image-upload').click()}
+                      sx={{
+                        borderColor: 'grey.300',
+                        color: 'grey.700',
+                        '&:hover': {
+                          bgcolor: 'grey.50',
+                          borderColor: 'grey.400',
+                        },
+                      }}
+                    >
+                      Choose File
+                    </Button>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Box>
+          </Grid>
+        </Grid>
 
-      {/* Action Buttons */}
-      <ActionButtonsContainer>
-        <Button
-          variant="outlined"
-          onClick={handleCancel}
-          fullWidth={isMobile}
-          sx={{
-            padding: '12px 32px',
-            fontSize: '14px',
-            fontWeight: 500,
-            color: '#4a5568',
-            borderColor: '#e2e8f0',
-            borderRadius: '8px',
-            '&:hover': {
-              backgroundColor: '#f7fafc',
-              borderColor: '#cbd5e0',
-            },
-            transition: 'all 0.2s ease',
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSave}
-          fullWidth={isMobile}
-          sx={{
-            padding: '12px 32px',
-            fontSize: '14px',
-            fontWeight: 600,
-            backgroundColor: '#1976d2',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
-            '&:hover': {
-              backgroundColor: '#1565c0',
-              boxShadow: '0 6px 16px rgba(25, 118, 210, 0.4)',
-              transform: 'translateY(-2px)',
-            },
-            transition: 'all 0.2s ease',
-          }}
-        >
-          Save Product
-        </Button>
-      </ActionButtonsContainer>
+        {/* Action Buttons */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
+          <Button 
+            variant="outlined" 
+            sx={{ 
+              px: 4, 
+              py: 1.5,
+              borderColor: 'grey.300',
+              color: 'grey.700',
+              '&:hover': {
+                bgcolor: 'grey.50',
+                borderColor: 'grey.400',
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant="contained" 
+            sx={{ 
+              px: 4, 
+              py: 1.5,
+              bgcolor: 'primary.main',
+              '&:hover': {
+                bgcolor: 'primary.dark',
+              },
+            }}
+          >
+            Save Product
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 };

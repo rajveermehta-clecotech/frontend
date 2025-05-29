@@ -1,3 +1,4 @@
+// src/components/ui/Statistics.jsx
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import { 
@@ -48,13 +49,18 @@ const Statistics = () => {
           elevation={0} 
           sx={{ 
             p: { xs: 2, sm: 2.5, md: 3 }, 
-            backgroundColor: '#fff', 
-            borderRadius: 1,
-            border: '1px solid #e3f2fd',
+            backgroundColor: 'var(--mui-palette-background-paper)',
+            color: 'var(--mui-palette-text-primary)',
+            borderRadius: 2,
+            border: '1px solid var(--mui-palette-divider)',
             borderLeft: '4px solid #2196f3',
             flex: 1,
             position: 'relative',
-            minWidth: { xs: '100%', md: 'auto' }
+            minWidth: { xs: '100%', md: 'auto' },
+            transition: 'box-shadow 0.2s ease',
+            '&:hover': {
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+            }
           }}
         >
           <Box sx={{ 
@@ -93,7 +99,7 @@ const Statistics = () => {
           <Typography 
             variant="body2" 
             sx={{ 
-              color: '#666', 
+              color: 'var(--mui-palette-text-secondary)', 
               fontSize: { xs: '13px', sm: '14px' },
               mb: 1,
               fontWeight: 500
@@ -106,7 +112,7 @@ const Statistics = () => {
             variant="h4" 
             sx={{ 
               fontWeight: 700, 
-              color: '#333',
+              color: 'var(--mui-palette-text-primary)',
               mb: 1,
               fontSize: { xs: '22px', sm: '25px', md: '28px' }
             }}
@@ -117,7 +123,7 @@ const Statistics = () => {
           <Typography 
             variant="caption" 
             sx={{ 
-              color: '#999',
+              color: 'var(--mui-palette-text-secondary)',
               fontSize: { xs: '11px', sm: '12px' }
             }}
           >

@@ -19,6 +19,7 @@ import { useAuth } from "../../context/AuthContext";
 import NotificationAlert from "../../components/ui/NotificationAlert";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import api from "../../services/api/authApi";
+import PublicThemeWrapper from "../../components/layout/PublicThemeWrapper";
 
 // Import updated sub-components
 import StepperHeader from "../../components/profileCompletion/StepperHeader";
@@ -208,209 +209,214 @@ const ProfileCompletion = () => {
   // Show loading state while initially fetching data
   if (initialLoading) {
     return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          bgcolor: "#F8FAFC",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <LoadingIndicator text="Loading your profile..." />
-      </Box>
+      <PublicThemeWrapper>
+        <Box
+          sx={{
+            minHeight: "100vh",
+            bgcolor: "var(--mui-palette-background-default)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <LoadingIndicator text="Loading your profile..." />
+        </Box>
+      </PublicThemeWrapper>
     );
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#F8FAFC",
-        py: 4,
-      }}
-    >
-      <Container maxWidth="md">
-        {/* Header */}
-        <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              color: "#1A202C",
-              mb: 1,
-              fontSize: { xs: "1.5rem", sm: "2rem" },
-            }}
-          >
-            Welcome to MarketPlace
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: "#718096",
-              fontSize: "1rem",
-            }}
-          >
-            Complete your vendor profile to start selling
-          </Typography>
-        </Box>
-
-        {/* Stepper Header */}
-        <StepperHeader
-          activeStep={activeStep}
-          isStepComplete={isStepComplete}
-          calculateProgress={calculateProgress}
-        />
-
-        {/* Main Form Content */}
-        <Box
-          sx={{
-            bgcolor: "white",
-            borderRadius: 2,
-            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-            p: { xs: 3, sm: 4 },
-            mb: 4,
-            position: "relative",
-          }}
-        >
-          {loading && (
-            <LoadingIndicator overlay text="Completing your profile..." />
-          )}
-
-          <form onSubmit={handleSubmit}>
-            {/* Step 1: Role Selection */}
-            {activeStep === 0 && (
-              <RoleSelection
-                formData={formData}
-                handleChange={handleChange}
-                errors={errors}
-              />
-            )}
-
-            {/* Step 2: Business Information */}
-            {activeStep === 1 && (
-              <BusinessInformation
-                formData={formData}
-                handleChange={handleChange}
-                errors={errors}
-                filePreview={filePreview}
-                handleFileChange={handleFileChange}
-              />
-            )}
-
-            {/* Step 3: Document Upload */}
-            {activeStep === 2 && (
-              <DocumentUpload
-                formData={formData}
-                handleFileChange={handleFileChange}
-                filePreview={filePreview}
-              />
-            )}
-
-            {/* Navigation buttons */}
-            <Box
+    <PublicThemeWrapper>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          bgcolor: "var(--mui-palette-background-default)",
+          py: 4,
+        }}
+      >
+        <Container maxWidth="md">
+          {/* Header */}
+          <Box sx={{ textAlign: "center", mb: 6 }}>
+            <Typography
+              variant="h4"
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: 6,
-                pt: 4,
-                borderTop: "1px solid #E2E8F0",
+                fontWeight: 700,
+                color: "var(--mui-palette-text-primary)",
+                mb: 1,
+                fontSize: { xs: "1.5rem", sm: "2rem" },
               }}
             >
-              <Button
-                variant="text"
-                onClick={handleBack}
-                startIcon={<ArrowBack />}
-                disabled={activeStep === 0}
+              Welcome to MarketPlace
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "var(--mui-palette-text-secondary)",
+                fontSize: "1rem",
+              }}
+            >
+              Complete your vendor profile to start selling
+            </Typography>
+          </Box>
+
+          {/* Stepper Header */}
+          <StepperHeader
+            activeStep={activeStep}
+            isStepComplete={isStepComplete}
+            calculateProgress={calculateProgress}
+          />
+
+          {/* Main Form Content */}
+          <Box
+            sx={{
+              bgcolor: "var(--mui-palette-background-paper)",
+              borderRadius: 2,
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              border: "1px solid var(--mui-palette-divider)",
+              p: { xs: 3, sm: 4 },
+              mb: 4,
+              position: "relative",
+            }}
+          >
+            {loading && (
+              <LoadingIndicator overlay text="Completing your profile..." />
+            )}
+
+            <form onSubmit={handleSubmit}>
+              {/* Step 1: Role Selection */}
+              {activeStep === 0 && (
+                <RoleSelection
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              )}
+
+              {/* Step 2: Business Information */}
+              {activeStep === 1 && (
+                <BusinessInformation
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                  filePreview={filePreview}
+                  handleFileChange={handleFileChange}
+                />
+              )}
+
+              {/* Step 3: Document Upload */}
+              {activeStep === 2 && (
+                <DocumentUpload
+                  formData={formData}
+                  handleFileChange={handleFileChange}
+                  filePreview={filePreview}
+                />
+              )}
+
+              {/* Navigation buttons */}
+              <Box
                 sx={{
-                  color: activeStep === 0 ? "#A0AEC0" : "#4A5568",
-                  fontWeight: 500,
-                  px: 3,
-                  py: 1.5,
-                  "&:hover": {
-                    bgcolor: "rgba(0, 0, 0, 0.04)",
-                  },
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mt: 6,
+                  pt: 4,
+                  borderTop: "1px solid var(--mui-palette-divider)",
                 }}
               >
-                Previous
-              </Button>
-
-              {activeStep === 2 ? (
                 <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={loading || !isStepComplete(activeStep)}
+                  variant="text"
+                  onClick={handleBack}
+                  startIcon={<ArrowBack />}
+                  disabled={activeStep === 0}
                   sx={{
-                    bgcolor: "#4A5568",
-                    color: "white",
-                    fontWeight: 600,
-                    px: 4,
+                    color: activeStep === 0 ? "var(--mui-palette-text-disabled)" : "var(--mui-palette-text-secondary)",
+                    fontWeight: 500,
+                    px: 3,
                     py: 1.5,
-                    borderRadius: 1,
                     "&:hover": {
-                      bgcolor: "#2D3748",
-                    },
-                    "&:disabled": {
-                      bgcolor: "#E2E8F0",
-                      color: "#A0AEC0",
+                      bgcolor: "var(--mui-palette-action-hover)",
                     },
                   }}
                 >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
-                  ) : (
-                    "Complete Setup"
-                  )}
+                  Previous
                 </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  endIcon={<ArrowForward />}
-                  disabled={!isStepComplete(activeStep)}
-                  sx={{
-                    bgcolor: "#4A5568",
-                    color: "white",
-                    fontWeight: 600,
-                    px: 4,
-                    py: 1.5,
-                    borderRadius: 1,
-                    "&:hover": {
-                      bgcolor: "#2D3748",
-                    },
-                    "&:disabled": {
-                      bgcolor: "#E2E8F0",
-                      color: "#A0AEC0",
-                    },
-                  }}
-                >
-                  Next
-                </Button>
-              )}
-            </Box>
-          </form>
-        </Box>
 
-        {/* Success/Error Messages */}
-        {success && (
-          <NotificationAlert
-            type="success"
-            title="Profile Completed"
-            message="Your vendor profile has been successfully set up. Redirecting to dashboard..."
-            showActionButton={false}
-          />
-        )}
-        
-        {error && (
-          <NotificationAlert
-            type="error"
-            title="Error"
-            message={error}
-            showActionButton={false}
-          />
-        )}
-      </Container>
-    </Box>
+                {activeStep === 2 ? (
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    disabled={loading || !isStepComplete(activeStep)}
+                    sx={{
+                      bgcolor: "var(--mui-palette-primary-main)",
+                      color: "white",
+                      fontWeight: 600,
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 1,
+                      "&:hover": {
+                        bgcolor: "var(--mui-palette-primary-dark)",
+                      },
+                      "&:disabled": {
+                        bgcolor: "var(--mui-palette-action-disabled)",
+                        color: "var(--mui-palette-text-disabled)",
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+                    ) : (
+                      "Complete Setup"
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    endIcon={<ArrowForward />}
+                    disabled={!isStepComplete(activeStep)}
+                    sx={{
+                      bgcolor: "var(--mui-palette-primary-main)",
+                      color: "white",
+                      fontWeight: 600,
+                      px: 4,
+                      py: 1.5,
+                      borderRadius: 1,
+                      "&:hover": {
+                        bgcolor: "var(--mui-palette-primary-dark)",
+                      },
+                      "&:disabled": {
+                        bgcolor: "var(--mui-palette-action-disabled)",
+                        color: "var(--mui-palette-text-disabled)",
+                      },
+                    }}
+                  >
+                    Next
+                  </Button>
+                )}
+              </Box>
+            </form>
+          </Box>
+
+          {/* Success/Error Messages */}
+          {success && (
+            <NotificationAlert
+              type="success"
+              title="Profile Completed"
+              message="Your vendor profile has been successfully set up. Redirecting to dashboard..."
+              showActionButton={false}
+            />
+          )}
+          
+          {error && (
+            <NotificationAlert
+              type="error"
+              title="Error"
+              message={error}
+              showActionButton={false}
+            />
+          )}
+        </Container>
+      </Box>
+    </PublicThemeWrapper>
   );
 };
 

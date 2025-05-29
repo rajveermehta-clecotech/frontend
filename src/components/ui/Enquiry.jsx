@@ -1,3 +1,4 @@
+// src/components/ui/Enquiry.jsx
 import React from 'react';
 import { Box, Typography, Paper, Chip, Button } from '@mui/material';
 import { Reply } from '@mui/icons-material';
@@ -30,9 +31,15 @@ const Enquiry = () => {
   return (
     <Paper elevation={0} sx={{ 
       p: { xs: 2, sm: 2.5, md: 3 }, 
-      backgroundColor: '#fff', 
-      borderRadius: 1,
-      mx: { xs: 1, sm: 0 }
+      backgroundColor: 'var(--mui-palette-background-paper)',
+      color: 'var(--mui-palette-text-primary)',
+      borderRadius: 2,
+      border: '1px solid var(--mui-palette-divider)',
+      mx: { xs: 1, sm: 0 },
+      transition: 'box-shadow 0.2s ease',
+      '&:hover': {
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      }
     }}>
       <Box sx={{ 
         display: 'flex', 
@@ -44,7 +51,7 @@ const Enquiry = () => {
       }}>
         <Typography variant="h6" sx={{ 
           fontWeight: 600, 
-          color: '#333',
+          color: 'var(--mui-palette-text-primary)',
           fontSize: { xs: '1.1rem', sm: '1.25rem' }
         }}>
           Recent Enquiries
@@ -65,7 +72,7 @@ const Enquiry = () => {
         {enquiries.map((enquiry, index) => (
           <Box key={index} sx={{ 
             pb: { xs: 1.5, sm: 2 }, 
-            borderBottom: index < enquiries.length - 1 ? '1px solid #f0f0f0' : 'none' 
+            borderBottom: index < enquiries.length - 1 ? '1px solid var(--mui-palette-divider)' : 'none' 
           }}>
             <Box sx={{ 
               display: 'flex', 
@@ -83,7 +90,7 @@ const Enquiry = () => {
               }}>
                 <Typography variant="subtitle2" sx={{ 
                   fontWeight: 600, 
-                  color: '#333',
+                  color: 'var(--mui-palette-text-primary)',
                   fontSize: { xs: '0.9rem', sm: '1rem' }
                 }}>
                   {enquiry.name}
@@ -93,8 +100,8 @@ const Enquiry = () => {
                     label="new" 
                     size="small" 
                     sx={{ 
-                      backgroundColor: '#333', 
-                      color: '#fff', 
+                      backgroundColor: 'var(--mui-palette-text-primary)', 
+                      color: 'var(--mui-palette-background-paper)', 
                       height: '20px',
                       fontSize: '10px',
                       fontWeight: 500,
@@ -131,11 +138,11 @@ const Enquiry = () => {
                   minWidth: 'auto',
                   px: { xs: 1.5, sm: 2 },
                   py: 0.5,
-                  borderColor: '#ddd',
-                  color: '#666',
+                  borderColor: 'var(--mui-palette-divider)',
+                  color: 'var(--mui-palette-text-secondary)',
                   '&:hover': {
                     borderColor: '#1976d2',
-                    backgroundColor: '#f5f5f5'
+                    backgroundColor: 'var(--mui-palette-action-hover)'
                   }
                 }}
               >
@@ -144,7 +151,7 @@ const Enquiry = () => {
             </Box>
             
             <Typography variant="body2" sx={{ 
-              color: '#666', 
+              color: 'var(--mui-palette-text-secondary)', 
               mb: 1, 
               lineHeight: 1.4,
               fontSize: { xs: '0.85rem', sm: '0.875rem' }
@@ -152,7 +159,10 @@ const Enquiry = () => {
               {enquiry.message}
             </Typography>
             
-            <Typography variant="caption" sx={{ color: '#999', fontSize: '12px' }}>
+            <Typography variant="caption" sx={{ 
+              color: 'var(--mui-palette-text-secondary)', 
+              fontSize: '12px' 
+            }}>
               {enquiry.date}
             </Typography>
           </Box>

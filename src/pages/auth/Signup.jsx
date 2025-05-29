@@ -25,6 +25,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
 import { isValidEmail, validatePassword } from '../../utils/common';
+import PublicThemeWrapper from '../../components/layout/PublicThemeWrapper';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -140,475 +141,558 @@ const Signup = () => {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        bgcolor: theme.palette.background.auth,
-      }}
-    >
-      {/* Left Panel - Branding */}
-      {!isMobile && (
+    <PublicThemeWrapper>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          bgcolor: 'var(--mui-palette-background-default)',
+          color: 'var(--mui-palette-text-primary)',
+        }}
+      >
+        {/* Left Panel - Branding */}
+        {!isMobile && (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              px: 6,
+              py: 8,
+              bgcolor: 'var(--mui-palette-background-paper)',
+              borderRight: '1px solid var(--mui-palette-divider)',
+            }}
+          >
+            <Box sx={{ maxWidth: 400 }}>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 700,
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 2,
+                  fontSize: '2rem',
+                }}
+              >
+                Multi-Vendor Marketplace
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: 'var(--mui-palette-text-secondary)',
+                  mb: 4,
+                  fontSize: '1rem',
+                  lineHeight: 1.5,
+                }}
+              >
+                Connect with verified vendors and buyers in our trusted B2B platform
+              </Typography>
+
+              {/* Features List */}
+              <Box sx={{ space: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      bgcolor: '#10B981',
+                      mt: 0.75,
+                      mr: 2,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        color: 'var(--mui-palette-text-primary)',
+                        mb: 0.5,
+                        fontSize: '1rem',
+                      }}
+                    >
+                      Verified Vendors
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'var(--mui-palette-text-secondary)',
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      All vendors go through our strict verification process
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      bgcolor: '#3B82F6',
+                      mt: 0.75,
+                      mr: 2,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        color: 'var(--mui-palette-text-primary)',
+                        mb: 0.5,
+                        fontSize: '1rem',
+                      }}
+                    >
+                      Secure Transactions
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'var(--mui-palette-text-secondary)',
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      Protected communication and secure payment processing
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Box
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      bgcolor: '#8B5CF6',
+                      mt: 0.75,
+                      mr: 2,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        color: 'var(--mui-palette-text-primary)',
+                        mb: 0.5,
+                        fontSize: '1rem',
+                      }}
+                    >
+                      Global Reach
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'var(--mui-palette-text-secondary)',
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      Connect with suppliers and buyers worldwide
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* Right Panel - Signup Form */}
         <Box
           sx={{
-            flex: 1,
+            flex: isMobile ? 1 : '0 0 55%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            px: 6,
-            py: 8,
-            bgcolor: theme.palette.background.auth,
+            px: isMobile ? 3 : { lg: 6, xl: 8 },
+            py: 4,
+            bgcolor: 'var(--mui-palette-background-paper)',
           }}
         >
-          <Box sx={{ maxWidth: 400 }}>
+          <Box sx={{ maxWidth: 420, width: '100%', mx: 'auto' }}>
             <Typography
-              variant="h3"
+              variant="h4"
               sx={{
                 fontWeight: 700,
-                color: '#1F2937',
-                mb: 2,
-                fontSize: '2rem',
+                color: 'var(--mui-palette-text-primary)',
+                mb: 1,
+                textAlign: 'center',
+                fontSize: { xs: '1.5rem', lg: '1.75rem' },
               }}
             >
-              Multi-Vendor Marketplace
+              Create Account
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: '#6B7280',
-                mb: 4,
-                fontSize: '1rem',
-                lineHeight: 1.5,
-              }}
-            >
-              Connect with verified vendors and buyers in our trusted B2B platform
-            </Typography>
-
-            {/* Features List */}
-            <Box sx={{ space: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                <Box
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    bgcolor: theme.palette.features?.verified || '#10B981',
-                    mt: 0.75,
-                    mr: 2,
-                    flexShrink: 0,
-                  }}
-                />
-                <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 600,
-                      color: '#1F2937',
-                      mb: 0.5,
-                      fontSize: '1rem',
-                    }}
-                  >
-                    Verified Vendors
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#6B7280',
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    All vendors go through our strict verification process
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                <Box
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    bgcolor: theme.palette.features?.secure || '#3B82F6',
-                    mt: 0.75,
-                    mr: 2,
-                    flexShrink: 0,
-                  }}
-                />
-                <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 600,
-                      color: '#1F2937',
-                      mb: 0.5,
-                      fontSize: '1rem',
-                    }}
-                  >
-                    Secure Transactions
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#6B7280',
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    Protected communication and secure payment processing
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                <Box
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    bgcolor: theme.palette.features?.global || '#8B5CF6',
-                    mt: 0.75,
-                    mr: 2,
-                    flexShrink: 0,
-                  }}
-                />
-                <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 600,
-                      color: '#1F2937',
-                      mb: 0.5,
-                      fontSize: '1rem',
-                    }}
-                  >
-                    Global Reach
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#6B7280',
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    Connect with suppliers and buyers worldwide
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      )}
-
-      {/* Right Panel - Signup Form */}
-      <Box
-        sx={{
-          flex: isMobile ? 1 : '0 0 55%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          px: isMobile ? 3 : { lg: 6, xl: 8 },
-          py: 4,
-          bgcolor: 'white',
-        }}
-      >
-        <Box sx={{ maxWidth: 420, width: '100%', mx: 'auto' }}>
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              color: '#1F2937',
-              mb: 1,
-              textAlign: 'center',
-              fontSize: { xs: '1.5rem', lg: '1.75rem' },
-            }}
-          >
-            Create Account
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: '#6B7280',
-              mb: 2,
-              textAlign: 'center',
-              fontSize: '0.875rem',
-            }}
-          >
-            Join our marketplace platform
-          </Typography>
-
-          {/* Error Alert */}
-          {signupError && (
-            <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
-              {signupError}
-            </Alert>
-          )}
-
-          {/* Signup Form */}
-          <Box component="form" onSubmit={handleSubmit}>
             <Typography
               variant="body2"
               sx={{
-                color: '#374151',
-                mb: 1,
-                fontWeight: 500,
-                fontSize: '0.875rem',
-              }}
-            >
-              Full Name
-            </Typography>
-            <TextField
-              fullWidth
-              name="fullName"
-              placeholder="Enter your full name"
-              value={formData.fullName}
-              onChange={handleChange}
-              error={!!errors.fullName}
-              helperText={errors.fullName}
-              sx={{
+                color: 'var(--mui-palette-text-secondary)',
                 mb: 2,
-                '& .MuiOutlinedInput-root': {
-                  height: 44,
-                },
-              }}
-            />
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#374151',
-                mb: 1,
-                fontWeight: 500,
+                textAlign: 'center',
                 fontSize: '0.875rem',
               }}
             >
-              Email
+              Join our marketplace platform
             </Typography>
-            <TextField
-              fullWidth
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              error={!!errors.email}
-              helperText={errors.email}
-              sx={{
-                mb: 2,
-                '& .MuiOutlinedInput-root': {
-                  height: 44,
-                },
-              }}
-            />
 
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#374151',
-                mb: 1,
-                fontWeight: 500,
-                fontSize: '0.875rem',
-              }}
-            >
-              Account Type
-            </Typography>
-            <FormControl sx={{ mb: 2 }}>
-              <RadioGroup
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                row
-                sx={{ gap: 2 }}
-              >
-                <FormControlLabel
-                  value="vendor"
-                  control={<Radio size="small" />}
-                  label={
-                    <Typography sx={{ fontSize: '0.875rem' }}>
-                      Vendor (Sell products)
-                    </Typography>
-                  }
-                />
-                <FormControlLabel
-                  value="buyer"
-                  control={<Radio size="small" />}
-                  label={
-                    <Typography sx={{ fontSize: '0.875rem' }}>
-                      Buyer (Purchase products)
-                    </Typography>
-                  }
-                />
-              </RadioGroup>
-            </FormControl>
+            {/* Error Alert */}
+            {signupError && (
+              <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
+                {signupError}
+              </Alert>
+            )}
 
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#374151',
-                mb: 1,
-                fontWeight: 500,
-                fontSize: '0.875rem',
-              }}
-            >
-              Password
-            </Typography>
-            <TextField
-              fullWidth
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
-              error={!!errors.password}
-              helperText={errors.password}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                      size="small"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                mb: 2,
-                '& .MuiOutlinedInput-root': {
-                  height: 44,
-                },
-              }}
-            />
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#374151',
-                mb: 1,
-                fontWeight: 500,
-                fontSize: '0.875rem',
-              }}
-            >
-              Confirm Password
-            </Typography>
-            <TextField
-              fullWidth
-              name="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                      size="small"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                mb: 2,
-                '& .MuiOutlinedInput-root': {
-                  height: 44,
-                },
-              }}
-            />
-
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              disabled={isLoading || googleLoading}
-              sx={{
-                py: 1.5,
-                mb: 2,
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                bgcolor: '#1F2937',
-                '&:hover': {
-                  bgcolor: '#111827',
-                },
-              }}
-            >
-              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
-            </Button>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Divider sx={{ flex: 1 }} />
+            {/* Signup Form */}
+            <Box component="form" onSubmit={handleSubmit}>
               <Typography
-                variant="caption"
+                variant="body2"
                 sx={{
-                  px: 2,
-                  color: '#9CA3AF',
-                  fontSize: '0.75rem',
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 1,
                   fontWeight: 500,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  fontSize: '0.875rem',
                 }}
               >
-                OR CONTINUE WITH
+                Full Name
               </Typography>
-              <Divider sx={{ flex: 1 }} />
-            </Box>
-
-            <Button
-              fullWidth
-              variant="outlined"
-              size="large"
-              startIcon={<GoogleIcon />}
-              onClick={handleGoogleSignIn}
-              disabled={googleLoading || isLoading}
-              sx={{
-                mb: 2,
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                borderColor: '#E5E7EB',
-                color: '#374151',
-                '&:hover': {
-                  borderColor: '#D1D5DB',
-                  bgcolor: '#F9FAFB',
-                },
-              }}
-            >
-              {googleLoading ? 'Signing up...' : 'Continue with Google'}
-            </Button>
-
-            <Typography
-              variant="body2"
-              sx={{
-                textAlign: 'center',
-                color: '#6B7280',
-                fontSize: '0.875rem',
-              }}
-            >
-              Already have an account?{' '}
-              <Link
-                component={RouterLink}
-                to="/login"
+              <TextField
+                fullWidth
+                name="fullName"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={handleChange}
+                error={!!errors.fullName}
+                helperText={errors.fullName}
                 sx={{
-                  color: '#1F2937',
-                  textDecoration: 'none',
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    height: 44,
+                    bgcolor: 'var(--mui-palette-background-paper)',
+                    '& fieldset': {
+                      borderColor: 'var(--mui-palette-divider)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--mui-palette-text-primary)',
+                  },
+                }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 1,
+                  fontWeight: 500,
+                  fontSize: '0.875rem',
+                }}
+              >
+                Email
+              </Typography>
+              <TextField
+                fullWidth
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    height: 44,
+                    bgcolor: 'var(--mui-palette-background-paper)',
+                    '& fieldset': {
+                      borderColor: 'var(--mui-palette-divider)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--mui-palette-text-primary)',
+                  },
+                }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 1,
+                  fontWeight: 500,
+                  fontSize: '0.875rem',
+                }}
+              >
+                Account Type
+              </Typography>
+              <FormControl sx={{ mb: 2 }}>
+                <RadioGroup
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  row
+                  sx={{ gap: 2 }}
+                >
+                  <FormControlLabel
+                    value="vendor"
+                    control={
+                      <Radio 
+                        size="small" 
+                        sx={{
+                          color: 'var(--mui-palette-text-secondary)',
+                          '&.Mui-checked': {
+                            color: 'var(--mui-palette-primary-main)',
+                          },
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: '0.875rem', color: 'var(--mui-palette-text-primary)' }}>
+                        Vendor (Sell products)
+                      </Typography>
+                    }
+                  />
+                  <FormControlLabel
+                    value="buyer"
+                    control={
+                      <Radio 
+                        size="small" 
+                        sx={{
+                          color: 'var(--mui-palette-text-secondary)',
+                          '&.Mui-checked': {
+                            color: 'var(--mui-palette-primary-main)',
+                          },
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: '0.875rem', color: 'var(--mui-palette-text-primary)' }}>
+                        Buyer (Purchase products)
+                      </Typography>
+                    }
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 1,
+                  fontWeight: 500,
+                  fontSize: '0.875rem',
+                }}
+              >
+                Password
+              </Typography>
+              <TextField
+                fullWidth
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Create a password"
+                value={formData.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                        size="small"
+                        sx={{ color: 'var(--mui-palette-text-secondary)' }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    height: 44,
+                    bgcolor: 'var(--mui-palette-background-paper)',
+                    '& fieldset': {
+                      borderColor: 'var(--mui-palette-divider)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--mui-palette-text-primary)',
+                  },
+                }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--mui-palette-text-primary)',
+                  mb: 1,
+                  fontWeight: 500,
+                  fontSize: '0.875rem',
+                }}
+              >
+                Confirm Password
+              </Typography>
+              <TextField
+                fullWidth
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                        size="small"
+                        sx={{ color: 'var(--mui-palette-text-secondary)' }}
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    height: 44,
+                    bgcolor: 'var(--mui-palette-background-paper)',
+                    '& fieldset': {
+                      borderColor: 'var(--mui-palette-divider)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--mui-palette-primary-main)',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--mui-palette-text-primary)',
+                  },
+                }}
+              />
+
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={isLoading || googleLoading}
+                sx={{
+                  py: 1.5,
+                  mb: 2,
+                  fontSize: '0.875rem',
                   fontWeight: 600,
+                  bgcolor: 'var(--mui-palette-primary-main)',
+                  color: '#ffffff',
                   '&:hover': {
-                    textDecoration: 'underline',
+                    bgcolor: 'var(--mui-palette-primary-dark)',
+                  },
+                  '&:disabled': {
+                    bgcolor: 'var(--mui-palette-action-disabled)',
+                    color: 'var(--mui-palette-text-disabled)',
                   },
                 }}
               >
-                Sign in
-              </Link>
-            </Typography>
+                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
+              </Button>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Divider sx={{ flex: 1, borderColor: 'var(--mui-palette-divider)' }} />
+                <Typography
+                  variant="caption"
+                  sx={{
+                    px: 2,
+                    color: 'var(--mui-palette-text-secondary)',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  OR CONTINUE WITH
+                </Typography>
+                <Divider sx={{ flex: 1, borderColor: 'var(--mui-palette-divider)' }} />
+              </Box>
+
+              <Button
+                fullWidth
+                variant="outlined"
+                size="large"
+                startIcon={<GoogleIcon />}
+                onClick={handleGoogleSignIn}
+                disabled={googleLoading || isLoading}
+                sx={{
+                  mb: 2,
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  borderColor: 'var(--mui-palette-divider)',
+                  color: 'var(--mui-palette-text-primary)',
+                  '&:hover': {
+                    borderColor: 'var(--mui-palette-primary-main)',
+                    bgcolor: 'var(--mui-palette-action-hover)',
+                  },
+                }}
+              >
+                {googleLoading ? 'Signing up...' : 'Continue with Google'}
+              </Button>
+
+              <Typography
+                variant="body2"
+                sx={{
+                  textAlign: 'center',
+                  color: 'var(--mui-palette-text-secondary)',
+                  fontSize: '0.875rem',
+                }}
+              >
+                Already have an account?{' '}
+                <Link
+                  component={RouterLink}
+                  to="/login"
+                  sx={{
+                    color: 'var(--mui-palette-primary-main)',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Sign in
+                </Link>
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </PublicThemeWrapper>
   );
 };
 
