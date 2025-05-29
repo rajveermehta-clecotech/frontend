@@ -235,7 +235,7 @@ const MainLayout = ({ children }) => {
               </>
             )}
           </ListItemButton>
-          
+
           {drawerOpen && (
             <Collapse in={productMenuOpen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
@@ -505,7 +505,7 @@ const MainLayout = ({ children }) => {
             aria-label="toggle drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ 
+            sx={{
               mr: 2,
               color: 'text.primary',
               '&:hover': {
@@ -517,24 +517,23 @@ const MainLayout = ({ children }) => {
           </IconButton>
 
           {/* Search Box */}
-          <Box
-            sx={{
-              display: { xs: 'none', sm: 'flex' },
-              alignItems: 'center',
-              bgcolor: alpha(theme.palette.common.black, 0.04),
-              borderRadius: 2,
-              px: 2,
-              py: 0.5,
-              mr: 2,
-              minWidth: 200,
-            }}
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
           >
-            <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
-            <InputBase
-              placeholder="Search…"
-              sx={{ color: 'text.primary', fontSize: '0.875rem' }}
-            />
-          </Box>
+            <Box display="flex" alignItems="center">
+              <Avatar
+                sx={{ width: 32, height: 32, mr: 1, borderRadius: 1 }} // 1 = 8px rounded corners
+                variant="square"
+              >
+                M
+              </Avatar>
+              <Box component="span" sx={{ fontWeight: 600 }}>
+                MarketPlace
+              </Box>
+            </Box>
+          </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
 
@@ -587,7 +586,7 @@ const MainLayout = ({ children }) => {
               sx: {
                 mt: 1,
                 minWidth: 200,
-                borderRadius: 3,
+                borderRadius: 1,
                 border: '1px solid',
                 borderColor: 'divider',
                 '& .MuiMenuItem-root': {

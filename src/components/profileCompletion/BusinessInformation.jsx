@@ -126,84 +126,6 @@ const BusinessInformation = ({
                 }}
               />
             </Box>
-
-            {/* Business Website */}
-            <Box sx={{ mb: 3 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 600,
-                  color: "#2D3748",
-                  mb: 1,
-                  fontSize: "0.9rem",
-                }}
-              >
-                Business Website{" "}
-                <Typography
-                  component="span"
-                  sx={{ color: "#718096", fontWeight: 400 }}
-                >
-                  (Optional)
-                </Typography>
-              </Typography>
-              <TextField
-                fullWidth
-                placeholder="https://your-website.com"
-                name="businessWebsite"
-                value={formData.businessWebsite}
-                onChange={handleChange}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#E2E8F0",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#CBD5E0",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#4A90E2",
-                    },
-                  },
-                }}
-              />
-            </Box>
-
-            {/* Business Description */}
-            <Box sx={{ mb: 3 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 600,
-                  color: "#2D3748",
-                  mb: 1,
-                  fontSize: "0.9rem",
-                }}
-              >
-                Business Description
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                placeholder="Tell us about your business..."
-                name="businessDescription"
-                value={formData.businessDescription}
-                onChange={handleChange}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#E2E8F0",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#CBD5E0",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#4A90E2",
-                    },
-                  },
-                }}
-              />
-            </Box>
           </Grid>
 
           {/* Right Column */}
@@ -247,7 +169,7 @@ const BusinessInformation = ({
           </Grid>
 
           {/* Business Logo Upload - Full width */}
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography
               variant="body2"
               sx={{
@@ -337,7 +259,7 @@ const BusinessInformation = ({
                 </Box>
               )}
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Box>

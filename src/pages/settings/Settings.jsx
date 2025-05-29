@@ -344,13 +344,12 @@ const Settings = () => {
         </Box>
 
         {/* Content Area */}
-        <Box sx={{ p: 4 }}>
           <Box sx={{ 
             backgroundColor: 'white',
-            borderRadius: '8px',
+            borderRadius: '1px',
             border: '1px solid #e0e0e0',
             p: 4,
-            maxWidth: '800px'
+            maxWidth: '100%'
           }}>
             {/* Success Message */}
             {successMessage && (
@@ -452,7 +451,6 @@ const Settings = () => {
                     fontWeight: 500,
                     color: '#333',
                     fontSize: '18px',
-                    mb: 3
                   }}
                 >
                   Change Password
@@ -514,7 +512,6 @@ const Settings = () => {
             )}
           </Box>
         </Box>
-      </Box>
   );
 };
 
