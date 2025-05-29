@@ -36,7 +36,6 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
-import AppLayout from "../../components/layout/AppLayout";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import NotificationAlert from "../../components/ui/NotificationAlert";
 
@@ -348,26 +347,25 @@ const AddProduct = () => {
   };
   
   return (
-    <AppLayout title="Add New Product">
-      {success && (
-        <NotificationAlert
-          type="success"
-          title="Product Created"
-          message="Your product has been successfully created."
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
-      )}
+      // {success && (
+      //   <NotificationAlert
+      //     type="success"
+      //     title="Product Created"
+      //     message="Your product has been successfully created."
+      //     showActionButton={false}
+      //     sx={{ mb: 3 }}
+      //   />
+      // )}
       
-      {error && (
-        <NotificationAlert
-          type="error"
-          title="Error"
-          message={error}
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
-      )}
+      // {error && (
+      //   <NotificationAlert
+      //     type="error"
+      //     title="Error"
+      //     message={error}
+      //     showActionButton={false}
+      //     sx={{ mb: 3 }}
+      //   />
+      // )}
       
       <Box sx={{ position: 'relative' }}>
         {loading && <LoadingIndicator overlay text="Creating product..." />}
@@ -1103,7 +1101,6 @@ const AddProduct = () => {
           </Box>
         </form>
       </Box>
-    </AppLayout>
   );
 };
 

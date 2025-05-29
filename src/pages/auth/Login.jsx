@@ -98,7 +98,6 @@ const Login = () => {
     setGoogleLoading(true);
     setLoginError(null);
     try {
-      // Implement Google sign-in logic here
       console.log('Google sign-in clicked');
     } catch (error) {
       setLoginError('Google sign-in failed. Please try again.');
@@ -123,8 +122,8 @@ const Login = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            px: 8,
-            py: 12,
+            px: 6,
+            py: 8,
             bgcolor: theme.palette.background.auth,
           }}
         >
@@ -134,8 +133,8 @@ const Login = () => {
               sx={{
                 fontWeight: 700,
                 color: '#1F2937',
-                mb: 3,
-                fontSize: '2.25rem',
+                mb: 2,
+                fontSize: '2rem',
               }}
             >
               Multi-Vendor Marketplace
@@ -144,25 +143,25 @@ const Login = () => {
               variant="body1"
               sx={{
                 color: '#6B7280',
-                mb: 6,
-                fontSize: '1.125rem',
-                lineHeight: 1.6,
+                mb: 4,
+                fontSize: '1rem',
+                lineHeight: 1.5,
               }}
             >
               Connect with verified vendors and buyers in our trusted B2B platform
             </Typography>
 
             {/* Features List */}
-            <Box sx={{ space: 4 }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
+            <Box sx={{ space: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
                 <Box
                   sx={{
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.verified,
+                    bgcolor: theme.palette.features?.verified || '#10B981',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -173,7 +172,7 @@ const Login = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Verified Vendors
@@ -190,15 +189,15 @@ const Login = () => {
                 </Box>
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
                 <Box
                   sx={{
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.secure,
+                    bgcolor: theme.palette.features?.secure || '#3B82F6',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -209,7 +208,7 @@ const Login = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Secure Transactions
@@ -232,9 +231,9 @@ const Login = () => {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.global,
+                    bgcolor: theme.palette.features?.global || '#8B5CF6',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -245,7 +244,7 @@ const Login = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Global Reach
@@ -266,7 +265,6 @@ const Login = () => {
         </Box>
       )}
 
-
       {/* Right Panel - Login Form */}
       <Box
         sx={{
@@ -274,20 +272,20 @@ const Login = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          px: isMobile ? 4 : { lg: 8, xl: 12 },
-          py: 12,
+          px: isMobile ? 3 : { lg: 6, xl: 8 },
+          py: 6,
           bgcolor: 'white',
         }}
       >
-        <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}>
+        <Box sx={{ maxWidth: 420, width: '100%', mx: 'auto' }}>
           <Typography
             variant="h4"
             sx={{
               fontWeight: 700,
               color: '#1F2937',
-              mb: 2,
+              mb: 1,
               textAlign: 'center',
-              fontSize: { xs: '1.75rem', lg: '1.875rem', xl: '2rem' },
+              fontSize: { xs: '1.5rem', lg: '1.75rem' },
             }}
           >
             Welcome Back
@@ -296,9 +294,9 @@ const Login = () => {
             variant="body2"
             sx={{
               color: '#6B7280',
-              mb: 6,
+              mb: 3,
               textAlign: 'center',
-              fontSize: { xs: '0.875rem', lg: '0.9rem' },
+              fontSize: '0.875rem',
             }}
           >
             Sign in to your vendor account
@@ -306,7 +304,7 @@ const Login = () => {
 
           {/* Error Alert */}
           {loginError && (
-            <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+            <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
               {loginError}
             </Alert>
           )}
@@ -317,7 +315,7 @@ const Login = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2,
+                mb: 1,
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -334,9 +332,9 @@ const Login = () => {
               error={!!errors.email}
               helperText={errors.email}
               sx={{
-                mb: 4,
+                mb: 2,
                 '& .MuiOutlinedInput-root': {
-                  height: 48,
+                  height: 44,
                 },
               }}
             />
@@ -345,7 +343,7 @@ const Login = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2,
+                mb: 1,
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -375,32 +373,12 @@ const Login = () => {
                 ),
               }}
               sx={{
-                mb: 3,
+                mb: 2,
                 '& .MuiOutlinedInput-root': {
-                  height: 48,
+                  height: 44,
                 },
               }}
             />
-
-
-            {/* <Link
-              component={RouterLink}
-              to="/forgot-password"
-              sx={{
-                display: 'block',
-                textAlign: 'right',
-                color: '#6B7280',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                mb: 6,
-                '&:hover': {
-                  color: '#1F2937',
-                  textDecoration: 'underline',
-                },
-              }}
-            >
-              Forgot your password?
-            </Link> */}
 
             <Button
               fullWidth
@@ -409,8 +387,8 @@ const Login = () => {
               size="large"
               disabled={isLoading || googleLoading}
               sx={{
-                py: 2,
-                mb: 3,
+                py: 1.5,
+                mb: 2,
                 fontSize: '0.875rem',
                 fontWeight: 600,
                 bgcolor: '#1F2937',
@@ -422,12 +400,12 @@ const Login = () => {
               {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
             </Button>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Divider sx={{ flex: 1 }} />
               <Typography
                 variant="caption"
                 sx={{
-                  px: 3,
+                  px: 2,
                   color: '#9CA3AF',
                   fontSize: '0.75rem',
                   fontWeight: 500,
@@ -449,7 +427,7 @@ const Login = () => {
               onClick={handleGoogleSignIn}
               disabled={googleLoading || isLoading}
               sx={{
-                mb: 6,
+                mb: 3,
                 fontSize: '0.875rem',
                 fontWeight: 500,
                 borderColor: '#E5E7EB',
@@ -488,10 +466,6 @@ const Login = () => {
               </Link>
             </Typography>
           </Box>
-
-
-
-
         </Box>
       </Box>
     </Box>

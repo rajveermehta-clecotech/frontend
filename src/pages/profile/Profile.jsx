@@ -18,7 +18,6 @@ import {
   Edit,
   FiberManualRecord,
 } from "@mui/icons-material";
-import AppLayout from "../../components/layout/AppLayout";
 import NotificationAlert from "../../components/ui/NotificationAlert";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { useAuth } from "../../context/AuthContext";
@@ -220,27 +219,45 @@ const Profile = () => {
 
   if (loading && !userData) {
     return (
-      <AppLayout title="Profile">
+      <Box sx={{ 
+        flexGrow: 1, 
+        p: { xs: 2, sm: 3 },
+        minHeight: 'calc(100vh - 70px)',
+        bgcolor: '#f5f5f5',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
         <LoadingIndicator text="Loading profile..." />
-      </AppLayout>
+      </Box>
     );
   }
 
   if (error && !userData) {
     return (
-      <AppLayout title="Profile">
+      <Box sx={{ 
+        flexGrow: 1, 
+        p: { xs: 2, sm: 3 },
+        minHeight: 'calc(100vh - 70px)',
+        bgcolor: '#f5f5f5'
+      }}>
         <NotificationAlert
           type="error"
           title="Error"
           message={error}
           showActionButton={false}
         />
-      </AppLayout>
+      </Box>
     );
   }
 
   return (
-    <AppLayout title="Profile">
+    <Box sx={{ 
+      flexGrow: 1, 
+      p: { xs: 2, sm: 3 },
+      minHeight: 'calc(100vh - 70px)',
+      bgcolor: '#f5f5f5'
+    }}>
       {success && (
         <NotificationAlert
           type="success"
@@ -720,7 +737,7 @@ const Profile = () => {
           </Grid>
         </Grid>
       </Box>
-    </AppLayout>
+    </Box>
   );
 };
 

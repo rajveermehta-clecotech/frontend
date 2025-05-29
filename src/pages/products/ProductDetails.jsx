@@ -57,7 +57,6 @@ import {
   ArrowForwardIos
 } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
-import AppLayout from "../../components/layout/AppLayout";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import NotificationAlert from "../../components/ui/NotificationAlert";
 
@@ -445,27 +444,6 @@ const ProductDetails = () => {
   }
   
   return (
-    <AppLayout title="Product Details">
-      {success && (
-        <NotificationAlert
-          type="success"
-          title="Product Updated"
-          message="Your product has been successfully updated."
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
-      )}
-      
-      {error && (
-        <NotificationAlert
-          type="error"
-          title="Error"
-          message={error}
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
-      )}
-      
       <Box sx={{ position: 'relative' }}>
         {saveLoading && <LoadingIndicator overlay text="Saving..." />}
         
@@ -1388,7 +1366,6 @@ const ProductDetails = () => {
           </DialogActions>
         </Dialog>
       </Box>
-    </AppLayout>
   );
 };
 

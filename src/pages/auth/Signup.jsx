@@ -131,7 +131,6 @@ const Signup = () => {
     setGoogleLoading(true);
     setSignupError(null);
     try {
-      // Implement Google sign-in logic here
       console.log('Google sign-in clicked');
     } catch (error) {
       setSignupError('Google sign-in failed. Please try again.');
@@ -156,8 +155,8 @@ const Signup = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            px: 8,
-            py: 12,
+            px: 6,
+            py: 8,
             bgcolor: theme.palette.background.auth,
           }}
         >
@@ -167,8 +166,8 @@ const Signup = () => {
               sx={{
                 fontWeight: 700,
                 color: '#1F2937',
-                mb: 3,
-                fontSize: '2.25rem',
+                mb: 2,
+                fontSize: '2rem',
               }}
             >
               Multi-Vendor Marketplace
@@ -177,25 +176,25 @@ const Signup = () => {
               variant="body1"
               sx={{
                 color: '#6B7280',
-                mb: 6,
-                fontSize: '1.125rem',
-                lineHeight: 1.6,
+                mb: 4,
+                fontSize: '1rem',
+                lineHeight: 1.5,
               }}
             >
               Connect with verified vendors and buyers in our trusted B2B platform
             </Typography>
 
             {/* Features List */}
-            <Box sx={{ space: 4 }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
+            <Box sx={{ space: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
                 <Box
                   sx={{
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.verified,
+                    bgcolor: theme.palette.features?.verified || '#10B981',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -206,7 +205,7 @@ const Signup = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Verified Vendors
@@ -223,15 +222,15 @@ const Signup = () => {
                 </Box>
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
                 <Box
                   sx={{
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.secure,
+                    bgcolor: theme.palette.features?.secure || '#3B82F6',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -242,7 +241,7 @@ const Signup = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Secure Transactions
@@ -265,9 +264,9 @@ const Signup = () => {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    bgcolor: theme.palette.features.global,
+                    bgcolor: theme.palette.features?.global || '#8B5CF6',
                     mt: 0.75,
-                    mr: 3,
+                    mr: 2,
                     flexShrink: 0,
                   }}
                 />
@@ -278,7 +277,7 @@ const Signup = () => {
                       fontWeight: 600,
                       color: '#1F2937',
                       mb: 0.5,
-                      fontSize: '1.125rem',
+                      fontSize: '1rem',
                     }}
                   >
                     Global Reach
@@ -302,24 +301,24 @@ const Signup = () => {
       {/* Right Panel - Signup Form */}
       <Box
         sx={{
-          flex: isMobile ? 1 : '0 0 55%', // Changed from '0 0 600px' to match login
+          flex: isMobile ? 1 : '0 0 55%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          px: isMobile ? 4 : { lg: 8, xl: 12 }, // Updated to match login
-          py: 12,
+          px: isMobile ? 3 : { lg: 6, xl: 8 },
+          py: 4,
           bgcolor: 'white',
         }}
       >
-        <Box sx={{ maxWidth: 480, width: '100%', mx: 'auto' }}> {/* Changed from 800 to 480 to match login */}
+        <Box sx={{ maxWidth: 420, width: '100%', mx: 'auto' }}>
           <Typography
             variant="h4"
             sx={{
               fontWeight: 700,
               color: '#1F2937',
-              mb: 1, // Changed from 1 to 2 to match login
+              mb: 1,
               textAlign: 'center',
-              fontSize: { xs: '1.75rem', lg: '1.875rem', xl: '2rem' }, // Updated to match login
+              fontSize: { xs: '1.5rem', lg: '1.75rem' },
             }}
           >
             Create Account
@@ -328,9 +327,9 @@ const Signup = () => {
             variant="body2"
             sx={{
               color: '#6B7280',
-              mb: 4, // Changed from 6 to 8 to match login
+              mb: 2,
               textAlign: 'center',
-              fontSize: { xs: '0.875rem', lg: '0.9rem' }, // Updated to match login
+              fontSize: '0.875rem',
             }}
           >
             Join our marketplace platform
@@ -338,7 +337,7 @@ const Signup = () => {
 
           {/* Error Alert */}
           {signupError && (
-            <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}> {/* Added borderRadius to match login */}
+            <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
               {signupError}
             </Alert>
           )}
@@ -349,8 +348,8 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 1, // Changed from 1 to 2 to match login
-                fontWeight: 500, // Changed from 400 to 500 to match login
+                mb: 1,
+                fontWeight: 500,
                 fontSize: '0.875rem',
               }}
             >
@@ -365,9 +364,9 @@ const Signup = () => {
               error={!!errors.fullName}
               helperText={errors.fullName}
               sx={{
-                mb: 3, // Changed from 3 to 4 to match login
-                '& .MuiOutlinedInput-root': { // Added to match login
-                  height: 48,
+                mb: 2,
+                '& .MuiOutlinedInput-root': {
+                  height: 44,
                 },
               }}
             />
@@ -376,7 +375,7 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 1, // Changed from 1 to 2 to match login
+                mb: 1,
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -393,9 +392,9 @@ const Signup = () => {
               error={!!errors.email}
               helperText={errors.email}
               sx={{
-                mb: 3, // Changed from 3 to 4 to match login
-                '& .MuiOutlinedInput-root': { // Added to match login
-                  height: 48,
+                mb: 2,
+                '& .MuiOutlinedInput-root': {
+                  height: 44,
                 },
               }}
             />
@@ -404,24 +403,24 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 2,
+                mb: 1,
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
             >
               Account Type
             </Typography>
-            <FormControl sx={{ mb: 3 }}> {/* Changed from 3 to 4 */}
+            <FormControl sx={{ mb: 2 }}>
               <RadioGroup
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                row // Added this to make radio buttons inline
-                sx={{ gap: 3 }} // Changed from 1 to 3 for better spacing
+                row
+                sx={{ gap: 2 }}
               >
                 <FormControlLabel
                   value="vendor"
-                  control={<Radio />}
+                  control={<Radio size="small" />}
                   label={
                     <Typography sx={{ fontSize: '0.875rem' }}>
                       Vendor (Sell products)
@@ -430,7 +429,7 @@ const Signup = () => {
                 />
                 <FormControlLabel
                   value="buyer"
-                  control={<Radio />}
+                  control={<Radio size="small" />}
                   label={
                     <Typography sx={{ fontSize: '0.875rem' }}>
                       Buyer (Purchase products)
@@ -444,7 +443,7 @@ const Signup = () => {
               variant="body2"
               sx={{
                 color: '#374151',
-                mb: 1, // Changed from 1 to 2 to match login
+                mb: 1,
                 fontWeight: 500,
                 fontSize: '0.875rem',
               }}
@@ -474,9 +473,50 @@ const Signup = () => {
                 ),
               }}
               sx={{
-                mb: 4, // Changed from 3 to 4 to match login
-                '& .MuiOutlinedInput-root': { // Added to match login
-                  height: 48,
+                mb: 2,
+                '& .MuiOutlinedInput-root': {
+                  height: 44,
+                },
+              }}
+            />
+
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#374151',
+                mb: 1,
+                fontWeight: 500,
+                fontSize: '0.875rem',
+              }}
+            >
+              Confirm Password
+            </Typography>
+            <TextField
+              fullWidth
+              name="confirmPassword"
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="Confirm your password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                      size="small"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                mb: 2,
+                '& .MuiOutlinedInput-root': {
+                  height: 44,
                 },
               }}
             />
@@ -488,10 +528,10 @@ const Signup = () => {
               size="large"
               disabled={isLoading || googleLoading}
               sx={{
-                py: 2, // Updated to match login
-                mb: 3, // Changed from 4 to 6 to match login
-                fontSize: '0.875rem', // Added to match login
-                fontWeight: 600, // Added to match login
+                py: 1.5,
+                mb: 2,
+                fontSize: '0.875rem',
+                fontWeight: 600,
                 bgcolor: '#1F2937',
                 '&:hover': {
                   bgcolor: '#111827',
@@ -501,18 +541,17 @@ const Signup = () => {
               {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
             </Button>
 
-            {/* Google Sign-in Button */}
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}> {/* Changed from 4 to 6 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Divider sx={{ flex: 1 }} />
               <Typography
                 variant="caption"
                 sx={{
-                  px: 3, // Changed from 2 to 3 to match login
+                  px: 2,
                   color: '#9CA3AF',
                   fontSize: '0.75rem',
                   fontWeight: 500,
-                  textTransform: 'uppercase', // Added to match login
-                  letterSpacing: '0.05em', // Added to match login
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
                 }}
               >
                 OR CONTINUE WITH
@@ -528,10 +567,9 @@ const Signup = () => {
               onClick={handleGoogleSignIn}
               disabled={googleLoading || isLoading}
               sx={{
-                mb: 3, // Changed from 4 to 6 to match login
-                py: 2, // Updated to match login
-                fontSize: '0.875rem', // Added to match login
-                fontWeight: 500, // Added to match login
+                mb: 2,
+                fontSize: '0.875rem',
+                fontWeight: 500,
                 borderColor: '#E5E7EB',
                 color: '#374151',
                 '&:hover': {
@@ -542,8 +580,6 @@ const Signup = () => {
             >
               {googleLoading ? 'Signing up...' : 'Continue with Google'}
             </Button>
-
-
 
             <Typography
               variant="body2"
