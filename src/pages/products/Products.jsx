@@ -219,7 +219,7 @@ const Products = () => {
             fontWeight: 600,
             px: 3,
             py: 1.5,
-            borderRadius: 2,
+            borderRadius: 1,
             textTransform: "none",
             "&:hover": {
               bgcolor: "#1976d2",
@@ -332,7 +332,7 @@ const Products = () => {
       <TableContainer
         component={Paper}
         sx={{
-          borderRadius: 2,
+          borderRadius: 1,
           boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
           border: "1px solid #E0E0E0",
         }}

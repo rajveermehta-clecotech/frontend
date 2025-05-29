@@ -435,11 +435,9 @@ const ProductDetails = () => {
   // If product is loading, show loading indicator
   if (loading && !product.id) {
     return (
-      <AppLayout title="Product Details">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 400 }}>
           <LoadingIndicator text="Loading product details..." />
         </Box>
-      </AppLayout>
     );
   }
   

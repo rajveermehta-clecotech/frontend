@@ -25,8 +25,8 @@ import NotFound from "./pages/NotFound";
 import theme from "./theme";
 import "./index.css";
 import Products from "./pages/products/Products";
-// import AddProduct from "./pages/products/AddProduct";
-// import ProductDetails from "./pages/products/ProductDetails";
+import AddProduct from "./pages/products/AddProduct";
+import ProductDetails from "./pages/products/ProductDetails";
 
 function App() {
   return (
@@ -44,25 +44,25 @@ function App() {
               {/* Protected Routes - With MainLayout */}
               <Route path="/*" element={
                 // <ProtectedRoute>
-                  <MainLayout>
-                    <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/products" element={<Products />} />
-                       <Route path="/profile" element={<Profile />} />
-                       <Route path="/settings" element={<Settings />} />
-                      {/* <Route path="/profile" element={<Profile />} />
-                      <Route path="/products/new" element={<AddProduct />} />
-                      <Route path="/products/:id" element={<ProductDetails />} />
-                      <Route path="/products/:id/edit" element={<ProductDetails />} />
+                <MainLayout>
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/products/new" element={<AddProduct />} />
+                    <Route path="/products/:id" element={<ProductDetails />} />
+                    <Route path="/products/:id/edit" element={<ProductDetails />} />
+                    {/* <Route path="/profile" element={<Profile />} />
                        */}
-                      
-                      {/* Default Route */}
-                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                      
-                      {/* 404 Page */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </MainLayout>
+
+                    {/* Default Route */}
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+                    {/* 404 Page */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MainLayout>
                 // </ProtectedRoute>
               } />
             </Routes>

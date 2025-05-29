@@ -31,7 +31,7 @@ const Enquiry = () => {
     <Paper elevation={0} sx={{ 
       p: { xs: 2, sm: 2.5, md: 3 }, 
       backgroundColor: '#fff', 
-      borderRadius: 2,
+      borderRadius: 1,
       mx: { xs: 1, sm: 0 }
     }}>
       <Box sx={{ 

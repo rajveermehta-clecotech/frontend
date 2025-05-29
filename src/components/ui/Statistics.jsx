@@ -49,7 +49,7 @@ const Statistics = () => {
           sx={{ 
             p: { xs: 2, sm: 2.5, md: 3 }, 
             backgroundColor: '#fff', 
-            borderRadius: 2,
+            borderRadius: 1,
             border: '1px solid #e3f2fd',
             borderLeft: '4px solid #2196f3',
             flex: 1,
