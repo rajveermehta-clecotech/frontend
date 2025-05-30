@@ -116,7 +116,7 @@ const Settings = () => {
           width: 60,
           height: 60,
           borderRadius: '50%',
-          background: `conic-gradient(${theme.palette.common.white} 0deg, ${theme.palette.common.white} ${value * 3.6}deg, rgba(255,255,255,0.3) ${value * 3.6}deg)`,
+          background: `conic-gradient(white 0deg, white ${value * 3.6}deg, rgba(255,255,255,0.3) ${value * 3.6}deg)`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -139,7 +139,7 @@ const Settings = () => {
           <Typography
             variant="body1"
             sx={{
-              color: theme.palette.common.white,
+              color: 'white',
               fontWeight: 600,
               fontSize: '16px'
             }}
@@ -161,7 +161,7 @@ const Settings = () => {
               sx={{ 
                 fontWeight: 600, 
                 mb: 4,
-                color: theme.palette.text.primary,
+                color: 'var(--mui-palette-text-primary)',
                 fontSize: { xs: '1.5rem', sm: '1.75rem' }
               }}
             >
@@ -172,11 +172,10 @@ const Settings = () => {
               severity="info" 
               sx={{ 
                 mb: 4,
-                backgroundColor: theme.palette.mode === 'dark' ? 
-                  'rgba(33, 150, 243, 0.1)' : 'rgba(33, 150, 243, 0.05)',
-                color: theme.palette.text.primary,
+                backgroundColor: 'var(--mui-palette-info-light)',
+                color: 'var(--mui-palette-text-primary)',
                 '& .MuiAlert-icon': {
-                  color: theme.palette.info.main
+                  color: 'var(--mui-palette-info-main)'
                 }
               }}
             >
@@ -198,7 +197,7 @@ const Settings = () => {
                         <IconButton
                           onClick={() => togglePasswordVisibility('current')}
                           edge="end"
-                          sx={{ color: theme.palette.text.secondary }}
+                          sx={{ color: 'var(--mui-palette-text-secondary)' }}
                         >
                           {showPasswords.current ? <VisibilityOffIcon /> : <VisibilityIcon />}
                         </IconButton>
@@ -208,23 +207,21 @@ const Settings = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     },
                     '& .MuiInputLabel-root': {
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       '&.Mui-focused': {
-                        color: theme.palette.primary.main
+                        color: 'var(--mui-palette-primary-main)'
                       }
                     }
                   }}
@@ -245,7 +242,7 @@ const Settings = () => {
                         <IconButton
                           onClick={() => togglePasswordVisibility('new')}
                           edge="end"
-                          sx={{ color: theme.palette.text.secondary }}
+                          sx={{ color: 'var(--mui-palette-text-secondary)' }}
                         >
                           {showPasswords.new ? <VisibilityOffIcon /> : <VisibilityIcon />}
                         </IconButton>
@@ -255,23 +252,21 @@ const Settings = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     },
                     '& .MuiInputLabel-root': {
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       '&.Mui-focused': {
-                        color: theme.palette.primary.main
+                        color: 'var(--mui-palette-primary-main)'
                       }
                     }
                   }}
@@ -298,7 +293,7 @@ const Settings = () => {
                         <IconButton
                           onClick={() => togglePasswordVisibility('confirm')}
                           edge="end"
-                          sx={{ color: theme.palette.text.secondary }}
+                          sx={{ color: 'var(--mui-palette-text-secondary)' }}
                         >
                           {showPasswords.confirm ? <VisibilityOffIcon /> : <VisibilityIcon />}
                         </IconButton>
@@ -308,23 +303,21 @@ const Settings = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     },
                     '& .MuiInputLabel-root': {
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       '&.Mui-focused': {
-                        color: theme.palette.primary.main
+                        color: 'var(--mui-palette-primary-main)'
                       }
                     }
                   }}
@@ -341,23 +334,21 @@ const Settings = () => {
                     passwordData.newPassword !== passwordData.confirmPassword
                   }
                   sx={{
-                    bgcolor: theme.palette.primary.main,
-                    color: theme.palette.primary.contrastText,
+                    bgcolor: 'var(--mui-palette-primary-main)',
+                    color: 'var(--mui-palette-primary-contrastText)',
                     py: 2,
                     borderRadius: 3,
                     textTransform: 'none',
                     fontSize: '1rem',
                     fontWeight: 600,
                     '&:hover': {
-                      bgcolor: theme.palette.primary.dark,
+                      bgcolor: 'var(--mui-palette-primary-dark)',
                       transform: 'translateY(-1px)',
                       boxShadow: theme.shadows[4]
                     },
                     '&:disabled': {
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.1)' : theme.palette.grey[300],
-                      color: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.3)' : theme.palette.grey[500]
+                      bgcolor: 'var(--mui-palette-action-disabled)',
+                      color: 'var(--mui-palette-text-disabled)'
                     },
                     transition: 'all 0.2s ease-in-out'
                   }}
@@ -377,7 +368,7 @@ const Settings = () => {
               sx={{ 
                 fontWeight: 600, 
                 mb: 4,
-                color: theme.palette.text.primary,
+                color: 'var(--mui-palette-text-primary)',
                 fontSize: { xs: '1.5rem', sm: '1.75rem' }
               }}
             >
@@ -386,7 +377,7 @@ const Settings = () => {
             <Box sx={{ 
               textAlign: 'center', 
               py: 8,
-              color: theme.palette.text.secondary
+              color: 'var(--mui-palette-text-secondary)'
             }}>
               <PersonAddIcon sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
               <Typography variant="h6" sx={{ mb: 1 }}>
@@ -407,7 +398,7 @@ const Settings = () => {
               sx={{ 
                 fontWeight: 600, 
                 mb: 4,
-                color: theme.palette.text.primary,
+                color: 'var(--mui-palette-text-primary)',
                 fontSize: { xs: '1.5rem', sm: '1.75rem' }
               }}
             >
@@ -428,7 +419,7 @@ const Settings = () => {
                   sx={{ 
                     width: { xs: 70, sm: 80 }, 
                     height: { xs: 70, sm: 80 },
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    background: `linear-gradient(135deg, var(--mui-palette-primary-main) 0%, var(--mui-palette-primary-dark) 100%)`,
                     fontSize: { xs: '1.5rem', sm: '1.75rem' },
                     fontWeight: 600
                   }}
@@ -440,16 +431,16 @@ const Settings = () => {
                     position: 'absolute',
                     bottom: -8,
                     right: -8,
-                    bgcolor: theme.palette.background.paper,
-                    border: `2px solid ${theme.palette.background.paper}`,
+                    bgcolor: 'var(--mui-palette-background-paper)',
+                    border: `2px solid var(--mui-palette-background-paper)`,
                     width: 32,
                     height: 32,
                     '&:hover': {
-                      bgcolor: theme.palette.action.hover
+                      bgcolor: 'var(--mui-palette-action-hover)'
                     }
                   }}
                 >
-                  <PhotoCameraIcon sx={{ fontSize: 16, color: theme.palette.text.secondary }} />
+                  <PhotoCameraIcon sx={{ fontSize: 16, color: 'var(--mui-palette-text-secondary)' }} />
                 </IconButton>
               </Box>
               
@@ -459,7 +450,7 @@ const Settings = () => {
                   sx={{ 
                     fontWeight: 600, 
                     mb: 1,
-                    color: theme.palette.text.primary,
+                    color: 'var(--mui-palette-text-primary)',
                     fontSize: { xs: '1.125rem', sm: '1.25rem' }
                   }}
                 >
@@ -475,14 +466,14 @@ const Settings = () => {
                     variant="contained"
                     size="small"
                     sx={{ 
-                      bgcolor: theme.palette.primary.main,
-                      color: theme.palette.primary.contrastText,
+                      bgcolor: 'var(--mui-palette-primary-main)',
+                      color: 'var(--mui-palette-primary-contrastText)',
                       textTransform: 'none',
                       fontWeight: 500,
                       borderRadius: 2,
                       px: 2,
                       '&:hover': {
-                        bgcolor: theme.palette.primary.dark
+                        bgcolor: 'var(--mui-palette-primary-dark)'
                       }
                     }}
                   >
@@ -492,11 +483,11 @@ const Settings = () => {
                     variant="text"
                     size="small"
                     sx={{ 
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       textTransform: 'none',
                       fontWeight: 500,
                       '&:hover': {
-                        color: theme.palette.error.main
+                        color: 'var(--mui-palette-error-main)'
                       }
                     }}
                   >
@@ -506,10 +497,10 @@ const Settings = () => {
               </Box>
               
               <IconButton sx={{ 
-                color: theme.palette.text.secondary,
+                color: 'var(--mui-palette-text-secondary)',
                 '&:hover': { 
-                  color: theme.palette.primary.main,
-                  bgcolor: theme.palette.action.hover
+                  color: 'var(--mui-palette-primary-main)',
+                  bgcolor: 'var(--mui-palette-action-hover)'
                 }
               }}>
                 <EditIcon />
@@ -529,23 +520,21 @@ const Settings = () => {
                     sx={{
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        bgcolor: 'var(--mui-palette-background-paper)',
                         '& fieldset': {
-                          borderColor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                          borderColor: 'var(--mui-palette-divider)'
                         },
                         '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         }
                       },
                       '& .MuiInputLabel-root': {
-                        color: theme.palette.text.secondary,
+                        color: 'var(--mui-palette-text-secondary)',
                         '&.Mui-focused': {
-                          color: theme.palette.primary.main
+                          color: 'var(--mui-palette-primary-main)'
                         }
                       }
                     }}
@@ -555,8 +544,8 @@ const Settings = () => {
                     right: 8,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    color: theme.palette.text.secondary,
-                    '&:hover': { color: theme.palette.primary.main }
+                    color: 'var(--mui-palette-text-secondary)',
+                    '&:hover': { color: 'var(--mui-palette-primary-main)' }
                   }}>
                     <EditIcon fontSize="small" />
                   </IconButton>
@@ -574,23 +563,21 @@ const Settings = () => {
                     sx={{
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        bgcolor: 'var(--mui-palette-background-paper)',
                         '& fieldset': {
-                          borderColor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                          borderColor: 'var(--mui-palette-divider)'
                         },
                         '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         }
                       },
                       '& .MuiInputLabel-root': {
-                        color: theme.palette.text.secondary,
+                        color: 'var(--mui-palette-text-secondary)',
                         '&.Mui-focused': {
-                          color: theme.palette.primary.main
+                          color: 'var(--mui-palette-primary-main)'
                         }
                       }
                     }}
@@ -600,8 +587,8 @@ const Settings = () => {
                     right: 8,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    color: theme.palette.text.secondary,
-                    '&:hover': { color: theme.palette.primary.main }
+                    color: 'var(--mui-palette-text-secondary)',
+                    '&:hover': { color: 'var(--mui-palette-primary-main)' }
                   }}>
                     <EditIcon fontSize="small" />
                   </IconButton>
@@ -619,23 +606,21 @@ const Settings = () => {
                     sx={{
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        bgcolor: 'var(--mui-palette-background-paper)',
                         '& fieldset': {
-                          borderColor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                          borderColor: 'var(--mui-palette-divider)'
                         },
                         '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
+                          borderColor: 'var(--mui-palette-primary-main)'
                         }
                       },
                       '& .MuiInputLabel-root': {
-                        color: theme.palette.text.secondary,
+                        color: 'var(--mui-palette-text-secondary)',
                         '&.Mui-focused': {
-                          color: theme.palette.primary.main
+                          color: 'var(--mui-palette-primary-main)'
                         }
                       }
                     }}
@@ -645,8 +630,8 @@ const Settings = () => {
                     right: 8,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    color: theme.palette.text.secondary,
-                    '&:hover': { color: theme.palette.primary.main }
+                    color: 'var(--mui-palette-text-secondary)',
+                    '&:hover': { color: 'var(--mui-palette-primary-main)' }
                   }}>
                     <EditIcon fontSize="small" />
                   </IconButton>
@@ -664,23 +649,21 @@ const Settings = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     },
                     '& .MuiInputLabel-root': {
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       '&.Mui-focused': {
-                        color: theme.palette.primary.main
+                        color: 'var(--mui-palette-primary-main)'
                       }
                     }
                   }}
@@ -698,23 +681,21 @@ const Settings = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     },
                     '& .MuiInputLabel-root': {
-                      color: theme.palette.text.secondary,
+                      color: 'var(--mui-palette-text-secondary)',
                       '&.Mui-focused': {
-                        color: theme.palette.primary.main
+                        color: 'var(--mui-palette-primary-main)'
                       }
                     }
                   }}
@@ -730,17 +711,15 @@ const Settings = () => {
                     renderValue={(value) => value || 'City'}
                     sx={{
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     }}
                   >
@@ -761,17 +740,15 @@ const Settings = () => {
                     renderValue={(value) => value || 'State'}
                     sx={{
                       borderRadius: 2,
-                      bgcolor: theme.palette.mode === 'dark' ? 
-                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      bgcolor: 'var(--mui-palette-background-paper)',
                       '& fieldset': {
-                        borderColor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        borderColor: 'var(--mui-palette-divider)'
                       },
                       '&:hover fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       },
                       '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main
+                        borderColor: 'var(--mui-palette-primary-main)'
                       }
                     }}
                   >
@@ -788,15 +765,15 @@ const Settings = () => {
                   fullWidth
                   variant="contained"
                   sx={{
-                    bgcolor: theme.palette.primary.main,
-                    color: theme.palette.primary.contrastText,
+                    bgcolor: 'var(--mui-palette-primary-main)',
+                    color: 'var(--mui-palette-primary-contrastText)',
                     py: 2,
                     borderRadius: 3,
                     textTransform: 'none',
                     fontSize: '1rem',
                     fontWeight: 600,
                     '&:hover': {
-                      bgcolor: theme.palette.primary.dark,
+                      bgcolor: 'var(--mui-palette-primary-dark)',
                       transform: 'translateY(-1px)',
                       boxShadow: theme.shadows[4]
                     },
@@ -829,8 +806,8 @@ const Settings = () => {
         }}>
           {/* Profile Completion Card */}
           <Card sx={{ 
-            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-            color: theme.palette.primary.contrastText,
+            background: `linear-gradient(135deg, var(--mui-palette-primary-main) 0%, var(--mui-palette-primary-dark) 100%)`,
+            color: 'var(--mui-palette-primary-contrastText)',
             borderRadius: 3,
             boxShadow: theme.shadows[8]
           }}>
@@ -850,7 +827,7 @@ const Settings = () => {
                     sx={{ 
                       fontWeight: 600, 
                       mb: 0.5,
-                      color: theme.palette.primary.contrastText
+                      color: 'var(--mui-palette-primary-contrastText)'
                     }}
                   >
                     Complete profile
@@ -860,7 +837,7 @@ const Settings = () => {
                     sx={{ 
                       opacity: 0.9, 
                       fontSize: '0.75rem',
-                      color: theme.palette.primary.contrastText
+                      color: 'var(--mui-palette-primary-contrastText)'
                     }}
                   >
                     Complete your profile to unlock all features
@@ -872,7 +849,7 @@ const Settings = () => {
                 variant="contained"
                 sx={{ 
                   bgcolor: 'rgba(255,255,255,0.2)',
-                  color: theme.palette.primary.contrastText,
+                  color: 'var(--mui-palette-primary-contrastText)',
                   fontWeight: 600,
                   textTransform: 'none',
                   borderRadius: 2,
@@ -889,7 +866,7 @@ const Settings = () => {
           {/* Navigation Menu */}
           <Card sx={{ 
             borderRadius: 3, 
-            bgcolor: theme.palette.background.paper,
+            bgcolor: 'var(--mui-palette-background-paper)',
             boxShadow: theme.shadows[2]
           }}>
             <List sx={{ p: 0 }}>
@@ -902,11 +879,11 @@ const Settings = () => {
                       py: 2.5,
                       px: 3,
                       bgcolor: activeSection === item.id ? 
-                        theme.palette.action.selected : 'transparent',
+                        'var(--mui-palette-action-selected)' : 'transparent',
                       borderLeft: activeSection === item.id ? 
-                        `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
+                        `3px solid var(--mui-palette-primary-main)` : '3px solid transparent',
                       '&:hover': {
-                        bgcolor: theme.palette.action.hover
+                        bgcolor: 'var(--mui-palette-action-hover)'
                       },
                       transition: 'all 0.2s ease-in-out'
                     }}
@@ -914,7 +891,7 @@ const Settings = () => {
                     <ListItemIcon sx={{ minWidth: 40 }}>
                       <item.icon sx={{ 
                         color: activeSection === item.id ? 
-                          theme.palette.primary.main : theme.palette.text.secondary,
+                          'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-secondary)',
                         fontSize: 20
                       }} />
                     </ListItemIcon>
@@ -925,7 +902,7 @@ const Settings = () => {
                           sx={{ 
                             fontWeight: 600,
                             color: activeSection === item.id ? 
-                              theme.palette.primary.main : theme.palette.text.primary,
+                              'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-primary)',
                             fontSize: { xs: '0.875rem', sm: '0.875rem' }
                           }}
                         >
@@ -936,7 +913,7 @@ const Settings = () => {
                         <Typography 
                           variant="caption" 
                           sx={{ 
-                            color: theme.palette.text.secondary,
+                            color: 'var(--mui-palette-text-secondary)',
                             fontSize: '0.75rem',
                             display: { xs: 'none', sm: 'block' }
                           }}
@@ -959,7 +936,7 @@ const Settings = () => {
         <Box sx={{ flex: 1 }}>
           <Card sx={{ 
             borderRadius: 3, 
-            bgcolor: theme.palette.background.paper,
+            bgcolor: 'var(--mui-palette-background-paper)',
             boxShadow: theme.shadows[2],
             height: 'fit-content'
           }}>
