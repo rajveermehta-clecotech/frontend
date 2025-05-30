@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -21,39 +21,100 @@ import {
   Close,
   Add,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const AddProduct = () => {
+const ProductForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
+  const { id } = useParams(); // Get product ID from URL params
+  const isEditMode = Boolean(id); // Determine if we're editing
+
+  // Sample products data (in a real app, this would come from an API)
+  const mockProductsData = {
+    1: {
+      productName: "Industrial Laptop Pro",
+      category: "Electronics",
+      subCategory: "Computers",
+      price: "$1299.99",
+      description: "Rugged laptop for industrial environments with enhanced durability and performance features.",
+      tags: ["Industrial", "Laptop", "Rugged", "Professional", "Electronics"]
+    },
+    2: {
+      productName: "Smart Sensor Module",
+      category: "Electronics",
+      subCategory: "IoT",
+      price: "$89.99",
+      description: "IoT-enabled environmental monitoring sensor with wireless connectivity and real-time data transmission.",
+      tags: ["IoT", "Sensor", "Smart", "Monitoring", "Wireless"]
+    },
+    3: {
+      productName: "Cable Management System",
+      category: "Men",
+      subCategory: "Accessories",
+      price: "$45.50",
+      description: "Professional cable organization solution for clean and efficient workspace management.",
+      tags: ["Cable", "Management", "Organization", "Professional", "Workspace"]
+    }
+  };
 
   const [formData, setFormData] = useState({
-    productName: 'Navy Blue Sneakers Shoe',
+    productName: '',
     category: 'Men',
     subCategory: 'Shoe',
-    price: '$175',
-    description: 'The lifestyle sneakers collection is just what you need to complete a sporty look. Shaft measures approximately low-top from arch Mesh fabric panels at front, sides, and collar for breathable comfort from cushioned comfort insole with arch support. Shock-absorbing.',
-    tags: ['Sneaker', 'Shoe', 'Footwear', 'Fashion', 'Blue', 'Stylish', 'Nike', 'Menshoes']
+    price: '',
+    description: '',
+    tags: []
   });
 
-  const [uploadedImages, setUploadedImages] = useState([
-    { name: 'Navy Blue Shoe 01.png', size: '462 kB', progress: 100 },
-    { name: 'Navy Blue Shoe 02.png', size: '512 kB', progress: 100 },
-    { name: 'Navy Blue Shoe 03.png', size: '478 kB', progress: 100 },
-    { name: 'Navy Blue Shoe 04.png', size: '1.28MB/sec', progress: 75, uploading: true }
-  ]);
-
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [newTag, setNewTag] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const categories = ['Men', 'Women', 'Kids', 'Electronics', 'Sports'];
   const subCategories = {
     'Men': ['Shoe', 'Clothing', 'Accessories'],
     'Women': ['Shoe', 'Clothing', 'Accessories'],
     'Kids': ['Shoe', 'Clothing', 'Toys'],
-    'Electronics': ['Phones', 'Computers', 'Gadgets'],
+    'Electronics': ['Phones', 'Computers', 'Gadgets', 'IoT'],
     'Sports': ['Equipment', 'Apparel', 'Footwear']
   };
+
+  // Load product data when in edit mode
+  useEffect(() => {
+    if (isEditMode && id) {
+      setIsLoading(true);
+      // Simulate API call to fetch product data
+      setTimeout(() => {
+        const productData = mockProductsData[id];
+        if (productData) {
+          setFormData(productData);
+          // Set sample images for edit mode
+          setUploadedImages([
+            { name: `${productData.productName} 01.png`, size: '462 kB', progress: 100 },
+            { name: `${productData.productName} 02.png`, size: '512 kB', progress: 100 },
+          ]);
+        }
+        setIsLoading(false);
+      }, 500);
+    } else {
+      // Reset to default values for add mode
+      setFormData({
+        productName: 'Navy Blue Sneakers Shoe',
+        category: 'Men',
+        subCategory: 'Shoe',
+        price: '$175',
+        description: 'The lifestyle sneakers collection is just what you need to complete a sporty look. Shaft measures approximately low-top from arch Mesh fabric panels at front, sides, and collar for breathable comfort from cushioned comfort insole with arch support. Shock-absorbing.',
+        tags: ['Sneaker', 'Shoe', 'Footwear', 'Fashion', 'Blue', 'Stylish', 'Nike', 'Menshoes']
+      });
+      setUploadedImages([
+        { name: 'Navy Blue Shoe 01.png', size: '462 kB', progress: 100 },
+        { name: 'Navy Blue Shoe 02.png', size: '512 kB', progress: 100 },
+        { name: 'Navy Blue Shoe 03.png', size: '478 kB', progress: 100 },
+        { name: 'Navy Blue Shoe 04.png', size: '1.28MB/sec', progress: 75, uploading: true }
+      ]);
+    }
+  }, [isEditMode, id]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -83,9 +144,17 @@ const AddProduct = () => {
     setUploadedImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handlePublish = () => {
-    console.log('Publishing product:', formData);
-    // Handle publish logic here
+  const handleSave = () => {
+    if (isEditMode) {
+      console.log('Updating product:', { id, ...formData });
+      // Handle update logic here
+      alert('Product updated successfully!');
+    } else {
+      console.log('Creating new product:', formData);
+      // Handle create logic here
+      alert('Product published successfully!');
+    }
+    navigate('/products');
   };
 
   const handleCancel = () => {
@@ -98,6 +167,26 @@ const AddProduct = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/products');
+  };
+
+  if (isLoading) {
+    return (
+      <Box sx={{
+        bgcolor: 'background.default',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Typography variant="h6" color="text.secondary">
+          Loading product data...
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{
       bgcolor: 'background.default',
@@ -107,17 +196,41 @@ const AddProduct = () => {
     }}>
       {/* Header */}
       <Box sx={{ mb: { xs: 3, md: 4 } }}>
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 600,
-            color: 'text.primary',
-            fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
-            mb: 1,
-          }}
-        >
-          Add Product
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <IconButton
+            onClick={handleBack}
+            sx={{
+              mr: 2,
+              color: 'text.secondary',
+              '&:hover': {
+                bgcolor: 'action.hover'
+              }
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 600,
+              color: 'text.primary',
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+            }}
+          >
+            {isEditMode ? 'Edit Product' : 'Add Product'}
+          </Typography>
+        </Box>
+        {isEditMode && (
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              ml: 7
+            }}
+          >
+            Editing: {formData.productName}
+          </Typography>
+        )}
       </Box>
 
       {/* Main Content Container */}
@@ -128,7 +241,7 @@ const AddProduct = () => {
         width: '100%',
         alignItems: 'flex-start'
       }}>
-        {/* Left Section - Image Upload */}
+        {/* Left Section - Product Details */}
         <Box sx={{
           flex: { xs: '1', lg: '1.2' },
           width: { xs: '100%', lg: 'auto' },
@@ -433,8 +546,25 @@ const AddProduct = () => {
               borderColor: 'divider'
             }}>
               <Button
+                variant="outlined"
+                onClick={handleCancel}
+                sx={{
+                  px: 4,
+                  py: 1,
+                  textTransform: 'none',
+                  borderColor: 'divider',
+                  color: 'text.primary',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: 'transparent'
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
                 variant="contained"
-                onClick={handlePublish}
+                onClick={handleSave}
                 sx={{
                   px: 4,
                   py: 1,
@@ -448,17 +578,13 @@ const AddProduct = () => {
                   },
                 }}
               >
-                Publish Product
+                {isEditMode ? 'Update Product' : 'Publish Product'}
               </Button>
             </Box>
           </Box>
         </Box>
 
-
-
-
-
-        {/* Right Section - Product Details */}
+        {/* Right Section - Image Upload */}
         <Box sx={{
           flex: { xs: '1', lg: '1' },
           width: { xs: '100%', lg: 'auto' },
@@ -482,7 +608,7 @@ const AddProduct = () => {
                 fontSize: { xs: '16px', md: '18px' }
               }}
             >
-              Add Images
+              {isEditMode ? 'Update Images' : 'Add Images'}
             </Typography>
 
             {/* Upload Area */}
@@ -643,4 +769,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default ProductForm;

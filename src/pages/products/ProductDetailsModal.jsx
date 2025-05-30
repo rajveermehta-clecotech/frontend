@@ -3,23 +3,34 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  DialogActions,
   Box,
   Typography,
   Chip,
   IconButton,
+  Button,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
 import {
   Close as CloseIcon,
+  Edit as EditIcon,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const ProductDetailsModal = ({ open, onClose, product }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
 
   if (!product) return null;
+
+  // Handle edit product navigation
+  const handleEditProduct = () => {
+    onClose(); // Close the modal first
+    navigate(`/products/${product.id}/edit`); // Navigate to edit page
+  };
 
   // Get stock status chip
   const getStockStatusChip = (status) => {
@@ -147,7 +158,7 @@ const ProductDetailsModal = ({ open, onClose, product }) => {
       </DialogTitle>
 
       {/* Dialog Content */}
-      <DialogContent sx={{ px: 3, pb: 3, pt: 0 }}>
+      <DialogContent sx={{ px: 3, pb: 2, pt: 0 }}>
         {/* Product Image */}
         <Box
           sx={{
@@ -364,6 +375,56 @@ const ProductDetailsModal = ({ open, onClose, product }) => {
           </Typography>
         </Box>
       </DialogContent>
+
+      {/* Dialog Actions */}
+      <DialogActions 
+        sx={{ 
+          px: 3, 
+          pb: 3, 
+          pt: 2,
+          gap: 2,
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          mt: 1
+        }}
+      >
+        <Button
+          variant="outlined"
+          onClick={onClose}
+          sx={{
+            textTransform: 'none',
+            px: 3,
+            py: 1,
+            borderColor: 'divider',
+            color: 'text.primary',
+            '&:hover': {
+              borderColor: 'primary.main',
+              bgcolor: 'transparent'
+            },
+          }}
+        >
+          Close
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<EditIcon />}
+          onClick={handleEditProduct}
+          sx={{
+            textTransform: 'none',
+            px: 3,
+            py: 1,
+            bgcolor: 'primary.main',
+            color: 'white',
+            boxShadow: 'none',
+            '&:hover': {
+              bgcolor: 'primary.dark',
+              boxShadow: 'none',
+            }
+          }}
+        >
+          Edit Product
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

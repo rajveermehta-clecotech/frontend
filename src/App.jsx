@@ -17,17 +17,15 @@ import DashboardLayoutWrapper from "./components/layout/DashboardLayoutWrapper";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Profile from "./pages/profile/Profile";
 import ProfileCompletion from "./pages/profile/ProfileCompletion";
 import Settings from "./pages/settings/Settings";
 import NotFound from "./pages/NotFound";
 
 import "./index.css";
 import Products from "./pages/products/Products";
-import AddProduct from "./pages/products/AddProduct";
-import ProductDetails from "./pages/products/ProductDetails";
 import GridDebugTest from "./pages/GridDebugTest";
 import ToastProvider from "./components/providers/ToastProvider";
+import ProductForm from "./pages/products/ProductForm";
 
 function App() {
   return (
@@ -51,11 +49,9 @@ function App() {
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/products" element={<Products />} />
-                      <Route path="/profile" element={<Profile />} />
                       <Route path="/settings" element={<Settings />} />
-                      <Route path="/products/new" element={<AddProduct />} />
-                      <Route path="/products/:id" element={<ProductDetails />} />
-                      <Route path="/products/:id/edit" element={<ProductDetails />} />
+                      <Route path="/products/new" element={<ProductForm />} />
+                      <Route path="/products/:id/edit" element={<ProductForm />} />
                       <Route path="/test" element={<GridDebugTest/>}/>
 
                       {/* Default Route */}

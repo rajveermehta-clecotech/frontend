@@ -14,30 +14,36 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  LinearProgress,
   useTheme,
   Grid,
   Divider,
   Container,
-  Paper,
   IconButton,
-  useMediaQuery
+  useMediaQuery,
+  InputAdornment,
+  Alert
 } from '@mui/material';
 import {
   Person as PersonIcon,
   Visibility as VisibilityIcon,
-  CreditCard as CreditCardIcon,
+  VisibilityOff as VisibilityOffIcon,
   Edit as EditIcon,
   PersonAdd as PersonAddIcon,
-  PhotoCamera as PhotoCameraIcon
+  PhotoCamera as PhotoCameraIcon,
+  Lock as LockIcon
 } from '@mui/icons-material';
 
 const Settings = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   
   const [activeSection, setActiveSection] = useState('account');
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+  
   const [profileData, setProfileData] = useState({
     name: 'Monir Ux Designer',
     email: 'monirrzzaman097@gmail.com',
@@ -48,10 +54,30 @@ const Settings = () => {
     state: ''
   });
 
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
   const handleInputChange = (field) => (event) => {
     setProfileData(prev => ({
       ...prev,
       [field]: event.target.value
+    }));
+  };
+
+  const handlePasswordChange = (field) => (event) => {
+    setPasswordData(prev => ({
+      ...prev,
+      [field]: event.target.value
+    }));
+  };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
     }));
   };
 
@@ -66,7 +92,7 @@ const Settings = () => {
       id: 'password',
       label: 'Password',
       sublabel: 'Change your Password',
-      icon: VisibilityIcon
+      icon: LockIcon
     },
     {
       id: 'invite',
@@ -124,6 +150,667 @@ const Settings = () => {
       </Box>
     </Box>
   );
+
+  const renderMainContent = () => {
+    switch (activeSection) {
+      case 'password':
+        return (
+          <Box>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 600, 
+                mb: 4,
+                color: theme.palette.text.primary,
+                fontSize: { xs: '1.5rem', sm: '1.75rem' }
+              }}
+            >
+              Change Password
+            </Typography>
+
+            <Alert 
+              severity="info" 
+              sx={{ 
+                mb: 4,
+                backgroundColor: theme.palette.mode === 'dark' ? 
+                  'rgba(33, 150, 243, 0.1)' : 'rgba(33, 150, 243, 0.05)',
+                color: theme.palette.text.primary,
+                '& .MuiAlert-icon': {
+                  color: theme.palette.info.main
+                }
+              }}
+            >
+              For your security, please enter your current password to make changes.
+            </Alert>
+
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type={showPasswords.current ? 'text' : 'password'}
+                  label="Current Password"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange('currentPassword')}
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => togglePasswordVisibility('current')}
+                          edge="end"
+                          sx={{ color: theme.palette.text.secondary }}
+                        >
+                          {showPasswords.current ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: theme.palette.text.secondary,
+                      '&.Mui-focused': {
+                        color: theme.palette.primary.main
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type={showPasswords.new ? 'text' : 'password'}
+                  label="New Password"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange('newPassword')}
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => togglePasswordVisibility('new')}
+                          edge="end"
+                          sx={{ color: theme.palette.text.secondary }}
+                        >
+                          {showPasswords.new ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: theme.palette.text.secondary,
+                      '&.Mui-focused': {
+                        color: theme.palette.primary.main
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  type={showPasswords.confirm ? 'text' : 'password'}
+                  label="Confirm New Password"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange('confirmPassword')}
+                  variant="outlined"
+                  error={passwordData.confirmPassword !== '' && passwordData.newPassword !== passwordData.confirmPassword}
+                  helperText={
+                    passwordData.confirmPassword !== '' && passwordData.newPassword !== passwordData.confirmPassword
+                      ? 'Passwords do not match'
+                      : ''
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => togglePasswordVisibility('confirm')}
+                          edge="end"
+                          sx={{ color: theme.palette.text.secondary }}
+                        >
+                          {showPasswords.confirm ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: theme.palette.text.secondary,
+                      '&.Mui-focused': {
+                        color: theme.palette.primary.main
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  disabled={
+                    !passwordData.currentPassword || 
+                    !passwordData.newPassword || 
+                    passwordData.newPassword !== passwordData.confirmPassword
+                  }
+                  sx={{
+                    bgcolor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    py: 2,
+                    borderRadius: 3,
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    '&:hover': {
+                      bgcolor: theme.palette.primary.dark,
+                      transform: 'translateY(-1px)',
+                      boxShadow: theme.shadows[4]
+                    },
+                    '&:disabled': {
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.1)' : theme.palette.grey[300],
+                      color: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.3)' : theme.palette.grey[500]
+                    },
+                    transition: 'all 0.2s ease-in-out'
+                  }}
+                >
+                  Update Password
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        );
+
+      case 'invite':
+        return (
+          <Box>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 600, 
+                mb: 4,
+                color: theme.palette.text.primary,
+                fontSize: { xs: '1.5rem', sm: '1.75rem' }
+              }}
+            >
+              Invite Friends
+            </Typography>
+            <Box sx={{ 
+              textAlign: 'center', 
+              py: 8,
+              color: theme.palette.text.secondary
+            }}>
+              <PersonAddIcon sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Invite System Coming Soon
+              </Typography>
+              <Typography variant="body2">
+                Get $2 for each successful invitation
+              </Typography>
+            </Box>
+          </Box>
+        );
+
+      default: // 'account'
+        return (
+          <Box>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 600, 
+                mb: 4,
+                color: theme.palette.text.primary,
+                fontSize: { xs: '1.5rem', sm: '1.75rem' }
+              }}
+            >
+              Personal Information
+            </Typography>
+
+            {/* Profile Section */}
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: 4, 
+              gap: 3,
+              flexDirection: { xs: 'column', sm: 'row' },
+              textAlign: { xs: 'center', sm: 'left' }
+            }}>
+              <Box sx={{ position: 'relative' }}>
+                <Avatar 
+                  sx={{ 
+                    width: { xs: 70, sm: 80 }, 
+                    height: { xs: 70, sm: 80 },
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                    fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                    fontWeight: 600
+                  }}
+                >
+                  M
+                </Avatar>
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    bottom: -8,
+                    right: -8,
+                    bgcolor: theme.palette.background.paper,
+                    border: `2px solid ${theme.palette.background.paper}`,
+                    width: 32,
+                    height: 32,
+                    '&:hover': {
+                      bgcolor: theme.palette.action.hover
+                    }
+                  }}
+                >
+                  <PhotoCameraIcon sx={{ fontSize: 16, color: theme.palette.text.secondary }} />
+                </IconButton>
+              </Box>
+              
+              <Box sx={{ flex: 1 }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    fontWeight: 600, 
+                    mb: 1,
+                    color: theme.palette.text.primary,
+                    fontSize: { xs: '1.125rem', sm: '1.25rem' }
+                  }}
+                >
+                  Monir UX Designer
+                </Typography>
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: 2,
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: { xs: 'center', sm: 'flex-start' }
+                }}>
+                  <Button 
+                    variant="contained"
+                    size="small"
+                    sx={{ 
+                      bgcolor: theme.palette.primary.main,
+                      color: theme.palette.primary.contrastText,
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      borderRadius: 2,
+                      px: 2,
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.dark
+                      }
+                    }}
+                  >
+                    Upload New Picture
+                  </Button>
+                  <Button 
+                    variant="text"
+                    size="small"
+                    sx={{ 
+                      color: theme.palette.text.secondary,
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      '&:hover': {
+                        color: theme.palette.error.main
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Box>
+              </Box>
+              
+              <IconButton sx={{ 
+                color: theme.palette.text.secondary,
+                '&:hover': { 
+                  color: theme.palette.primary.main,
+                  bgcolor: theme.palette.action.hover
+                }
+              }}>
+                <EditIcon />
+              </IconButton>
+            </Box>
+
+            {/* Form Fields */}
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box sx={{ position: 'relative' }}>
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    value={profileData.name}
+                    onChange={handleInputChange('name')}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: theme.palette.text.secondary,
+                        '&.Mui-focused': {
+                          color: theme.palette.primary.main
+                        }
+                      }
+                    }}
+                  />
+                  <IconButton sx={{ 
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: theme.palette.text.secondary,
+                    '&:hover': { color: theme.palette.primary.main }
+                  }}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={{ position: 'relative' }}>
+                  <TextField
+                    fullWidth
+                    label="Email Address"
+                    value={profileData.email}
+                    onChange={handleInputChange('email')}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: theme.palette.text.secondary,
+                        '&.Mui-focused': {
+                          color: theme.palette.primary.main
+                        }
+                      }
+                    }}
+                  />
+                  <IconButton sx={{ 
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: theme.palette.text.secondary,
+                    '&:hover': { color: theme.palette.primary.main }
+                  }}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={{ position: 'relative' }}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    value={profileData.phone}
+                    onChange={handleInputChange('phone')}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: theme.palette.text.secondary,
+                        '&.Mui-focused': {
+                          color: theme.palette.primary.main
+                        }
+                      }
+                    }}
+                  />
+                  <IconButton sx={{ 
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: theme.palette.text.secondary,
+                    '&:hover': { color: theme.palette.primary.main }
+                  }}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Street Number"
+                  placeholder="Street Number"
+                  value={profileData.streetNumber}
+                  onChange={handleInputChange('streetNumber')}
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: theme.palette.text.secondary,
+                      '&.Mui-focused': {
+                        color: theme.palette.primary.main
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Apt / House Number"
+                  placeholder="Apt / House Number"
+                  value={profileData.aptNumber}
+                  onChange={handleInputChange('aptNumber')}
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: theme.palette.text.secondary,
+                      '&.Mui-focused': {
+                        color: theme.palette.primary.main
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <Select
+                    value={profileData.city}
+                    onChange={handleInputChange('city')}
+                    displayEmpty
+                    renderValue={(value) => value || 'City'}
+                    sx={{
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    }}
+                  >
+                    <MenuItem value="">City</MenuItem>
+                    <MenuItem value="dhaka">Dhaka</MenuItem>
+                    <MenuItem value="chittagong">Chittagong</MenuItem>
+                    <MenuItem value="sylhet">Sylhet</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <Select
+                    value={profileData.state}
+                    onChange={handleInputChange('state')}
+                    displayEmpty
+                    renderValue={(value) => value || 'State'}
+                    sx={{
+                      borderRadius: 2,
+                      bgcolor: theme.palette.mode === 'dark' ? 
+                        'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                      '& fieldset': {
+                        borderColor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: theme.palette.primary.main
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: theme.palette.primary.main
+                      }
+                    }}
+                  >
+                    <MenuItem value="">State</MenuItem>
+                    <MenuItem value="dhaka-division">Dhaka Division</MenuItem>
+                    <MenuItem value="chittagong-division">Chittagong Division</MenuItem>
+                    <MenuItem value="sylhet-division">Sylhet Division</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    bgcolor: theme.palette.primary.main,
+                    color: theme.palette.primary.contrastText,
+                    py: 2,
+                    borderRadius: 3,
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    '&:hover': {
+                      bgcolor: theme.palette.primary.dark,
+                      transform: 'translateY(-1px)',
+                      boxShadow: theme.shadows[4]
+                    },
+                    transition: 'all 0.2s ease-in-out'
+                  }}
+                >
+                  Update Information
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        );
+    }
+  };
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
@@ -277,369 +964,7 @@ const Settings = () => {
             height: 'fit-content'
           }}>
             <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  fontWeight: 600, 
-                  mb: 4,
-                  color: theme.palette.text.primary,
-                  fontSize: { xs: '1.5rem', sm: '1.75rem' }
-                }}
-              >
-                Personal Informations
-              </Typography>
-
-              {/* Profile Section */}
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                mb: 4, 
-                gap: 3,
-                flexDirection: { xs: 'column', sm: 'row' },
-                textAlign: { xs: 'center', sm: 'left' }
-              }}>
-                <Box sx={{ position: 'relative' }}>
-                  <Avatar 
-                    sx={{ 
-                      width: { xs: 70, sm: 80 }, 
-                      height: { xs: 70, sm: 80 },
-                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                      fontSize: { xs: '1.5rem', sm: '1.75rem' },
-                      fontWeight: 600
-                    }}
-                  >
-                    M
-                  </Avatar>
-                  <IconButton
-                    sx={{
-                      position: 'absolute',
-                      bottom: -8,
-                      right: -8,
-                      bgcolor: theme.palette.background.paper,
-                      border: `2px solid ${theme.palette.background.paper}`,
-                      width: 32,
-                      height: 32,
-                      '&:hover': {
-                        bgcolor: theme.palette.action.hover
-                      }
-                    }}
-                  >
-                    <PhotoCameraIcon sx={{ fontSize: 16, color: theme.palette.text.secondary }} />
-                  </IconButton>
-                </Box>
-                
-                <Box sx={{ flex: 1 }}>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      fontWeight: 600, 
-                      mb: 1,
-                      color: theme.palette.text.primary,
-                      fontSize: { xs: '1.125rem', sm: '1.25rem' }
-                    }}
-                  >
-                    Monir UX Designer
-                  </Typography>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    gap: 2,
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    alignItems: { xs: 'center', sm: 'flex-start' }
-                  }}>
-                    <Button 
-                      variant="contained"
-                      size="small"
-                      sx={{ 
-                        bgcolor: theme.palette.primary.main,
-                        color: theme.palette.primary.contrastText,
-                        textTransform: 'none',
-                        fontWeight: 500,
-                        borderRadius: 2,
-                        px: 2,
-                        '&:hover': {
-                          bgcolor: theme.palette.primary.dark
-                        }
-                      }}
-                    >
-                      Upload New Picture
-                    </Button>
-                    <Button 
-                      variant="text"
-                      size="small"
-                      sx={{ 
-                        color: theme.palette.text.secondary,
-                        textTransform: 'none',
-                        fontWeight: 500,
-                        '&:hover': {
-                          color: theme.palette.error.main
-                        }
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </Box>
-                </Box>
-                
-                <IconButton sx={{ 
-                  color: theme.palette.text.secondary,
-                  '&:hover': { 
-                    color: theme.palette.primary.main,
-                    bgcolor: theme.palette.action.hover
-                  }
-                }}>
-                  <EditIcon />
-                </IconButton>
-              </Box>
-
-              {/* Form Fields */}
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Box sx={{ position: 'relative' }}>
-                    <TextField
-                      fullWidth
-                      value={profileData.name}
-                      onChange={handleInputChange('name')}
-                      variant="outlined"
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: 2,
-                          bgcolor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                          '& fieldset': {
-                            borderColor: 'transparent'
-                          },
-                          '&:hover fieldset': {
-                            borderColor: theme.palette.primary.main
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: theme.palette.primary.main
-                          }
-                        }
-                      }}
-                    />
-                    <IconButton sx={{ 
-                      position: 'absolute',
-                      right: 8,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: theme.palette.text.secondary,
-                      '&:hover': { color: theme.palette.primary.main }
-                    }}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box sx={{ position: 'relative' }}>
-                    <TextField
-                      fullWidth
-                      value={profileData.email}
-                      onChange={handleInputChange('email')}
-                      variant="outlined"
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: 2,
-                          bgcolor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                          '& fieldset': {
-                            borderColor: 'transparent'
-                          },
-                          '&:hover fieldset': {
-                            borderColor: theme.palette.primary.main
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: theme.palette.primary.main
-                          }
-                        }
-                      }}
-                    />
-                    <IconButton sx={{ 
-                      position: 'absolute',
-                      right: 8,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: theme.palette.text.secondary,
-                      '&:hover': { color: theme.palette.primary.main }
-                    }}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box sx={{ position: 'relative' }}>
-                    <TextField
-                      fullWidth
-                      value={profileData.phone}
-                      onChange={handleInputChange('phone')}
-                      variant="outlined"
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: 2,
-                          bgcolor: theme.palette.mode === 'dark' ? 
-                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                          '& fieldset': {
-                            borderColor: 'transparent'
-                          },
-                          '&:hover fieldset': {
-                            borderColor: theme.palette.primary.main
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: theme.palette.primary.main
-                          }
-                        }
-                      }}
-                    />
-                    <IconButton sx={{ 
-                      position: 'absolute',
-                      right: 8,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: theme.palette.text.secondary,
-                      '&:hover': { color: theme.palette.primary.main }
-                    }}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    placeholder="Street Number"
-                    value={profileData.streetNumber}
-                    onChange={handleInputChange('streetNumber')}
-                    variant="outlined"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                        '& fieldset': {
-                          borderColor: 'transparent'
-                        },
-                        '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
-                        }
-                      }
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    placeholder="Apt / House Number"
-                    value={profileData.aptNumber}
-                    onChange={handleInputChange('aptNumber')}
-                    variant="outlined"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                        '& fieldset': {
-                          borderColor: 'transparent'
-                        },
-                        '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
-                        }
-                      }
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={profileData.city}
-                      onChange={handleInputChange('city')}
-                      displayEmpty
-                      renderValue={(value) => value || 'City'}
-                      sx={{
-                        borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                        '& fieldset': {
-                          borderColor: 'transparent'
-                        },
-                        '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
-                        }
-                      }}
-                    >
-                      <MenuItem value="">City</MenuItem>
-                      <MenuItem value="dhaka">Dhaka</MenuItem>
-                      <MenuItem value="chittagong">Chittagong</MenuItem>
-                      <MenuItem value="sylhet">Sylhet</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={profileData.state}
-                      onChange={handleInputChange('state')}
-                      displayEmpty
-                      renderValue={(value) => value || 'State'}
-                      sx={{
-                        borderRadius: 2,
-                        bgcolor: theme.palette.mode === 'dark' ? 
-                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
-                        '& fieldset': {
-                          borderColor: 'transparent'
-                        },
-                        '&:hover fieldset': {
-                          borderColor: theme.palette.primary.main
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: theme.palette.primary.main
-                        }
-                      }}
-                    >
-                      <MenuItem value="">State</MenuItem>
-                      <MenuItem value="dhaka-division">Dhaka Division</MenuItem>
-                      <MenuItem value="chittagong-division">Chittagong Division</MenuItem>
-                      <MenuItem value="sylhet-division">Sylhet Division</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sx={{ mt: 2 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      bgcolor: theme.palette.primary.main,
-                      color: theme.palette.primary.contrastText,
-                      py: 2,
-                      borderRadius: 3,
-                      textTransform: 'none',
-                      fontSize: '1rem',
-                      fontWeight: 600,
-                      '&:hover': {
-                        bgcolor: theme.palette.primary.dark,
-                        transform: 'translateY(-1px)',
-                        boxShadow: theme.shadows[4]
-                      },
-                      transition: 'all 0.2s ease-in-out'
-                    }}
-                  >
-                    Update
-                  </Button>
-                </Grid>
-              </Grid>
+              {renderMainContent()}
             </CardContent>
           </Card>
         </Box>

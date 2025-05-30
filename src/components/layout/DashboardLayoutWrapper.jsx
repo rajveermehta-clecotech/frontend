@@ -2,17 +2,16 @@
 import React from "react";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import { Box } from "@mui/material";
+import { Container } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { createTheme } from '@mui/material/styles';
 import {
   Dashboard as DashboardIcon,
   Inventory as ProductsIcon,
-  Person as ProfileIcon,
   Settings as SettingsIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
-import { getInitials } from "../../utils/common";
 
 const NAVIGATION = [
   {
@@ -37,16 +36,28 @@ const NAVIGATION = [
     ],
   },
   {
-    segment: "profile",
-    title: "Profile",
-    icon: <ProfileIcon />,
-  },
-  {
     segment: "settings",
     title: "Settings",
     icon: <SettingsIcon />,
   },
 ];
+
+// Custom theme for the dashboard
+const demoTheme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-toolpad-color-scheme',
+  },
+  colorSchemes: { light: true, dark: true },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
 
 // Custom router implementation for React Router
 function useToolpadRouter() {
@@ -88,32 +99,35 @@ const DashboardLayoutWrapper = ({ children }) => {
     }
   };
 
-  // User session for the dashboard
+  // Handle sign in
+  const handleSignIn = () => {
+    navigate("/login");
+  };
+
+  // User session for the dashboard - this controls the avatar display
   const session = React.useMemo(() => {
     if (!user) return null;
 
     return {
       user: {
-        name: user.name || "User",
+        name: user.name || user.displayName || "User",
         email: user.email || "",
-        image:
-          user.avatar ||
-          `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=2196f3&color=fff`,
+        image: user.avatar ||
+          user.photoURL ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            user.name || user.displayName || "User"
+          )}&background=2196f3&color=fff&size=128`,
       },
     };
   }, [user]);
 
-  // Authentication object
+  // Authentication object - this controls the sign in/out functionality
   const authentication = React.useMemo(() => {
-    if (!session) return undefined;
-
     return {
-      signIn: () => {
-        navigate("/login");
-      },
+      signIn: handleSignIn,
       signOut: handleSignOut,
     };
-  }, [session, navigate]);
+  }, []);
 
   // Branding configuration
   const branding = {
@@ -146,9 +160,12 @@ const DashboardLayoutWrapper = ({ children }) => {
       router={router}
       session={session}
       authentication={authentication}
+      theme={demoTheme}
     >
       <DashboardLayout>
-        <Box sx={{ width: "100%", maxWidth: "100%" }}>{children}</Box>
+        <Container maxWidth="xl" sx={{ py: 2 }}>
+          {children}
+        </Container>
       </DashboardLayout>
     </AppProvider>
   );

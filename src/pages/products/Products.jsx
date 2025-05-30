@@ -31,7 +31,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
-import ProductDetailsModal from "../../components/ui/ProductDetailsModal"; // Import the modal component
+import ProductDetailsModal from "./ProductDetailsModal"; // Import the modal component
 
 const Products = () => {
   const { user } = useAuth();
