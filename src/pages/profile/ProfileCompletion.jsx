@@ -45,12 +45,16 @@ const ProfileCompletion = () => {
     2: false
   });
 
-  // Form data state
+  // Form data state - Updated to match BusinessInformation component
   const [formData, setFormData] = useState({
     vendorType: "Dealer",
     businessName: "",
+    businessAddress1: "",
+    businessAddress2: "",
+    city: "",
+    postalCode: "",
+    state: "",
     businessPhone: "",
-    businessAddress: "",
     businessWebsite: "",
     businessDescription: "",
     businessLogo: null,
@@ -88,11 +92,17 @@ const ProfileCompletion = () => {
       case 1: // Business Information
         return (
           !!formData.businessName &&
+          !!formData.businessAddress1 &&
+          !!formData.city &&
+          !!formData.postalCode &&
+          !!formData.state &&
           !!formData.businessPhone &&
-          !!formData.businessAddress &&
           !errors.businessName &&
-          !errors.businessPhone &&
-          !errors.businessAddress
+          !errors.businessAddress1 &&
+          !errors.city &&
+          !errors.postalCode &&
+          !errors.state &&
+          !errors.businessPhone
         );
       case 2: // Documents
         const uploadedDocs = Object.values(formData.documents).filter(doc => doc !== null);
@@ -128,14 +138,63 @@ const ProfileCompletion = () => {
     }
   };
 
-  // Handle file upload
+  // Validate business logo file
+  const validateBusinessLogo = (file) => {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+
+    if (!allowedTypes.includes(file.type)) {
+      return "Please upload a PNG, JPG, or JPEG image file.";
+    }
+
+    if (file.size > maxSize) {
+      return "File size must be less than 5MB.";
+    }
+
+    return null;
+  };
+
+  // Handle file uploads - FIXED VERSION
   const handleFileChange = (name, file) => {
     if (name === 'businessLogo') {
-      setFormData({
-        ...formData,
-        businessLogo: file,
-      });
+      // Handle business logo upload
+      if (file) {
+        // Clear previous errors
+        if (errors.businessLogo) {
+          setErrors({
+            ...errors,
+            businessLogo: "",
+          });
+        }
+
+        // Validate file
+        const validationError = validateBusinessLogo(file);
+        if (validationError) {
+          setErrors({
+            ...errors,
+            businessLogo: validationError,
+          });
+          return;
+        }
+
+        // Update form data with the file
+        setFormData({
+          ...formData,
+          businessLogo: file,
+        });
+
+        // Create file preview
+        const reader = new FileReader();
+        reader.onload = () => {
+          setFilePreview({
+            ...filePreview,
+            businessLogo: reader.result,
+          });
+        };
+        reader.readAsDataURL(file);
+      }
     } else {
+      // Handle document uploads
       setFormData({
         ...formData,
         documents: {
@@ -143,18 +202,18 @@ const ProfileCompletion = () => {
           [name]: file,
         }
       });
-    }
 
-    // Create file preview
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFilePreview({
-          ...filePreview,
-          [name]: reader.result,
-        });
-      };
-      reader.readAsDataURL(file);
+      // Create file preview
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setFilePreview({
+            ...filePreview,
+            [name]: reader.result,
+          });
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -219,7 +278,10 @@ const ProfileCompletion = () => {
             justifyContent: "center",
           }}
         >
-          <LoadingIndicator text="Loading your profile..." />
+          <LoadingIndicator 
+            text="Loading your profile..." 
+            size="large"
+          />
         </Box>
       </PublicThemeWrapper>
     );
@@ -279,7 +341,11 @@ const ProfileCompletion = () => {
             }}
           >
             {loading && (
-              <LoadingIndicator overlay text="Completing your profile..." />
+              <LoadingIndicator 
+                overlay 
+                text="Completing your profile..." 
+                size="medium"
+              />
             )}
 
             <form onSubmit={handleSubmit}>
@@ -298,7 +364,6 @@ const ProfileCompletion = () => {
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
-                  filePreview={filePreview}
                   handleFileChange={handleFileChange}
                 />
               )}

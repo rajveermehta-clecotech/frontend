@@ -13,11 +13,16 @@ import {
   Divider,
   useMediaQuery,
   useTheme,
+  Card,
+  Container,
 } from '@mui/material';
 import {
   Visibility,
   VisibilityOff,
   Google as GoogleIcon,
+  VerifiedUser,
+  Security,
+  TrendingUp,
 } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
 import { isValidEmail } from '../../utils/common';
@@ -26,7 +31,8 @@ import PublicThemeWrapper from '../../components/layout/PublicThemeWrapper';
 const Login = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   const { login, loginWithGoogle, isAuthenticated, loading, user } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -112,398 +118,487 @@ const Login = () => {
       <Box
         sx={{
           minHeight: '100vh',
-          display: 'flex',
-          bgcolor: 'var(--mui-palette-background-default)',
-          color: 'var(--mui-palette-text-primary)',
+          position: 'relative',
+          overflow: 'hidden',
+          background: `
+            linear-gradient(135deg, 
+              rgba(59, 130, 246, 0.1) 0%, 
+              rgba(139, 92, 246, 0.1) 50%, 
+              rgba(16, 185, 129, 0.1) 100%
+            ),
+            var(--mui-palette-background-paper)
+          `,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `
+              radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)
+            `,
+            pointerEvents: 'none',
+          },
         }}
       >
-        {/* Left Panel - Branding */}
-        {!isMobile && (
-          <Box
-            sx={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              px: 6,
-              py: 8,
-              bgcolor: 'var(--mui-palette-background-paper)',
-              borderRight: '1px solid var(--mui-palette-divider)',
-            }}
-          >
-            <Box sx={{ maxWidth: 400 }}>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontWeight: 700,
-                  color: 'var(--mui-palette-text-primary)',
-                  mb: 2,
-                  fontSize: '2rem',
-                }}
-              >
-                Multi-Vendor Marketplace
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'var(--mui-palette-text-secondary)',
-                  mb: 4,
-                  fontSize: '1rem',
-                  lineHeight: 1.5,
-                }}
-              >
-                Connect with verified vendors and buyers in our trusted B2B platform
-              </Typography>
-
-              {/* Features List */}
-              <Box sx={{ space: 3 }}>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      bgcolor: '#10B981',
-                      mt: 0.75,
-                      mr: 2,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        color: 'var(--mui-palette-text-primary)',
-                        mb: 0.5,
-                        fontSize: '1rem',
-                      }}
-                    >
-                      Verified Vendors
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: 'var(--mui-palette-text-secondary)',
-                        fontSize: '0.875rem',
-                      }}
-                    >
-                      All vendors go through our strict verification process
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 3 }}>
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      bgcolor: '#3B82F6',
-                      mt: 0.75,
-                      mr: 2,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        color: 'var(--mui-palette-text-primary)',
-                        mb: 0.5,
-                        fontSize: '1rem',
-                      }}
-                    >
-                      Secure Transactions
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: 'var(--mui-palette-text-secondary)',
-                        fontSize: '0.875rem',
-                      }}
-                    >
-                      Protected communication and secure payment processing
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                  <Box
-                    sx={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      bgcolor: '#8B5CF6',
-                      mt: 0.75,
-                      mr: 2,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        color: 'var(--mui-palette-text-primary)',
-                        mb: 0.5,
-                        fontSize: '1rem',
-                      }}
-                    >
-                      Global Reach
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: 'var(--mui-palette-text-secondary)',
-                        fontSize: '0.875rem',
-                      }}
-                    >
-                      Connect with suppliers and buyers worldwide
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        )}
-
-        {/* Right Panel - Login Form */}
+        {/* Floating Geometric Shapes */}
         <Box
           sx={{
-            flex: isMobile ? 1 : '0 0 55%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            px: isMobile ? 3 : { lg: 6, xl: 8 },
-            py: 6,
-            bgcolor: 'var(--mui-palette-background-paper)',
+            position: 'absolute',
+            top: '10%',
+            right: '15%',
+            width: { xs: 80, md: 120 },
+            height: { xs: 80, md: 120 },
+            background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))',
+            borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+            animation: 'float 6s ease-in-out infinite',
+            '@keyframes float': {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-20px) rotate(180deg)' },
+            },
           }}
-        >
-          <Box sx={{ maxWidth: 420, width: '100%', mx: 'auto' }}>
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                color: 'var(--mui-palette-text-primary)',
-                mb: 1,
-                textAlign: 'center',
-                fontSize: { xs: '1.5rem', lg: '1.75rem' },
-              }}
-            >
-              Welcome Back
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'var(--mui-palette-text-secondary)',
-                mb: 3,
-                textAlign: 'center',
-                fontSize: '0.875rem',
-              }}
-            >
-              Sign in to your vendor account
-            </Typography>
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: '20%',
+            left: '10%',
+            width: { xs: 60, md: 80 },
+            height: { xs: 60, md: 80 },
+            background: 'linear-gradient(45deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15))',
+            borderRadius: '50%',
+            animation: 'pulse 4s ease-in-out infinite',
+            '@keyframes pulse': {
+              '0%, 100%': { transform: 'scale(1)', opacity: 0.7 },
+              '50%': { transform: 'scale(1.1)', opacity: 1 },
+            },
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '30%',
+            left: '5%',
+            width: { xs: 40, md: 60 },
+            height: { xs: 40, md: 60 },
+            background: 'linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(16, 185, 129, 0.1))',
+            borderRadius: '20% 80% 80% 20% / 20% 20% 80% 80%',
+            animation: 'float 8s ease-in-out infinite reverse',
+          }}
+        />
 
-            {/* Error Alert */}
-            {loginError && (
-              <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
-                {loginError}
-              </Alert>
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, height: '100vh' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '100vh',
+              py: 4,
+              gap: { lg: 2, xl: 3 },
+            }}
+          >
+            {/* Left Content - Hidden on mobile */}
+            {!isMobile && (
+              <Box
+                sx={{
+                  flex: 1,
+                  maxWidth: isTablet ? 400 : 500,
+                  pr: { lg: 4, xl: 6 },
+                }}
+              >
+                {/* Header with Gradient Text */}
+                <Box sx={{ mb: 6 }}>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontWeight: 800,
+                      fontSize: { lg: '2rem', xl: '2.5rem' },
+                      lineHeight: 1.2,
+                      mb: 2,
+                      background: 'linear-gradient(135deg, var(--mui-palette-primary-main) 0%, #8B5CF6 50%, #10B981 100%)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    Multi-Vendor
+                    <br />
+                    Marketplace
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: 'var(--mui-palette-text-secondary)',
+                      fontSize: { lg: '1rem', xl: '1.1rem' },
+                      lineHeight: 1.6,
+                      maxWidth: 380,
+                    }}
+                  >
+                    Transform your business with our cutting-edge B2B platform that connects verified vendors and buyers worldwide
+                  </Typography>
+                </Box>
+
+                {/* Glassmorphism Feature Cards */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                  {[
+                    {
+                      icon: <VerifiedUser sx={{ fontSize: { lg: 20, xl: 24 } }} />,
+                      title: 'Verified Ecosystem',
+                      description: 'AI-powered verification ensures 99% authentic vendor network',
+                      gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05))',
+                      iconColor: '#10B981',
+                    },
+                    {
+                      icon: <Security sx={{ fontSize: { lg: 20, xl: 24 } }} />,
+                      title: 'Bank-Grade Security',
+                      description: 'End-to-end encryption with blockchain transaction logging',
+                      gradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05))',
+                      iconColor: '#3B82F6',
+                    },
+                    {
+                      icon: <TrendingUp sx={{ fontSize: { lg: 20, xl: 24 } }} />,
+                      title: 'Smart Analytics',
+                      description: 'Real-time insights and predictive market intelligence',
+                      gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05))',
+                      iconColor: '#8B5CF6',
+                    },
+                  ].map((feature, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        position: 'relative',
+                        background: feature.gradient,
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: 2.5,
+                        p: { lg: 2.5, xl: 3 },
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                          background: feature.gradient.replace('0.1)', '0.15)').replace('0.05)', '0.08)'),
+                        },
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: { lg: 40, xl: 48 },
+                            height: { lg: 40, xl: 48 },
+                            borderRadius: 2,
+                            background: `linear-gradient(135deg, ${feature.iconColor}20, ${feature.iconColor}10)`,
+                            color: feature.iconColor,
+                            flexShrink: 0,
+                          }}
+                        >
+                          {feature.icon}
+                        </Box>
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: 700,
+                              color: 'var(--mui-palette-text-primary)',
+                              mb: 0.5,
+                              fontSize: { lg: '1rem', xl: '1.1rem' },
+                            }}
+                          >
+                            {feature.title}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: 'var(--mui-palette-text-secondary)',
+                              fontSize: { lg: '0.8rem', xl: '0.9rem' },
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {feature.description}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+
+                {/* Stats Section */}
+                <Box
+                  sx={{
+                    mt: 4,
+                    p: { lg: 3, xl: 4 },
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: 2.5,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {[
+                      { number: '50K+', label: 'Active Vendors' },
+                      { number: '99.9%', label: 'Uptime' },
+                      { number: '$2.5B+', label: 'Processed' },
+                    ].map((stat, index) => (
+                      <Box key={index} sx={{ textAlign: 'center' }}>
+                        <Typography
+                          variant="h4"
+                          sx={{
+                            fontWeight: 800,
+                            fontSize: { lg: '1.25rem', xl: '1.5rem' },
+                            color: 'var(--mui-palette-primary-main)',
+                            mb: 0.5,
+                          }}
+                        >
+                          {stat.number}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: 'var(--mui-palette-text-secondary)',
+                            fontSize: '0.65rem',
+                            fontWeight: 500,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                          }}
+                        >
+                          {stat.label}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              </Box>
             )}
 
-            {/* Login Form */}
-            <Box component="form" onSubmit={handleSubmit}>
-              <Typography
-                variant="body2"
+            {/* Right Panel - Floating Form Card */}
+            <Box
+              sx={{
+                flex: isMobile ? 1 : 'none',
+                width: isMobile ? '100%' : { lg: 440, xl: 480 },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Card
+                elevation={0}
                 sx={{
-                  color: 'var(--mui-palette-text-primary)',
-                  mb: 1,
-                  fontWeight: 500,
-                  fontSize: '0.875rem',
-                }}
-              >
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                error={!!errors.email}
-                helperText={errors.email}
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    height: 44,
-                    bgcolor: 'var(--mui-palette-background-paper)',
-                    '& fieldset': {
-                      borderColor: 'var(--mui-palette-divider)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'var(--mui-palette-primary-main)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'var(--mui-palette-primary-main)',
-                    },
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'var(--mui-palette-text-primary)',
-                  },
-                }}
-              />
-
-              <Typography
-                variant="body2"
-                sx={{
-                  color: 'var(--mui-palette-text-primary)',
-                  mb: 1,
-                  fontWeight: 500,
-                  fontSize: '0.875rem',
-                }}
-              >
-                Password
-              </Typography>
-              <TextField
-                fullWidth
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                error={!!errors.password}
-                helperText={errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        size="small"
-                        // sx={{ color: 'var(--mui-palette-text-secondary)' }}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  mb: 2,
-                  '& .MuiOutlinedInput-root': {
-                    height: 44,
-                    bgcolor: 'var(--mui-palette-background-paper)',
-                    '& fieldset': {
-                      borderColor: 'var(--mui-palette-divider)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'var(--mui-palette-primary-main)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'var(--mui-palette-primary-main)',
-                    },
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'var(--mui-palette-text-primary)',
-                  },
-                }}
-              />
-
-              <Button
-                fullWidth
-                type="submit"
-                variant="contained"
-                size="large"
-                disabled={isLoading || googleLoading}
-                sx={{
-                  py: 1.5,
-                  mb: 2,
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  bgcolor: 'var(--mui-palette-primary-main)',
-                  color: '#ffffff',
-                  '&:hover': {
-                    bgcolor: 'var(--mui-palette-primary-dark)',
-                  },
-                  '&:disabled': {
-                    bgcolor: 'var(--mui-palette-action-disabled)',
-                    color: 'var(--mui-palette-text-disabled)',
+                  width: '100%',
+                  maxWidth: 440,
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: 2,
+                  p: { xs: 3, md: 4 },
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'var(--mui-palette-background-paper)',
+                    opacity: 0.9,
+                    borderRadius: 4,
+                    zIndex: -1,
                   },
                 }}
               >
-                {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
-              </Button>
+                {/* Mobile Header */}
+                {isMobile && (
+                  <Box sx={{ textAlign: 'center', mb: 3 }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 800,
+                        background: 'linear-gradient(135deg, var(--mui-palette-primary-main) 0%, #8B5CF6 100%)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent',
+                        WebkitTextFillColor: 'transparent',
+                        mb: 1,
+                      }}
+                    >
+                      Multi-Vendor Marketplace
+                    </Typography>
+                  </Box>
+                )}
 
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Divider sx={{ flex: 1, borderColor: 'var(--mui-palette-divider)' }} />
                 <Typography
-                  variant="caption"
+                  variant="h4"
                   sx={{
-                    px: 2,
-                    color: 'var(--mui-palette-text-secondary)',
-                    fontSize: '0.75rem',
-                    fontWeight: 500,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    fontWeight: 700,
+                    color: 'var(--mui-palette-text-primary)',
+                    mb: 1,
+                    textAlign: 'center',
+                    fontSize: { xs: '1.5rem', md: '1.75rem' },
                   }}
                 >
-                  OR CONTINUE WITH
+                  Welcome Back
                 </Typography>
-                <Divider sx={{ flex: 1, borderColor: 'var(--mui-palette-divider)' }} />
-              </Box>
-
-              {/* Google Sign-in Button */}
-              <Button
-                fullWidth
-                variant="outlined"
-                size="large"
-                startIcon={<GoogleIcon />}
-                onClick={handleGoogleSignIn}
-                disabled={googleLoading || isLoading}
-                sx={{
-                  mb: 3,
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  borderColor: 'var(--mui-palette-divider)',
-                  color: 'var(--mui-palette-text-primary)',
-                  '&:hover': {
-                    borderColor: 'var(--mui-palette-primary-main)',
-                    bgcolor: 'var(--mui-palette-action-hover)',
-                  },
-                }}
-              >
-                {googleLoading ? 'Signing in...' : 'Continue with Google'}
-              </Button>
-
-              <Typography
-                variant="body2"
-                sx={{
-                  textAlign: 'center',
-                  color: 'var(--mui-palette-text-secondary)',
-                  fontSize: '0.875rem',
-                }}
-              >
-                Don't have an account?{' '}
-                <Link
-                  component={RouterLink}
-                  to="/signup"
+                <Typography
+                  variant="body2"
                   sx={{
-                    color: 'var(--mui-palette-primary-main)',
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
+                    color: 'var(--mui-palette-text-secondary)',
+                    mb: 3,
+                    textAlign: 'center',
+                    fontSize: '0.875rem',
                   }}
                 >
-                  Sign up
-                </Link>
-              </Typography>
+                  Sign in to your account
+                </Typography>
+
+                {/* Error Alert */}
+                {loginError && (
+                  <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                    {loginError}
+                  </Alert>
+                )}
+
+                {/* Login Form */}
+                <Box component="form" onSubmit={handleSubmit}>
+                  <TextField
+                    fullWidth
+                    name="email"
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    sx={{ mb: 2.5 }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    label="Password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            size="small"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ mb: 3 }}
+                  />
+
+                  <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    disabled={isLoading || googleLoading}
+                    sx={{
+                      py: 1.5,
+                      mb: 2.5,
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      background: 'linear-gradient(135deg, var(--mui-palette-primary-main) 0%, var(--mui-palette-primary-dark) 100%)',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, var(--mui-palette-primary-dark) 0%, var(--mui-palette-primary-main) 100%)',
+                        boxShadow: '0 6px 25px rgba(0, 0, 0, 0.15)',
+                      },
+                    }}
+                  >
+                    {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+                  </Button>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2.5 }}>
+                    <Divider sx={{ flex: 1 }} />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        px: 2,
+                        color: 'var(--mui-palette-text-secondary)',
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      OR CONTINUE WITH
+                    </Typography>
+                    <Divider sx={{ flex: 1 }} />
+                  </Box>
+
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    size="large"
+                    startIcon={<GoogleIcon />}
+                    onClick={handleGoogleSignIn}
+                    disabled={googleLoading || isLoading}
+                    sx={{
+                      mb: 3,
+                      py: 1.5,
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      borderRadius: 2,
+                      borderColor: 'var(--mui-palette-divider)',
+                      '&:hover': {
+                        borderColor: 'var(--mui-palette-primary-main)',
+                        bgcolor: 'var(--mui-palette-action-hover)',
+                      },
+                    }}
+                  >
+                    {googleLoading ? 'Signing in...' : 'Continue with Google'}
+                  </Button>
+
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      textAlign: 'center',
+                      color: 'var(--mui-palette-text-secondary)',
+                      fontSize: '0.875rem',
+                    }}
+                  >
+                    Don't have an account?{' '}
+                    <Link
+                      component={RouterLink}
+                      to="/signup"
+                      sx={{
+                        color: 'var(--mui-palette-primary-main)',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      Sign up
+                    </Link>
+                  </Typography>
+                </Box>
+              </Card>
             </Box>
           </Box>
-        </Box>
+        </Container>
       </Box>
     </PublicThemeWrapper>
   );

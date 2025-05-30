@@ -31,6 +31,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
+import ProductDetailsModal from "../../components/ui/ProductDetailsModal"; // Import the modal component
 
 const Products = () => {
   const { user } = useAuth();
@@ -41,6 +42,10 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Sample products data matching the reference image
   const productsData = [
@@ -85,7 +90,11 @@ const Products = () => {
 
   // Handle product actions
   const handleViewProduct = (productId) => {
-    navigate(`/products/${productId}`);
+    const product = productsData.find(p => p.id === productId);
+    if (product) {
+      setSelectedProduct(product);
+      setModalOpen(true);
+    }
   };
 
   const handleEditProduct = (productId) => {
@@ -95,6 +104,12 @@ const Products = () => {
   const handleDeleteProduct = (productId) => {
     console.log("Delete product:", productId);
     // Handle delete logic here
+  };
+
+  // Modal handlers
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedProduct(null);
   };
 
   // Format currency
@@ -553,6 +568,13 @@ const Products = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Product Details Modal */}
+      <ProductDetailsModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+      />
     </Box>
   );
 };

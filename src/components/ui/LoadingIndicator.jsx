@@ -9,7 +9,7 @@ const LoadingIndicator = ({
   sx = {}
 }) => {
   const theme = useTheme();
-  
+
   // Size mappings
   const sizes = {
     small: {
@@ -25,9 +25,9 @@ const LoadingIndicator = ({
       fontSize: '1.25rem',
     }
   };
-  
+
   const { spinner, fontSize } = sizes[size] || sizes.medium;
-  
+
   const content = (
     <Box
       sx={{
@@ -35,34 +35,28 @@ const LoadingIndicator = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2,
+        gap: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Semi-transparent background
+        backdropFilter: 'blur(10px)', // Blur effect
+        borderRadius: '16px', // Rounded corners for modern look
+        padding: 3, // Some padding around the content
+        border: '1px solid rgba(255, 255, 255, 0.2)', // Subtle border
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', // Soft shadow
         ...sx
       }}
     >
-      <CircularProgress
-        size={spinner}
-        thickness={4}
-        sx={{ 
-          color: 'primary.main',
-          mb: text ? 2 : 0 
-        }}
-      />
+      <CircularProgress size={spinner} />
       {text && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ 
-            fontSize,
-            fontWeight: 500,
-            textAlign: 'center'
-          }}
+        <Typography 
+          variant="body2" 
+          sx={{ fontSize, mt: 1, color: 'inherit' }}
         >
           {text}
         </Typography>
       )}
     </Box>
   );
-  
+
   // Full screen loading
   if (fullScreen) {
     return (
@@ -71,20 +65,21 @@ const LoadingIndicator = ({
           position: 'fixed',
           top: 0,
           left: 0,
-          right: 0,
-          bottom: 0,
-          bgcolor: overlay ? 'rgba(255, 255, 255, 0.8)' : 'background.default',
-          zIndex: theme.zIndex.modal + 1,
+          width: '100vw',
+          height: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent dark background
+          backdropFilter: 'blur(8px)', // Blur the background
+          zIndex: 9999,
         }}
       >
         {content}
       </Box>
     );
   }
-  
+
   // Overlay loading (for components)
   if (overlay) {
     return (
@@ -93,20 +88,21 @@ const LoadingIndicator = ({
           position: 'absolute',
           top: 0,
           left: 0,
-          right: 0,
-          bottom: 0,
-          bgcolor: 'rgba(255, 255, 255, 0.8)',
-          zIndex: 5,
+          width: '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)', // Semi-transparent background
+          backdropFilter: 'blur(6px)', // Blur effect
+          zIndex: 1,
         }}
       >
         {content}
       </Box>
     );
   }
-  
+
   // Regular loading indicator
   return content;
 };
