@@ -393,7 +393,6 @@ const Login = () => {
                 sx={{
                   width: '100%',
                   maxWidth: 440,
-                  background: 'rgba(255, 255, 255, 0.95)',
                   backdropFilter: 'blur(20px)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   borderRadius: 2,
