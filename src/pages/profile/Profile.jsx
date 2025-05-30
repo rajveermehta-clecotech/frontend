@@ -18,45 +18,41 @@ import {
   Edit,
   FiberManualRecord,
 } from "@mui/icons-material";
-import NotificationAlert from "../../components/ui/NotificationAlert";
-import LoadingIndicator from "../../components/ui/LoadingIndicator";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api/authApi";
+
+// Mock static data
+const staticUserData = {
+  role: "vendor",
+  vendorProfile: {
+    business: {
+      businessName: "TechCorp Solutions",
+      businessLogo: "",
+      city: "Mumbai",
+      state: "Maharashtra",
+      phoneNumber: "+91 98765 43210",
+      address1: "123 Business Park, Sector 15",
+      pincode: "400001"
+    },
+    vendorType: "manufacturer",
+    profileCompletion: 85,
+    gstNumber: "27AABCT1234A1Z5",
+    isBuyer: false
+  }
+};
 
 const Profile = () => {
-  const { user, updateUserProfile } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Separate edit mode states for each card
   const [profileEditMode, setProfileEditMode] = useState(false);
   const [bioEditMode, setBioEditMode] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(staticUserData);
   const [error, setError] = useState(null);
 
-  // Fetch user data on component mount
-  useEffect(() => {
-    const fetchUserData = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get('/auth/me');
-        setUserData(response.data.data.user);
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-        setError("Failed to load profile data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  // Form data state with business information from API
+  // Form data state with business information from static data
   const [formData, setFormData] = useState({
-    name: userData?.vendorProfile?.business?.businessName || user?.name || "",
+    name: userData?.vendorProfile?.business?.businessName || "",
     userType: userData?.role ? `${userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}` : "Premium User",
     role: userData?.vendorProfile?.vendorType || "manufacturer",
     experienceLevel: "Intermediate", // Default as not in API
@@ -138,68 +134,66 @@ const Profile = () => {
     setBioEditMode(!bioEditMode);
   };
 
-  // Save profile changes
+  // Save profile changes (mock function)
   const saveProfileChanges = async () => {
-    setLoading(true);
-    try {
-      // Make API call to update profile
-      await api.put('/auth/profile', {
-        businessName: formData.name,
-        role: formData.userType.toLowerCase(),
-      });
-
+    // Simulate API call
+    setTimeout(() => {
       setSuccess(true);
       setProfileEditMode(false);
-
-      // Refresh user data
-      const response = await api.get('/auth/me');
-      setUserData(response.data.data.user);
+      
+      // Update userData with new values
+      const updatedUserData = {
+        ...userData,
+        vendorProfile: {
+          ...userData.vendorProfile,
+          business: {
+            ...userData.vendorProfile.business,
+            businessName: formData.name
+          }
+        },
+        role: formData.userType.toLowerCase()
+      };
+      setUserData(updatedUserData);
 
       // Reset success message after 3 seconds
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      setError("Failed to update profile");
-    } finally {
-      setLoading(false);
-    }
+    }, 500);
   };
 
-  // Save bio changes
+  // Save bio changes (mock function)
   const saveBioChanges = async () => {
-    setLoading(true);
-    try {
-      // Make API call to update bio
-      await api.put('/auth/profile', {
-        vendorType: formData.role,
-        address1: formData.address,
-        city: formData.location.split(',')[0].trim(),
-        state: formData.location.split(',')[1]?.trim() || '',
-        pincode: formData.pincode,
-        phoneNumber: formData.phoneNumber,
-        gstNumber: formData.gstNumber,
-        isBuyer: !formData.availability,
-      });
-
+    // Simulate API call
+    setTimeout(() => {
       setSuccess(true);
       setBioEditMode(false);
 
-      // Refresh user data
-      const response = await api.get('/auth/me');
-      setUserData(response.data.data.user);
+      // Update userData with new values
+      const updatedUserData = {
+        ...userData,
+        vendorProfile: {
+          ...userData.vendorProfile,
+          vendorType: formData.role,
+          gstNumber: formData.gstNumber,
+          isBuyer: !formData.availability,
+          business: {
+            ...userData.vendorProfile.business,
+            address1: formData.address,
+            city: formData.location.split(',')[0]?.trim() || '',
+            state: formData.location.split(',')[1]?.trim() || '',
+            pincode: formData.pincode,
+            phoneNumber: formData.phoneNumber,
+          }
+        }
+      };
+      setUserData(updatedUserData);
 
       // Reset success message after 3 seconds
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (error) {
-      console.error("Error updating bio:", error);
-      setError("Failed to update profile details");
-    } finally {
-      setLoading(false);
-    }
+    }, 500);
   };
 
   const infoItemStyle = {
@@ -215,67 +209,46 @@ const Profile = () => {
   const valueStyle = {
     fontSize: "1rem",
     mb: 1,
+    color: "text.primary",
   };
-
-  if (loading && !userData) {
-    return (
-      <Box sx={{ 
-        flexGrow: 1, 
-        p: { xs: 2, sm: 3 },
-        minHeight: 'calc(100vh - 70px)',
-        bgcolor: '#f5f5f5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <LoadingIndicator text="Loading profile..." />
-      </Box>
-    );
-  }
-
-  if (error && !userData) {
-    return (
-      <Box sx={{ 
-        flexGrow: 1, 
-        p: { xs: 2, sm: 3 },
-        minHeight: 'calc(100vh - 70px)',
-        bgcolor: '#f5f5f5'
-      }}>
-        <NotificationAlert
-          type="error"
-          title="Error"
-          message={error}
-          showActionButton={false}
-        />
-      </Box>
-    );
-  }
 
   return (
     <Box sx={{ 
       flexGrow: 1, 
       p: { xs: 2, sm: 3 },
       minHeight: 'calc(100vh - 70px)',
-      bgcolor: '#f5f5f5'
+      bgcolor: 'background.default'
     }}>
       {success && (
-        <NotificationAlert
-          type="success"
-          title="Profile Updated"
-          message="Your profile has been successfully updated."
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
+        <Box sx={{ 
+          mb: 3, 
+          p: 2, 
+          bgcolor: 'success.light', 
+          color: 'success.contrastText',
+          borderRadius: 1,
+          border: 1,
+          borderColor: 'success.main'
+        }}>
+          <Typography variant="body2">
+            ✓ Profile Updated Successfully
+          </Typography>
+        </Box>
       )}
 
       {error && (
-        <NotificationAlert
-          type="error"
-          title="Error"
-          message={error}
-          showActionButton={false}
-          sx={{ mb: 3 }}
-        />
+        <Box sx={{ 
+          mb: 3, 
+          p: 2, 
+          bgcolor: 'error.light', 
+          color: 'error.contrastText',
+          borderRadius: 1,
+          border: 1,
+          borderColor: 'error.main'
+        }}>
+          <Typography variant="body2">
+            ✗ {error}
+          </Typography>
+        </Box>
       )}
 
       <Box sx={{ position: "relative", pb: 4 }}>
@@ -285,6 +258,7 @@ const Profile = () => {
           sx={{ 
             fontWeight: 600, 
             mb: 1,
+            color: "text.primary"
           }}
         >
           Profile
@@ -304,12 +278,16 @@ const Profile = () => {
             <Card
               sx={{
                 borderRadius: 2,
-                boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-                position: "relative"
+                boxShadow: theme.palette.mode === 'dark' 
+                  ? "0px 1px 3px rgba(255, 255, 255, 0.1)" 
+                  : "0px 1px 3px rgba(0, 0, 0, 0.1)",
+                position: "relative",
+                bgcolor: "background.paper",
+                border: theme.palette.mode === 'dark' 
+                  ? '1px solid rgba(255, 255, 255, 0.12)' 
+                  : 'none'
               }}
             >
-              {loading && profileEditMode && <LoadingIndicator overlay text="Saving..." />}
-
               <CardContent sx={{ p: 3, textAlign: 'center' }}>
                 {profileEditMode ? (
                   <TextField
@@ -325,10 +303,12 @@ const Profile = () => {
                       mx: 'auto',
                       '& .MuiOutlinedInput-root': {
                         textAlign: 'center',
+                        bgcolor: 'background.paper',
                       },
                       '& .MuiInputBase-input': {
                         textAlign: 'center',
                         fontWeight: 600,
+                        color: 'text.primary',
                       }
                     }}
                   />
@@ -338,6 +318,7 @@ const Profile = () => {
                     sx={{
                       fontWeight: 600,
                       mb: 1,
+                      color: "text.primary"
                     }}
                   >
                     {formData.name || "Business Name"}
@@ -358,6 +339,7 @@ const Profile = () => {
                       mx: 'auto',
                       '& .MuiOutlinedInput-root': {
                         textAlign: 'center',
+                        bgcolor: 'background.paper',
                       },
                       '& .MuiInputBase-input': {
                         textAlign: 'center',
@@ -382,9 +364,13 @@ const Profile = () => {
                   sx={{
                     width: 100,
                     height: 100,
-                    bgcolor: "#bdbdbd",
+                    bgcolor: theme.palette.mode === 'dark' ? "grey.700" : "grey.300",
                     fontSize: "2.5rem",
                     margin: '0 auto',
+                    color: "text.primary",
+                    border: theme.palette.mode === 'dark' 
+                      ? '2px solid rgba(255, 255, 255, 0.12)' 
+                      : '2px solid rgba(0, 0, 0, 0.12)'
                   }}
                 >
                   {formData.name ? formData.name.charAt(0).toUpperCase() : "B"}
@@ -407,6 +393,11 @@ const Profile = () => {
                       fontSize: "0.875rem",
                       borderColor: "primary.main",
                       color: "primary.main",
+                      '&:hover': {
+                        bgcolor: theme.palette.mode === 'dark' 
+                          ? 'rgba(144, 202, 249, 0.08)' 
+                          : 'rgba(25, 118, 210, 0.04)'
+                      }
                     }}
                   >
                     Edit Profile
@@ -423,6 +414,10 @@ const Profile = () => {
                         py: 0.5,
                         textTransform: "none",
                         fontSize: "0.875rem",
+                        color: "text.primary",
+                        borderColor: theme.palette.mode === 'dark' 
+                          ? 'rgba(255, 255, 255, 0.23)' 
+                          : 'rgba(0, 0, 0, 0.23)'
                       }}
                     >
                       Cancel
@@ -453,12 +448,16 @@ const Profile = () => {
             <Card
               sx={{
                 borderRadius: 2,
-                boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-                position: "relative"
+                boxShadow: theme.palette.mode === 'dark' 
+                  ? "0px 1px 3px rgba(255, 255, 255, 0.1)" 
+                  : "0px 1px 3px rgba(0, 0, 0, 0.1)",
+                position: "relative",
+                bgcolor: "background.paper",
+                border: theme.palette.mode === 'dark' 
+                  ? '1px solid rgba(255, 255, 255, 0.12)' 
+                  : 'none'
               }}
             >
-              {loading && bioEditMode && <LoadingIndicator overlay text="Saving..." />}
-
               <CardContent sx={{ p: 3 }}>
                 <Box
                   sx={{
@@ -472,6 +471,7 @@ const Profile = () => {
                     variant="h6"
                     sx={{
                       fontWeight: 600,
+                      color: "text.primary"
                     }}
                   >
                     Business Details
@@ -485,11 +485,21 @@ const Profile = () => {
                     sx={{ 
                       height: '24px',
                       borderRadius: 1,
+                      bgcolor: 'success.main',
+                      color: 'success.contrastText',
+                      '& .MuiChip-label': {
+                        color: 'success.contrastText'
+                      }
                     }}
                   />
                 </Box>
 
-                <Divider sx={{ mb: 3 }} />
+                <Divider sx={{ 
+                  mb: 3,
+                  borderColor: theme.palette.mode === 'dark' 
+                    ? 'rgba(255, 255, 255, 0.12)' 
+                    : 'rgba(0, 0, 0, 0.12)'
+                }} />
 
                 <Grid container spacing={2}>
                   {/* Left column of details */}
@@ -506,7 +516,12 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           size="small"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -527,7 +542,12 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           size="small"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -548,7 +568,12 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           size="small"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -568,12 +593,15 @@ const Profile = () => {
                             label={badge}
                             size="small"
                             sx={{
-                              bgcolor: 'info.light',
-                              color: 'white',
+                              bgcolor: 'info.main',
+                              color: 'info.contrastText',
                               fontSize: '0.75rem',
                               height: '24px',
                               borderRadius: 1,
                               mr: 1,
+                              '& .MuiChip-label': {
+                                color: 'info.contrastText'
+                              }
                             }}
                           />
                         ))}
@@ -595,7 +623,12 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           size="small"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -617,7 +650,12 @@ const Profile = () => {
                           fullWidth
                           size="small"
                           placeholder="City, State"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -638,7 +676,12 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           size="small"
-                          sx={{ mb: 1 }}
+                          sx={{ 
+                            mb: 1,
+                            '& .MuiOutlinedInput-root': {
+                              bgcolor: 'background.paper',
+                            }
+                          }}
                         />
                       ) : (
                         <Typography variant="body1" sx={valueStyle}>
@@ -653,7 +696,7 @@ const Profile = () => {
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <FiberManualRecord sx={{ color: 'success.main', fontSize: '0.7rem', mr: 0.5 }} />
-                        <Typography variant="body1">
+                        <Typography variant="body1" sx={{ color: "text.primary" }}>
                           {formData.availability ? "Available for Business" : "Not Available"}
                         </Typography>
                       </Box>
@@ -668,7 +711,10 @@ const Profile = () => {
                           <Typography 
                             key={index} 
                             variant="body1"
-                            sx={{ mr: index < formData.tags.length - 1 ? 1 : 0 }}
+                            sx={{ 
+                              mr: index < formData.tags.length - 1 ? 1 : 0,
+                              color: "text.primary"
+                            }}
                           >
                             {tag}{index < formData.tags.length - 1 ? ", " : ""}
                           </Typography>
@@ -695,6 +741,11 @@ const Profile = () => {
                       fontSize: "0.875rem",
                       borderColor: "primary.main",
                       color: "primary.main",
+                      '&:hover': {
+                        bgcolor: theme.palette.mode === 'dark' 
+                          ? 'rgba(144, 202, 249, 0.08)' 
+                          : 'rgba(25, 118, 210, 0.04)'
+                      }
                     }}
                   >
                     Edit Details
@@ -711,6 +762,10 @@ const Profile = () => {
                         py: 0.5,
                         textTransform: "none",
                         fontSize: "0.875rem",
+                        color: "text.primary",
+                        borderColor: theme.palette.mode === 'dark' 
+                          ? 'rgba(255, 255, 255, 0.23)' 
+                          : 'rgba(0, 0, 0, 0.23)'
                       }}
                     >
                       Cancel

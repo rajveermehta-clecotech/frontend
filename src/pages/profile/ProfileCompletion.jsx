@@ -15,8 +15,8 @@ import {
   ArrowForward,
   CheckCircle,
 } from "@mui/icons-material";
+import { useToast } from "../../hooks/useToast";
 import { useAuth } from "../../context/AuthContext";
-import NotificationAlert from "../../components/ui/NotificationAlert";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import api from "../../services/api/authApi";
 import PublicThemeWrapper from "../../components/layout/PublicThemeWrapper";
@@ -32,13 +32,20 @@ const ProfileCompletion = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const {
+    showError,
+    showSuccess,
+    showFileUploadSuccess,
+    showFileUploadError,
+    showStepComplete,
+    showWelcome,
+    showProfileComplete
+  } = useToast();
 
   // State for active step
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
   const [stepSaveSuccess, setStepSaveSuccess] = useState({
     0: false,
     1: false,
@@ -174,6 +181,7 @@ const ProfileCompletion = () => {
             ...errors,
             businessLogo: validationError,
           });
+          showFileUploadError(validationError);
           return;
         }
 
@@ -192,6 +200,9 @@ const ProfileCompletion = () => {
           });
         };
         reader.readAsDataURL(file);
+        
+        // Show success toast
+        showFileUploadSuccess('Business logo');
       }
     } else {
       // Handle document uploads
@@ -213,6 +224,10 @@ const ProfileCompletion = () => {
           });
         };
         reader.readAsDataURL(file);
+        
+        // Show success toast
+        const formattedName = name.replace(/([A-Z])/g, ' $1').toLowerCase();
+        showFileUploadSuccess(formattedName);
       }
     }
   };
@@ -220,6 +235,10 @@ const ProfileCompletion = () => {
   // Handle next step button click
   const handleNext = async () => {
     if (isStepComplete(activeStep)) {
+      // Show step completion toast
+      const stepNames = ['Vendor Type', 'Business Information', 'Document Upload'];
+      showStepComplete(stepNames[activeStep]);
+      
       setActiveStep((prevStep) => prevStep + 1);
     }
   };
@@ -235,13 +254,13 @@ const ProfileCompletion = () => {
 
     if (isStepComplete(2)) {
       setLoading(true);
-      setError(null);
 
       try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        setSuccess(true);
+        // Show success toast
+        showProfileComplete();
         
         // Wait briefly to show success message, then redirect
         setTimeout(() => {
@@ -249,7 +268,7 @@ const ProfileCompletion = () => {
         }, 1500);
       } catch (error) {
         console.error("Error completing profile:", error);
-        setError("Profile completion failed. Please try again.");
+        showError("Profile completion failed. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -260,10 +279,13 @@ const ProfileCompletion = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
+      // Welcome toast - only show once on component mount
+      showWelcome('Welcome! Let\'s complete your vendor profile.');
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array to ensure it only runs once
 
   // Show loading state while initially fetching data
   if (initialLoading) {
@@ -460,25 +482,6 @@ const ProfileCompletion = () => {
               </Box>
             </form>
           </Box>
-
-          {/* Success/Error Messages */}
-          {success && (
-            <NotificationAlert
-              type="success"
-              title="Profile Completed"
-              message="Your vendor profile has been successfully set up. Redirecting to dashboard..."
-              showActionButton={false}
-            />
-          )}
-          
-          {error && (
-            <NotificationAlert
-              type="error"
-              title="Error"
-              message={error}
-              showActionButton={false}
-            />
-          )}
         </Container>
       </Box>
     </PublicThemeWrapper>

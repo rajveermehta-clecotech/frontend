@@ -27,6 +27,7 @@ import Products from "./pages/products/Products";
 import AddProduct from "./pages/products/AddProduct";
 import ProductDetails from "./pages/products/ProductDetails";
 import GridDebugTest from "./pages/GridDebugTest";
+import ToastProvider from "./components/providers/ToastProvider";
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
       <ErrorBoundary>
         <AuthProvider>
           <Router>
+          <ToastProvider>
+
             <Routes>
               {/* Public Routes - No Layout */}
               <Route path="/login" element={<Login />} />
@@ -65,6 +68,8 @@ function App() {
                 // </ProtectedRoute> 
               } />
             </Routes>
+            </ToastProvider>
+
           </Router>
         </AuthProvider>
       </ErrorBoundary>

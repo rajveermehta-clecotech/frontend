@@ -1,552 +1,650 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Card, 
-  CardContent, 
-  TextField, 
-  Button, 
-  Tab, 
-  Tabs, 
-  Grid, 
-  useTheme, 
-  useMediaQuery,
-  Alert,
-  CircularProgress,
-  Paper,
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Avatar,
+  MenuItem,
+  Select,
+  FormControl,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  LinearProgress,
+  useTheme,
+  Grid,
   Divider,
+  Container,
+  Paper,
+  IconButton,
+  useMediaQuery
 } from '@mui/material';
-import { Person as PersonIcon, Lock as LockIcon } from '@mui/icons-material';
-import { useAuth } from '../../context/AuthContext';
-import { authApi } from '../../services/api/authApi';
-import { isValidEmail, validatePassword } from '../../utils/common';
-import { handleApiError } from '../../utils/errorHandler';
-
-// Memoized Input Field Component
-const InputField = React.memo(({ label, name, value, onChange, error, disabled, helperText, ...props }) => (
-  <Box sx={{ mb: 3 }}>
-    <Typography 
-      variant="body2" 
-      sx={{ 
-        color: 'primary.main', 
-        fontWeight: 500, 
-        mb: 1,
-        fontSize: '14px'
-      }}
-    >
-      {label}
-    </Typography>
-    <TextField
-      fullWidth
-      name={name}
-      value={value}
-      onChange={onChange}
-      error={!!error}
-      helperText={error || helperText}
-      disabled={disabled}
-      variant="outlined"
-      size="small"
-      sx={{
-        bgcolor: 'background.paper',
-        '& .MuiOutlinedInput-root': {
-          backgroundColor: disabled ? 'action.disabled' : 'background.paper',
-          '& fieldset': { 
-            borderColor: 'divider',
-            borderRadius: '8px'
-          },
-          '&:hover fieldset': { 
-            borderColor: disabled ? 'divider' : 'primary.main' 
-          },
-          '&.Mui-focused fieldset': { 
-            borderColor: 'primary.main',
-            borderWidth: '2px'
-          },
-          '& input': {
-            padding: '12px 14px',
-            fontSize: '14px',
-            color: disabled ? 'text.disabled' : 'text.primary'
-          }
-        },
-        '& .MuiFormHelperText-root': {
-          fontSize: '12px',
-          color: disabled ? 'primary.main' : 'error.main',
-          marginTop: '4px'
-        }
-      }}
-      {...props}
-    />
-  </Box>
-));
-
-InputField.displayName = 'InputField';
-
-// Memoized Submit Button Component
-const SubmitButton = React.memo(({ loading, label, disabled, onClick }) => (
-  <Button
-    variant="contained"
-    disabled={loading || disabled}
-    onClick={onClick}
-    sx={{
-      bgcolor: 'primary.main',
-      color: 'primary.contrastText',
-      textTransform: 'none',
-      fontWeight: 500,
-      fontSize: '14px',
-      px: 3,
-      py: 1.5,
-      borderRadius: 2,
-      '&:hover': { 
-        bgcolor: 'primary.dark' 
-      },
-      '&:disabled': { 
-        bgcolor: 'action.disabled', 
-        color: 'text.disabled' 
-      },
-    }}
-  >
-    {loading ? <CircularProgress size={20} sx={{ color: 'inherit' }} /> : label}
-  </Button>
-));
-
-SubmitButton.displayName = 'SubmitButton';
+import {
+  Person as PersonIcon,
+  Visibility as VisibilityIcon,
+  CreditCard as CreditCardIcon,
+  Edit as EditIcon,
+  PersonAdd as PersonAddIcon,
+  PhotoCamera as PhotoCameraIcon
+} from '@mui/icons-material';
 
 const Settings = () => {
-  const { user } = useAuth();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   
-  // State management
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeSection, setActiveSection] = useState('account');
   const [profileData, setProfileData] = useState({
-    fullName: 'John Vendor',
-    email: 'vendor@example.com',
-    contactNumber: '+1 (555) 123-4567',
-    address: '123 Business St, Suite 100, City, State 12345',
+    name: 'Monir Ux Designer',
+    email: 'monirrzzaman097@gmail.com',
+    phone: '+088 01872055538',
+    streetNumber: '',
+    aptNumber: '',
+    city: '',
+    state: ''
   });
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [profileError, setProfileError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
-  // Load profile data on component mount
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await authApi.getCurrentUser();
-        setProfileData({
-          fullName: response.name || 'John Vendor',
-          email: response.email || 'vendor@example.com',
-          contactNumber: response.contactNumber || '+1 (555) 123-4567',
-          address: response.address || '123 Business St, Suite 100, City, State 12345',
-        });
-      } catch (error) {
-        // Keep default values if API fails
-      }
-    };
-    
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
-
-  // Handle tab change
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-    setErrors({});
-    setProfileError(null);
-    setPasswordError(null);
-    setSuccessMessage(null);
+  const handleInputChange = (field) => (event) => {
+    setProfileData(prev => ({
+      ...prev,
+      [field]: event.target.value
+    }));
   };
 
-  // Handle profile form changes
-  const handleProfileChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setProfileData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+  const sidebarItems = [
+    {
+      id: 'account',
+      label: 'Account Information',
+      sublabel: 'Change your Account Information',
+      icon: PersonIcon
+    },
+    {
+      id: 'password',
+      label: 'Password',
+      sublabel: 'Change your Password',
+      icon: VisibilityIcon
+    },
+    {
+      id: 'invite',
+      label: 'Invite Your Friends',
+      sublabel: 'Get $2 For each Invitation',
+      icon: PersonAddIcon
     }
-  }, [errors]);
+  ];
 
-  // Handle password form changes
-  const handlePasswordChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setPasswordData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  }, [errors]);
-
-  // Validate profile form
-  const validateProfile = useCallback(() => {
-    const newErrors = {};
-    if (!profileData.fullName) newErrors.fullName = 'Full name is required';
-    if (!profileData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!isValidEmail(profileData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    if (profileData.contactNumber && profileData.contactNumber.length < 10) {
-      newErrors.contactNumber = 'Invalid phone number';
-    }
-    if (!profileData.address) newErrors.address = 'Address is required';
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [profileData]);
-
-  // Validate password form
-  const validatePasswordForm = useCallback(() => {
-    const newErrors = {};
-    if (!passwordData.currentPassword) {
-      newErrors.currentPassword = 'Current password is required';
-    }
-    if (!passwordData.newPassword) {
-      newErrors.newPassword = 'New password is required';
-    } else {
-      const passwordValidation = validatePassword(passwordData.newPassword);
-      if (!passwordValidation.isValid) {
-        newErrors.newPassword = passwordValidation.errors.join(', ');
-      }
-    }
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [passwordData]);
-
-  // Handle profile update
-  const handleUpdateProfile = useCallback(async () => {
-    if (!validateProfile()) return;
-    
-    setLoading(true);
-    setProfileError(null);
-    setSuccessMessage(null);
-    
-    try {
-      await authApi.updateProfile(profileData);
-      setSuccessMessage('Profile updated successfully!');
-    } catch (error) {
-      setProfileError(handleApiError(error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, [profileData, validateProfile]);
-
-  // Handle password change
-  const handleChangePassword = useCallback(async () => {
-    if (!validatePasswordForm()) return;
-    
-    setLoading(true);
-    setPasswordError(null);
-    setSuccessMessage(null);
-    
-    try {
-      // Implement password change API call here
-      // await authApi.changePassword(passwordData);
-      setSuccessMessage('Password changed successfully!');
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-    } catch (error) {
-      setPasswordError(handleApiError(error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, [passwordData, validatePasswordForm]);
-
-  return (
-    <Box sx={{ 
-      bgcolor: 'background.default', 
-      minHeight: '100vh', 
-      p: 0 
-    }}>
-      {/* Header */}
-      <Paper 
-        elevation={0}
-        sx={{ 
-          bgcolor: 'background.paper', 
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          px: 4,
-          py: 3
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            fontWeight: 600, 
-            color: 'text.primary',
-            fontSize: { xs: '1.5rem', sm: '2rem' },
-            mb: 0.5
-          }}
-        >
-          Settings
-        </Typography>
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            color: 'text.secondary',
-            fontSize: '1rem'
-          }}
-        >
-          Manage your account preferences
-        </Typography>
-      </Paper>
-
-      {/* Tab Navigation */}
-      <Paper
-        elevation={0}
+  const CircularProgress = ({ value }) => (
+    <Box
+      sx={{
+        position: 'relative',
+        display: 'inline-flex',
+        width: 60,
+        height: 60
+      }}
+    >
+      <Box
         sx={{
-          bgcolor: 'background.paper',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          px: 4
+          width: 60,
+          height: 60,
+          borderRadius: '50%',
+          background: `conic-gradient(${theme.palette.common.white} 0deg, ${theme.palette.common.white} ${value * 3.6}deg, rgba(255,255,255,0.3) ${value * 3.6}deg)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: `3px solid rgba(255,255,255,0.3)`,
+          position: 'relative'
         }}
       >
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
+        <Box
           sx={{
-            '& .MuiTab-root': {
-              textTransform: 'none',
-              fontWeight: 500,
-              fontSize: '14px',
-              minHeight: 60,
-              color: 'text.secondary',
-              '&.Mui-selected': {
-                color: 'primary.main',
-              }
-            },
-            '& .MuiTabs-indicator': {
-              backgroundColor: 'primary.main',
-              height: 3,
-            }
+            position: 'absolute',
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <Tab
-            icon={<PersonIcon sx={{ fontSize: '18px' }} />}
-            iconPosition="start"
-            label="Update Profile"
-            sx={{ px: 3 }}
-          />
-          <Tab
-            icon={<LockIcon sx={{ fontSize: '18px' }} />}
-            iconPosition="start"
-            label="Change Password"
-            sx={{ px: 3 }}
-          />
-        </Tabs>
-      </Paper>
-
-      {/* Content Area */}
-      <Box sx={{ p: 4 }}>
-        <Card
-          sx={{
-            bgcolor: 'background.paper',
-            borderRadius: 3,
-            border: '1px solid',
-            borderColor: 'divider',
-            boxShadow: theme.shadows[1],
-            maxWidth: '100%'
-          }}
-        >
-          <CardContent sx={{ p: 4 }}>
-            {/* Success Message */}
-            {successMessage && (
-              <Alert 
-                severity="success" 
-                sx={{ mb: 3, borderRadius: 2 }}
-                onClose={() => setSuccessMessage(null)}
-              >
-                {successMessage}
-              </Alert>
-            )}
-            
-            {/* Profile Update Tab */}
-            {activeTab === 0 && (
-              <Box>
-                <Typography 
-                  variant="h5" 
-                  sx={{ 
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    fontSize: '1.25rem',
-                    mb: 1
-                  }}
-                >
-                  Profile Information
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    color: 'text.secondary',
-                    mb: 4
-                  }}
-                >
-                  Update your personal information and contact details
-                </Typography>
-
-                {profileError && (
-                  <Alert 
-                    severity="error" 
-                    sx={{ mb: 3, borderRadius: 2 }}
-                    onClose={() => setProfileError(null)}
-                  >
-                    {profileError}
-                  </Alert>
-                )}
-                
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="Full Name"
-                      name="fullName"
-                      value={profileData.fullName}
-                      onChange={handleProfileChange}
-                      error={errors.fullName}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="Email"
-                      name="email"
-                      value={profileData.email}
-                      onChange={handleProfileChange}
-                      error={errors.email}
-                      disabled
-                      helperText="Email cannot be changed"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="Contact Number"
-                      name="contactNumber"
-                      value={profileData.contactNumber}
-                      onChange={handleProfileChange}
-                      error={errors.contactNumber}
-                      type="tel"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}></Grid>
-                  <Grid item xs={12}>
-                    <InputField
-                      label="Address"
-                      name="address"
-                      value={profileData.address}
-                      onChange={handleProfileChange}
-                      error={errors.address}
-                      multiline
-                      rows={3}
-                    />
-                  </Grid>
-                </Grid>
-                
-                <Divider sx={{ my: 4 }} />
-                
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <SubmitButton 
-                    loading={loading} 
-                    label="Update Profile" 
-                    onClick={handleUpdateProfile}
-                  />
-                </Box>
-              </Box>
-            )}
-            
-            {/* Password Change Tab */}
-            {activeTab === 1 && (
-              <Box>
-                <Typography 
-                  variant="h5" 
-                  sx={{ 
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    fontSize: '1.25rem',
-                    mb: 1
-                  }}
-                >
-                  Change Password
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    color: 'text.secondary',
-                    mb: 4
-                  }}
-                >
-                  Update your password to keep your account secure
-                </Typography>
-
-                {passwordError && (
-                  <Alert 
-                    severity="error" 
-                    sx={{ mb: 3, borderRadius: 2 }}
-                    onClose={() => setPasswordError(null)}
-                  >
-                    {passwordError}
-                  </Alert>
-                )}
-                
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="Current Password"
-                      name="currentPassword"
-                      type="password"
-                      value={passwordData.currentPassword}
-                      onChange={handlePasswordChange}
-                      error={errors.currentPassword}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}></Grid>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="New Password"
-                      name="newPassword"
-                      type="password"
-                      value={passwordData.newPassword}
-                      onChange={handlePasswordChange}
-                      error={errors.newPassword}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}></Grid>
-                  <Grid item xs={12} md={6}>
-                    <InputField
-                      label="Confirm New Password"
-                      name="confirmPassword"
-                      type="password"
-                      value={passwordData.confirmPassword}
-                      onChange={handlePasswordChange}
-                      error={errors.confirmPassword}
-                    />
-                  </Grid>
-                </Grid>
-                
-                <Divider sx={{ my: 4 }} />
-                
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <SubmitButton 
-                    loading={loading} 
-                    label="Change Password" 
-                    onClick={handleChangePassword}
-                  />
-                </Box>
-              </Box>
-            )}
-          </CardContent>
-        </Card>
+          <Typography
+            variant="body1"
+            sx={{
+              color: theme.palette.common.white,
+              fontWeight: 600,
+              fontSize: '16px'
+            }}
+          >
+            {value}%
+          </Typography>
+        </Box>
       </Box>
     </Box>
+  );
+
+  return (
+    <Container maxWidth="xl" sx={{ py: 3 }}>
+      <Box sx={{ 
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: 3,
+        minHeight: '100vh'
+      }}>
+        {/* Left Sidebar */}
+        <Box sx={{ 
+          width: { xs: '100%', md: 320 },
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: 2
+        }}>
+          {/* Profile Completion Card */}
+          <Card sx={{ 
+            background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+            color: theme.palette.primary.contrastText,
+            borderRadius: 3,
+            boxShadow: theme.shadows[8]
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                mb: 2,
+                flexDirection: { xs: 'column', sm: 'row' },
+                textAlign: { xs: 'center', sm: 'left' },
+                gap: 2
+              }}>
+                <CircularProgress value={64} />
+                <Box sx={{ flex: 1 }}>
+                  <Typography 
+                    variant="subtitle1" 
+                    sx={{ 
+                      fontWeight: 600, 
+                      mb: 0.5,
+                      color: theme.palette.primary.contrastText
+                    }}
+                  >
+                    Complete profile
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      opacity: 0.9, 
+                      fontSize: '0.75rem',
+                      color: theme.palette.primary.contrastText
+                    }}
+                  >
+                    Complete your profile to unlock all features
+                  </Typography>
+                </Box>
+              </Box>
+              <Button 
+                fullWidth 
+                variant="contained"
+                sx={{ 
+                  bgcolor: 'rgba(255,255,255,0.2)',
+                  color: theme.palette.primary.contrastText,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  '&:hover': {
+                    bgcolor: 'rgba(255,255,255,0.3)'
+                  }
+                }}
+              >
+                Verify Identity
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Navigation Menu */}
+          <Card sx={{ 
+            borderRadius: 3, 
+            bgcolor: theme.palette.background.paper,
+            boxShadow: theme.shadows[2]
+          }}>
+            <List sx={{ p: 0 }}>
+              {sidebarItems.map((item, index) => (
+                <React.Fragment key={item.id}>
+                  <ListItem 
+                    button 
+                    onClick={() => setActiveSection(item.id)}
+                    sx={{ 
+                      py: 2.5,
+                      px: 3,
+                      bgcolor: activeSection === item.id ? 
+                        theme.palette.action.selected : 'transparent',
+                      borderLeft: activeSection === item.id ? 
+                        `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
+                      '&:hover': {
+                        bgcolor: theme.palette.action.hover
+                      },
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      <item.icon sx={{ 
+                        color: activeSection === item.id ? 
+                          theme.palette.primary.main : theme.palette.text.secondary,
+                        fontSize: 20
+                      }} />
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={
+                        <Typography 
+                          variant="subtitle2" 
+                          sx={{ 
+                            fontWeight: 600,
+                            color: activeSection === item.id ? 
+                              theme.palette.primary.main : theme.palette.text.primary,
+                            fontSize: { xs: '0.875rem', sm: '0.875rem' }
+                          }}
+                        >
+                          {item.label}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            color: theme.palette.text.secondary,
+                            fontSize: '0.75rem',
+                            display: { xs: 'none', sm: 'block' }
+                          }}
+                        >
+                          {item.sublabel}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                  {index < sidebarItems.length - 1 && (
+                    <Divider sx={{ mx: 3 }} />
+                  )}
+                </React.Fragment>
+              ))}
+            </List>
+          </Card>
+        </Box>
+
+        {/* Main Content */}
+        <Box sx={{ flex: 1 }}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            bgcolor: theme.palette.background.paper,
+            boxShadow: theme.shadows[2],
+            height: 'fit-content'
+          }}>
+            <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  fontWeight: 600, 
+                  mb: 4,
+                  color: theme.palette.text.primary,
+                  fontSize: { xs: '1.5rem', sm: '1.75rem' }
+                }}
+              >
+                Personal Informations
+              </Typography>
+
+              {/* Profile Section */}
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                mb: 4, 
+                gap: 3,
+                flexDirection: { xs: 'column', sm: 'row' },
+                textAlign: { xs: 'center', sm: 'left' }
+              }}>
+                <Box sx={{ position: 'relative' }}>
+                  <Avatar 
+                    sx={{ 
+                      width: { xs: 70, sm: 80 }, 
+                      height: { xs: 70, sm: 80 },
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+                      fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                      fontWeight: 600
+                    }}
+                  >
+                    M
+                  </Avatar>
+                  <IconButton
+                    sx={{
+                      position: 'absolute',
+                      bottom: -8,
+                      right: -8,
+                      bgcolor: theme.palette.background.paper,
+                      border: `2px solid ${theme.palette.background.paper}`,
+                      width: 32,
+                      height: 32,
+                      '&:hover': {
+                        bgcolor: theme.palette.action.hover
+                      }
+                    }}
+                  >
+                    <PhotoCameraIcon sx={{ fontSize: 16, color: theme.palette.text.secondary }} />
+                  </IconButton>
+                </Box>
+                
+                <Box sx={{ flex: 1 }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 600, 
+                      mb: 1,
+                      color: theme.palette.text.primary,
+                      fontSize: { xs: '1.125rem', sm: '1.25rem' }
+                    }}
+                  >
+                    Monir UX Designer
+                  </Typography>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    gap: 2,
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'center', sm: 'flex-start' }
+                  }}>
+                    <Button 
+                      variant="contained"
+                      size="small"
+                      sx={{ 
+                        bgcolor: theme.palette.primary.main,
+                        color: theme.palette.primary.contrastText,
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        borderRadius: 2,
+                        px: 2,
+                        '&:hover': {
+                          bgcolor: theme.palette.primary.dark
+                        }
+                      }}
+                    >
+                      Upload New Picture
+                    </Button>
+                    <Button 
+                      variant="text"
+                      size="small"
+                      sx={{ 
+                        color: theme.palette.text.secondary,
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        '&:hover': {
+                          color: theme.palette.error.main
+                        }
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                </Box>
+                
+                <IconButton sx={{ 
+                  color: theme.palette.text.secondary,
+                  '&:hover': { 
+                    color: theme.palette.primary.main,
+                    bgcolor: theme.palette.action.hover
+                  }
+                }}>
+                  <EditIcon />
+                </IconButton>
+              </Box>
+
+              {/* Form Fields */}
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Box sx={{ position: 'relative' }}>
+                    <TextField
+                      fullWidth
+                      value={profileData.name}
+                      onChange={handleInputChange('name')}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          bgcolor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                          '& fieldset': {
+                            borderColor: 'transparent'
+                          },
+                          '&:hover fieldset': {
+                            borderColor: theme.palette.primary.main
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: theme.palette.primary.main
+                          }
+                        }
+                      }}
+                    />
+                    <IconButton sx={{ 
+                      position: 'absolute',
+                      right: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: theme.palette.text.secondary,
+                      '&:hover': { color: theme.palette.primary.main }
+                    }}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box sx={{ position: 'relative' }}>
+                    <TextField
+                      fullWidth
+                      value={profileData.email}
+                      onChange={handleInputChange('email')}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          bgcolor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                          '& fieldset': {
+                            borderColor: 'transparent'
+                          },
+                          '&:hover fieldset': {
+                            borderColor: theme.palette.primary.main
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: theme.palette.primary.main
+                          }
+                        }
+                      }}
+                    />
+                    <IconButton sx={{ 
+                      position: 'absolute',
+                      right: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: theme.palette.text.secondary,
+                      '&:hover': { color: theme.palette.primary.main }
+                    }}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box sx={{ position: 'relative' }}>
+                    <TextField
+                      fullWidth
+                      value={profileData.phone}
+                      onChange={handleInputChange('phone')}
+                      variant="outlined"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          bgcolor: theme.palette.mode === 'dark' ? 
+                            'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                          '& fieldset': {
+                            borderColor: 'transparent'
+                          },
+                          '&:hover fieldset': {
+                            borderColor: theme.palette.primary.main
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: theme.palette.primary.main
+                          }
+                        }
+                      }}
+                    />
+                    <IconButton sx={{ 
+                      position: 'absolute',
+                      right: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: theme.palette.text.secondary,
+                      '&:hover': { color: theme.palette.primary.main }
+                    }}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    placeholder="Street Number"
+                    value={profileData.streetNumber}
+                    onChange={handleInputChange('streetNumber')}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: 'transparent'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    placeholder="Apt / House Number"
+                    value={profileData.aptNumber}
+                    onChange={handleInputChange('aptNumber')}
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: 'transparent'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={profileData.city}
+                      onChange={handleInputChange('city')}
+                      displayEmpty
+                      renderValue={(value) => value || 'City'}
+                      sx={{
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: 'transparent'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      }}
+                    >
+                      <MenuItem value="">City</MenuItem>
+                      <MenuItem value="dhaka">Dhaka</MenuItem>
+                      <MenuItem value="chittagong">Chittagong</MenuItem>
+                      <MenuItem value="sylhet">Sylhet</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={profileData.state}
+                      onChange={handleInputChange('state')}
+                      displayEmpty
+                      renderValue={(value) => value || 'State'}
+                      sx={{
+                        borderRadius: 2,
+                        bgcolor: theme.palette.mode === 'dark' ? 
+                          'rgba(255,255,255,0.05)' : theme.palette.grey[50],
+                        '& fieldset': {
+                          borderColor: 'transparent'
+                        },
+                        '&:hover fieldset': {
+                          borderColor: theme.palette.primary.main
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: theme.palette.primary.main
+                        }
+                      }}
+                    >
+                      <MenuItem value="">State</MenuItem>
+                      <MenuItem value="dhaka-division">Dhaka Division</MenuItem>
+                      <MenuItem value="chittagong-division">Chittagong Division</MenuItem>
+                      <MenuItem value="sylhet-division">Sylhet Division</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sx={{ mt: 2 }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      bgcolor: theme.palette.primary.main,
+                      color: theme.palette.primary.contrastText,
+                      py: 2,
+                      borderRadius: 3,
+                      textTransform: 'none',
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      '&:hover': {
+                        bgcolor: theme.palette.primary.dark,
+                        transform: 'translateY(-1px)',
+                        boxShadow: theme.shadows[4]
+                      },
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                  >
+                    Update
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
