@@ -111,8 +111,8 @@ const Products = () => {
             label="in stock"
             size="small"
             sx={{
-              bgcolor: "#D4F5D4",
-              color: "#2E7D2E",
+              bgcolor: "success.light",
+              color: "success.dark",
               fontWeight: 600,
               fontSize: "0.75rem",
               height: 24,
@@ -126,8 +126,8 @@ const Products = () => {
             label="low stock"
             size="small"
             sx={{
-              bgcolor: "#FFF3CD",
-              color: "#856404",
+              bgcolor: "warning.light",
+              color: "warning.dark",
               fontWeight: 600,
               fontSize: "0.75rem",
               height: 24,
@@ -141,8 +141,8 @@ const Products = () => {
             label="out of stock"
             size="small"
             sx={{
-              bgcolor: "#F8D7DA",
-              color: "#721C24",
+              bgcolor: "error.light",
+              color: "error.dark",
               fontWeight: 600,
               fontSize: "0.75rem",
               height: 24,
@@ -156,8 +156,8 @@ const Products = () => {
             label={status}
             size="small"
             sx={{
-              bgcolor: "#E9ECEF",
-              color: "#495057",
+              bgcolor: "grey.200",
+              color: "grey.700",
               fontWeight: 600,
               fontSize: "0.75rem",
               height: 24,
@@ -171,6 +171,8 @@ const Products = () => {
   return (
     <Box sx={{ 
       p: 3,
+      bgcolor: "background.default",
+      minHeight: "100vh",
     }}>
       {/* Page Header */}
       <Box
@@ -188,7 +190,7 @@ const Products = () => {
             variant="h4"
             sx={{
               fontWeight: 700,
-              color: "#1A1A1A",
+              color: "text.primary",
               fontSize: { xs: "1.5rem", sm: "2rem" },
               mb: 0.5,
             }}
@@ -198,7 +200,7 @@ const Products = () => {
           <Typography
             variant="body1"
             sx={{
-              color: "#666",
+              color: "text.secondary",
               fontSize: "1rem",
             }}
           >
@@ -211,15 +213,15 @@ const Products = () => {
           startIcon={<AddIcon />}
           onClick={handleAddProduct}
           sx={{
-            bgcolor: "#2196f3",
-            color: "white",
+            bgcolor: "primary.main",
+            color: "primary.contrastText",
             fontWeight: 600,
             px: 3,
             py: 1.5,
-            borderRadius: 1,
+            borderRadius: 2,
             textTransform: "none",
             "&:hover": {
-              bgcolor: "#1976d2",
+              bgcolor: "primary.dark",
             },
             width: { xs: "100%", sm: "auto" },
           }}
@@ -246,25 +248,25 @@ const Products = () => {
           variant="outlined"
           size="small"
           sx={{
-            bgcolor: "white",
-            borderRadius: 1,
+            bgcolor: "background.paper",
+            borderRadius: 2,
             minWidth: { xs: "100%", md: "300px" },
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
-                borderColor: "#E0E0E0",
+                borderColor: "divider",
               },
               "&:hover fieldset": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
               "&.Mui-focused fieldset": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
             },
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "#999", fontSize: 20 }} />
+                <SearchIcon sx={{ color: "text.secondary", fontSize: 20 }} />
               </InputAdornment>
             ),
           }}
@@ -277,19 +279,19 @@ const Products = () => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             displayEmpty
             sx={{
-              bgcolor: "white",
+              bgcolor: "background.paper",
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#E0E0E0",
+                borderColor: "divider",
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
             }}
             startAdornment={
-              <FilterIcon sx={{ color: "#999", fontSize: 18, mr: 1 }} />
+              <FilterIcon sx={{ color: "text.secondary", fontSize: 18, mr: 1 }} />
             }
           >
             <MenuItem value="">Filter by category</MenuItem>
@@ -305,15 +307,15 @@ const Products = () => {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             sx={{
-              bgcolor: "white",
+              bgcolor: "background.paper",
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#E0E0E0",
+                borderColor: "divider",
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#2196f3",
+                borderColor: "primary.main",
               },
             }}
           >
@@ -329,17 +331,19 @@ const Products = () => {
       <TableContainer
         component={Paper}
         sx={{
-          borderRadius: 1,
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-          border: "1px solid #E0E0E0",
+          borderRadius: 2,
+          boxShadow: theme.shadows[1],
+          border: "1px solid",
+          borderColor: "divider",
+          bgcolor: "background.paper",
         }}
       >
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: "#FAFAFA" }}>
+            <TableRow sx={{ bgcolor: "background.paper" }}>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -350,7 +354,7 @@ const Products = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -361,7 +365,7 @@ const Products = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -372,7 +376,7 @@ const Products = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -383,7 +387,7 @@ const Products = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -394,7 +398,7 @@ const Products = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  color: "#666",
+                  color: "text.secondary",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   py: 2,
@@ -412,7 +416,7 @@ const Products = () => {
                 key={product.id}
                 sx={{
                   "&:hover": {
-                    bgcolor: "#F8F9FA",
+                    bgcolor: "action.hover",
                   },
                   "&:last-child td": {
                     borderBottom: 0,
@@ -426,7 +430,7 @@ const Products = () => {
                       variant="subtitle1"
                       sx={{
                         fontWeight: 600,
-                        color: "#1A1A1A",
+                        color: "text.primary",
                         fontSize: "0.95rem",
                         mb: 0.5,
                       }}
@@ -436,7 +440,7 @@ const Products = () => {
                     <Typography
                       variant="body2"
                       sx={{
-                        color: "#666",
+                        color: "text.secondary",
                         fontSize: "0.8rem",
                       }}
                     >
@@ -454,8 +458,8 @@ const Products = () => {
                         label={category}
                         size="small"
                         sx={{
-                          bgcolor: "#E3F2FD",
-                          color: "#1976D2",
+                          bgcolor: "primary.light",
+                          color: "primary.dark",
                           fontWeight: 500,
                           fontSize: "0.75rem",
                           height: 22,
@@ -472,7 +476,7 @@ const Products = () => {
                     variant="subtitle1"
                     sx={{
                       fontWeight: 600,
-                      color: "#1A1A1A",
+                      color: "text.primary",
                       fontSize: "0.95rem",
                     }}
                   >
@@ -490,7 +494,7 @@ const Products = () => {
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "#666",
+                      color: "text.secondary",
                       fontSize: "0.875rem",
                     }}
                   >
@@ -507,10 +511,10 @@ const Products = () => {
                       size="small"
                       onClick={() => handleViewProduct(product.id)}
                       sx={{
-                        color: "#666",
+                        color: "text.secondary",
                         "&:hover": {
-                          color: "#2196f3",
-                          bgcolor: "rgba(33, 150, 243, 0.1)",
+                          color: "primary.main",
+                          bgcolor: "primary.light",
                         },
                       }}
                     >
@@ -520,10 +524,10 @@ const Products = () => {
                       size="small"
                       onClick={() => handleEditProduct(product.id)}
                       sx={{
-                        color: "#666",
+                        color: "text.secondary",
                         "&:hover": {
-                          color: "#FF9800",
-                          bgcolor: "rgba(255, 152, 0, 0.1)",
+                          color: "warning.main",
+                          bgcolor: "warning.light",
                         },
                       }}
                     >
@@ -533,10 +537,10 @@ const Products = () => {
                       size="small"
                       onClick={() => handleDeleteProduct(product.id)}
                       sx={{
-                        color: "#666",
+                        color: "text.secondary",
                         "&:hover": {
-                          color: "#F44336",
-                          bgcolor: "rgba(244, 67, 54, 0.1)",
+                          color: "error.main",
+                          bgcolor: "error.light",
                         },
                       }}
                     >

@@ -1,0 +1,14 @@
+/* Ensure MUI containers take full width */
+.MuiContainer-root {
+  width: 100% !important;
+}
+
+.MuiGrid-container {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* If using Toolpad layout */
+.MuiDashboardLayout-root {
+  width: 100% !important;
+}

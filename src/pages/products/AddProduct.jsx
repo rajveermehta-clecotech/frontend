@@ -2,30 +2,29 @@ import React, { useState } from 'react';
 import {
   Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
   Button,
   TextField,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
   FormControlLabel,
   Checkbox,
   FormGroup,
-  InputAdornment,
-  IconButton,
-  Paper
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   KeyboardArrowDown,
-  CloudUpload,
-  Add
+  ArrowBack,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     productName: '',
     subheading: '',
@@ -34,8 +33,6 @@ const AddProduct = () => {
     stockStatus: 'In Stock',
     categories: []
   });
-
-  const [selectedImage, setSelectedImage] = useState('https://images.unsplash.com/photo-1518709479606-2c47f0ff2a95?w=400&h=300&fit=crop');
 
   const categories = [
     'Electronics',
@@ -66,363 +63,555 @@ const AddProduct = () => {
     }));
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleSave = () => {
+    console.log('Saving product:', formData);
+    // Handle save logic here
+  };
+
+  const handleCancel = () => {
+    navigate('/products');
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', p: 3 }}>
-      <Box sx={{ maxWidth: '100%', mx: 'auto' }}>
-        <Grid container spacing={3}>
-          {/* Left Column - Product Information */}
-          <Grid item xs={12} md={8}>
-            <Card 
+    <Box sx={{ 
+      bgcolor: 'background.default', 
+      minHeight: '100vh',
+      width: '100%',
+      p: { xs: 2, sm: 3, md: 4 }
+    }}>
+      {/* Header */}
+      <Box sx={{ mb: { xs: 3, md: 4 } }}>
+        <Button
+          startIcon={<ArrowBack />}
+          onClick={handleCancel}
+          sx={{ 
+            mb: 2,
+            color: 'text.secondary',
+            textTransform: 'none',
+            fontSize: '14px',
+            p: 1,
+            '&:hover': { 
+              bgcolor: 'action.hover',
+              color: 'primary.main' 
+            }
+          }}
+        >
+          Back to Products
+        </Button>
+        
+        <Typography 
+          variant="h4" 
+          sx={{ 
+            fontWeight: 600, 
+            color: 'text.primary',
+            fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+            mb: 1,
+          }}
+        >
+          Add New Product
+        </Typography>
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            color: 'text.secondary',
+            fontSize: { xs: '13px', md: '14px' },
+          }}
+        >
+          Fill in the details for your new product
+        </Typography>
+      </Box>
+
+      {/* Main Content Container */}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 3, md: 4 },
+        width: '100%',
+        alignItems: 'flex-start'
+      }}>
+        {/* Left Section - Product Information */}
+        <Box sx={{
+          flex: { xs: '1', md: '2' },
+          width: { xs: '100%', md: 'auto' },
+          minWidth: 0 // Prevents flex item from overflowing
+        }}>
+          <Box sx={{ 
+            bgcolor: 'background.paper', 
+            borderRadius: 2, 
+            p: { xs: 2, sm: 3 },
+            width: '100%',
+            boxShadow: theme.shadows[1],
+            border: '1px solid',
+            borderColor: 'divider'
+          }}>
+            <Typography 
+              variant="h6" 
               sx={{ 
-                borderRadius: 2, 
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                border: '1px solid',
-                borderColor: 'grey.200'
+                fontWeight: 600, 
+                mb: 3, 
+                color: 'text.primary',
+                fontSize: { xs: '16px', md: '18px' }
               }}
             >
-              <CardContent sx={{ p: 3 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, color: 'grey.900' }}>
-                  Product Information
-                </Typography>
-                
-                {/* Product Name */}
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
-                    Product Name <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    value={formData.productName}
-                    onChange={(e) => handleInputChange('productName', e.target.value)}
-                    placeholder="Enter product name"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'grey.300',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'grey.400',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'primary.main',
-                          borderWidth: 2,
-                        },
-                      },
-                    }}
-                  />
-                </Box>
-
-                {/* Subheading */}
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
-                    Subheading <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    value={formData.subheading}
-                    onChange={(e) => handleInputChange('subheading', e.target.value)}
-                    placeholder="Brief description or tagline"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'grey.300',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'grey.400',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'primary.main',
-                          borderWidth: 2,
-                        },
-                      },
-                    }}
-                  />
-                </Box>
-
-                {/* Description */}
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
-                    Description <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    value={formData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Detailed product description"
-                    multiline
-                    rows={6}
-                    variant="outlined"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: 'grey.300',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'grey.400',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'primary.main',
-                          borderWidth: 2,
-                        },
-                      },
-                    }}
-                  />
-                </Box>
-
-                {/* Price and Stock Status */}
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
-                      Price ($) <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      type="number"
-                      value={formData.price}
-                      onChange={(e) => handleInputChange('price', e.target.value)}
-                      placeholder="0"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: 'grey.300',
-                          },
-                          '&:hover fieldset': {
-                            borderColor: 'grey.400',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: 'grey.700', mb: 1 }}>
-                      Stock Status <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                    </Typography>
-                    <FormControl fullWidth size="small">
-                      <Select
-                        value={formData.stockStatus}
-                        onChange={(e) => handleInputChange('stockStatus', e.target.value)}
-                        IconComponent={KeyboardArrowDown}
-                        sx={{
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'grey.300',
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'grey.400',
-                          },
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                          },
-                        }}
-                      >
-                        {stockOptions.map(option => (
-                          <MenuItem key={option} value={option}>{option}</MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Right Column - Categories and Product Image */}
-          <Grid item xs={12} md={4}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-              {/* Categories */}
-              <Card 
+              Product Information
+            </Typography>
+            
+            {/* Product Name */}
+            <Box sx={{ mb: 3 }}>
+              <Typography 
+                variant="body2" 
                 sx={{ 
-                  borderRadius: 2, 
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  border: '1px solid',
-                  borderColor: 'grey.200'
+                  fontWeight: 500, 
+                  color: 'text.primary', 
+                  mb: 1,
+                  fontSize: '14px'
                 }}
               >
-                <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'grey.900' }}>
-                    Categories <Box component="span" sx={{ color: 'error.main' }}>*</Box>
-                  </Typography>
-                  
-                  <FormGroup sx={{ maxHeight: 250, overflowY: 'auto' }}>
-                    {categories.map((category) => (
-                      <FormControlLabel
-                        key={category}
-                        control={
-                          <Checkbox
-                            checked={formData.categories.includes(category)}
-                            onChange={() => handleCategoryToggle(category)}
-                            size="small"
-                            sx={{
-                              color: 'grey.400',
-                              '&.Mui-checked': {
-                                color: 'primary.main',
-                              },
-                            }}
-                          />
-                        }
-                        label={
-                          <Typography variant="body2" sx={{ color: 'grey.700' }}>
-                            {category}
-                          </Typography>
-                        }
-                        sx={{ mb: 0.5 }}
-                      />
-                    ))}
-                  </FormGroup>
-                  
-                  {formData.categories.length === 0 && (
-                    <Typography variant="body2" sx={{ color: 'error.main', mt: 1 }}>
-                      Please select at least one category
-                    </Typography>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Product Image */}
-              <Card 
-                sx={{ 
-                  borderRadius: 2, 
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  border: '1px solid',
-                  borderColor: 'grey.200'
+                Product Name <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+              </Typography>
+              <TextField
+                fullWidth
+                value={formData.productName}
+                onChange={(e) => handleInputChange('productName', e.target.value)}
+                placeholder="Enter product name"
+                variant="outlined"
+                size="small"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'background.paper',
+                    height: '40px',
+                    '& fieldset': {
+                      borderColor: 'divider',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  },
                 }}
-              >
-                <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'grey.900' }}>
-                    Product Image
-                  </Typography>
-                  
-                  <Box sx={{ textAlign: 'center' }}>
-                    <Box
-                      sx={{
-                        width: '100%',
-                        height: 200,
-                        border: '2px dashed',
-                        borderColor: 'grey.300',
-                        borderRadius: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bgcolor: 'grey.50',
-                        mb: 2,
-                        cursor: 'pointer',
-                        '&:hover': {
-                          borderColor: 'primary.main',
-                          bgcolor: 'primary.50',
-                        }
-                      }}
-                      onClick={() => document.getElementById('image-upload').click()}
-                    >
-                      {selectedImage ? (
-                        <Box
-                          component="img"
-                          src={selectedImage}
-                          alt="Product"
-                          sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: 1
-                          }}
-                        />
-                      ) : (
-                        <>
-                          <CloudUpload sx={{ fontSize: 48, color: 'grey.400', mb: 1 }} />
-                          <Typography variant="body2" sx={{ color: 'grey.600' }}>
-                            Click to upload image
-                          </Typography>
-                          <Typography variant="caption" sx={{ color: 'grey.500', mt: 0.5 }}>
-                            PNG, JPG, GIF up to 10MB
-                          </Typography>
-                        </>
-                      )}
-                    </Box>
-                    
-                    <input
-                      id="image-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      style={{ display: 'none' }}
-                    />
-                    
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<CloudUpload />}
-                      onClick={() => document.getElementById('image-upload').click()}
-                      sx={{
-                        borderColor: 'grey.300',
-                        color: 'grey.700',
-                        '&:hover': {
-                          bgcolor: 'grey.50',
-                          borderColor: 'grey.400',
-                        },
-                      }}
-                    >
-                      Choose File
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
+              />
             </Box>
-          </Grid>
-        </Grid>
 
-        {/* Action Buttons */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 4 }}>
-          <Button 
-            variant="outlined" 
-            sx={{ 
-              px: 4, 
-              py: 1.5,
-              borderColor: 'grey.300',
-              color: 'grey.700',
-              '&:hover': {
-                bgcolor: 'grey.50',
-                borderColor: 'grey.400',
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button 
-            variant="contained" 
-            sx={{ 
-              px: 4, 
-              py: 1.5,
-              bgcolor: 'primary.main',
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            Save Product
-          </Button>
+            {/* Subheading */}
+            <Box sx={{ mb: 3 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  fontWeight: 500, 
+                  color: 'text.primary', 
+                  mb: 1,
+                  fontSize: '14px'
+                }}
+              >
+                Subheading <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+              </Typography>
+              <TextField
+                fullWidth
+                value={formData.subheading}
+                onChange={(e) => handleInputChange('subheading', e.target.value)}
+                placeholder="Brief description or tagline"
+                variant="outlined"
+                size="small"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'background.paper',
+                    height: '40px',
+                    '& fieldset': {
+                      borderColor: 'divider',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  },
+                }}
+              />
+            </Box>
+
+            {/* Description */}
+            <Box sx={{ mb: 3 }}>
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  fontWeight: 500, 
+                  color: 'text.primary', 
+                  mb: 1,
+                  fontSize: '14px'
+                }}
+              >
+                Description <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+              </Typography>
+              <TextField
+                fullWidth
+                value={formData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Detailed product description"
+                multiline
+                rows={6}
+                variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'background.paper',
+                    '& fieldset': {
+                      borderColor: 'divider',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  },
+                }}
+              />
+            </Box>
+
+            {/* Price and Stock Status Row */}
+            <Box sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 2, sm: 3 }
+            }}>
+              <Box sx={{ flex: 1 }}>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontWeight: 500, 
+                    color: 'text.primary', 
+                    mb: 1,
+                    fontSize: '14px'
+                  }}
+                >
+                  Price ($) <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => handleInputChange('price', e.target.value)}
+                  placeholder="0"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: 'background.paper',
+                      height: '40px',
+                      '& fieldset': {
+                        borderColor: 'divider',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ flex: 1 }}>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontWeight: 500, 
+                    color: 'text.primary', 
+                    mb: 1,
+                    fontSize: '14px'
+                  }}
+                >
+                  Stock Status <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+                </Typography>
+                <FormControl fullWidth size="small">
+                  <Select
+                    value={formData.stockStatus}
+                    onChange={(e) => handleInputChange('stockStatus', e.target.value)}
+                    IconComponent={KeyboardArrowDown}
+                    displayEmpty
+                    sx={{
+                      bgcolor: 'background.paper',
+                      height: '40px',
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'divider',
+                      },
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    }}
+                  >
+                    {stockOptions.map(option => (
+                      <MenuItem key={option} value={option}>{option}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+          </Box>
         </Box>
+
+        {/* Right Section - Categories and Product Image */}
+        <Box sx={{
+          flex: { xs: '1', md: '1' },
+          width: { xs: '100%', md: 'auto' },
+          minWidth: { xs: 'auto', md: '300px' },
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}>
+          {/* Categories */}
+          <Box sx={{ 
+            bgcolor: 'background.paper', 
+            borderRadius: 2, 
+            p: { xs: 2, sm: 3 },
+            width: '100%',
+            boxShadow: theme.shadows[1],
+            border: '1px solid',
+            borderColor: 'divider'
+          }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                fontWeight: 600, 
+                mb: 2, 
+                color: 'text.primary',
+                fontSize: { xs: '16px', md: '18px' }
+              }}
+            >
+              Categories <Box component="span" sx={{ color: 'error.main' }}>*</Box>
+            </Typography>
+            
+            <FormGroup sx={{ 
+              gap: 0.5,
+              maxHeight: { xs: '200px', md: '250px' },
+              overflowY: 'auto'
+            }}>
+              {categories.map((category) => (
+                <FormControlLabel
+                  key={category}
+                  control={
+                    <Checkbox
+                      checked={formData.categories.includes(category)}
+                      onChange={() => handleCategoryToggle(category)}
+                      size="small"
+                      sx={{
+                        color: 'action.disabled',
+                        '&.Mui-checked': {
+                          color: 'primary.main',
+                        },
+                        '& .MuiSvgIcon-root': {
+                          fontSize: 18,
+                        },
+                      }}
+                    />
+                  }
+                  label={
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: 'text.primary',
+                        fontSize: '14px',
+                        fontWeight: 400
+                      }}
+                    >
+                      {category}
+                    </Typography>
+                  }
+                  sx={{ 
+                    m: 0,
+                    '& .MuiFormControlLabel-label': {
+                      ml: 1
+                    }
+                  }}
+                />
+              ))}
+            </FormGroup>
+            
+            {formData.categories.length === 0 && (
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  color: 'error.main', 
+                  mt: 1,
+                  fontSize: '12px'
+                }}
+              >
+                Please select at least one category
+              </Typography>
+            )}
+          </Box>
+
+          {/* Product Image */}
+          <Box sx={{ 
+            bgcolor: 'background.paper', 
+            borderRadius: 2, 
+            p: { xs: 2, sm: 3 },
+            width: '100%',
+            boxShadow: theme.shadows[1],
+            border: '1px solid',
+            borderColor: 'divider'
+          }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                fontWeight: 600, 
+                mb: 2, 
+                color: 'text.primary',
+                fontSize: { xs: '16px', md: '18px' }
+              }}
+            >
+              Product Image
+            </Typography>
+            
+            <Box sx={{ textAlign: 'center' }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: { xs: '180px', sm: '200px', md: '220px' },
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                  mb: 2,
+                  cursor: 'pointer',
+                  background: 'linear-gradient(45deg, #000 0%, #003300 50%, #000 100%)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `repeating-linear-gradient(
+                      0deg,
+                      transparent,
+                      transparent 2px,
+                      rgba(0, 255, 0, 0.03) 2px,
+                      rgba(0, 255, 0, 0.03) 4px
+                    ),
+                    repeating-linear-gradient(
+                      90deg,
+                      transparent,
+                      transparent 2px,
+                      rgba(0, 255, 0, 0.03) 2px,
+                      rgba(0, 255, 0, 0.03) 4px
+                    )`,
+                  },
+                  '&::after': {
+                    content: '"01001001 11010110 00110100 10101010 01110011 11001100 00111001 10010110 11010101 00110011 10101001 01110110 00110100 11001010 01110011 10001100"',
+                    position: 'absolute',
+                    inset: 0,
+                    color: 'rgba(0, 255, 0, 0.1)',
+                    fontFamily: 'monospace',
+                    fontSize: { xs: '6px', sm: '8px' },
+                    lineHeight: { xs: '10px', sm: '12px' },
+                    wordSpacing: '4px',
+                    overflow: 'hidden',
+                    whiteSpace: 'pre-wrap',
+                    padding: '8px',
+                  }
+                }}
+              >
+                <Box sx={{ 
+                  position: 'relative', 
+                  zIndex: 2, 
+                  textAlign: 'center',
+                  color: '#00ff00',
+                  textShadow: '0 0 10px rgba(0,255,0,0.5)'
+                }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      color: '#00ff00', 
+                      fontWeight: 500,
+                      fontSize: { xs: '14px', sm: '16px' },
+                      mb: 0.5
+                    }}
+                  >
+                    Activate Windows
+                  </Typography>
+                  <Typography 
+                    variant="caption" 
+                    sx={{ 
+                      color: '#00ff00',
+                      fontSize: { xs: '10px', sm: '12px' },
+                      opacity: 0.8
+                    }}
+                  >
+                    Go to Settings to activate Windows
+                  </Typography>
+                </Box>
+              </Box>
+              
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  color: 'text.secondary',
+                  fontSize: '12px',
+                  textAlign: 'left'
+                }}
+              >
+                Choose from samples:
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Action Buttons */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: { xs: 'stretch', sm: 'flex-end' },
+        flexDirection: { xs: 'column', sm: 'row' },
+        gap: 2, 
+        mt: 4,
+        pt: 3,
+        borderTop: '1px solid',
+        borderColor: 'divider'
+      }}>
+        <Button 
+          variant="outlined" 
+          onClick={handleCancel}
+          sx={{ 
+            px: { xs: 2, sm: 3 }, 
+            py: 1,
+            borderColor: 'divider',
+            color: 'text.primary',
+            textTransform: 'none',
+            order: { xs: 2, sm: 1 },
+            '&:hover': {
+              bgcolor: 'action.hover',
+              borderColor: 'text.secondary',
+            },
+          }}
+        >
+          Cancel
+        </Button>
+        <Button 
+          variant="contained" 
+          onClick={handleSave}
+          sx={{ 
+            px: { xs: 2, sm: 3 }, 
+            py: 1,
+            bgcolor: 'primary.main',
+            color: 'primary.contrastText',
+            textTransform: 'none',
+            order: { xs: 1, sm: 2 },
+            '&:hover': {
+              bgcolor: 'primary.dark',
+            },
+          }}
+        >
+          Save Product
+        </Button>
       </Box>
     </Box>
   );

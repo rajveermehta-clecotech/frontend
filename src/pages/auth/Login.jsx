@@ -383,7 +383,7 @@ const Login = () => {
                         onClick={() => setShowPassword(!showPassword)}
                         edge="end"
                         size="small"
-                        sx={{ color: 'var(--mui-palette-text-secondary)' }}
+                        // sx={{ color: 'var(--mui-palette-text-secondary)' }}
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>

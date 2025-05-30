@@ -26,6 +26,7 @@ import "./index.css";
 import Products from "./pages/products/Products";
 import AddProduct from "./pages/products/AddProduct";
 import ProductDetails from "./pages/products/ProductDetails";
+import GridDebugTest from "./pages/GridDebugTest";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                       <Route path="/products/new" element={<AddProduct />} />
                       <Route path="/products/:id" element={<ProductDetails />} />
                       <Route path="/products/:id/edit" element={<ProductDetails />} />
+                      <Route path="/test" element={<GridDebugTest/>}/>
 
                       {/* Default Route */}
                       <Route path="/" element={<Navigate to="/dashboard" replace />} />

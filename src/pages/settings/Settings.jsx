@@ -12,7 +12,9 @@ import {
   useTheme, 
   useMediaQuery,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Paper,
+  Divider,
 } from '@mui/material';
 import { Person as PersonIcon, Lock as LockIcon } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
@@ -26,7 +28,7 @@ const InputField = React.memo(({ label, name, value, onChange, error, disabled, 
     <Typography 
       variant="body2" 
       sx={{ 
-        color: '#1976D2', 
+        color: 'primary.main', 
         fontWeight: 500, 
         mb: 1,
         fontSize: '14px'
@@ -45,28 +47,29 @@ const InputField = React.memo(({ label, name, value, onChange, error, disabled, 
       variant="outlined"
       size="small"
       sx={{
+        bgcolor: 'background.paper',
         '& .MuiOutlinedInput-root': {
-          backgroundColor: disabled ? '#f5f5f5' : 'white',
+          backgroundColor: disabled ? 'action.disabled' : 'background.paper',
           '& fieldset': { 
-            borderColor: '#e0e0e0',
-            borderRadius: '4px'
+            borderColor: 'divider',
+            borderRadius: '8px'
           },
           '&:hover fieldset': { 
-            borderColor: disabled ? '#e0e0e0' : '#1976D2' 
+            borderColor: disabled ? 'divider' : 'primary.main' 
           },
           '&.Mui-focused fieldset': { 
-            borderColor: '#1976D2',
-            borderWidth: '1px'
+            borderColor: 'primary.main',
+            borderWidth: '2px'
           },
           '& input': {
             padding: '12px 14px',
             fontSize: '14px',
-            color: disabled ? '#999' : '#333'
+            color: disabled ? 'text.disabled' : 'text.primary'
           }
         },
         '& .MuiFormHelperText-root': {
           fontSize: '12px',
-          color: disabled ? '#1976D2' : '#d32f2f',
+          color: disabled ? 'primary.main' : 'error.main',
           marginTop: '4px'
         }
       }}
@@ -84,25 +87,24 @@ const SubmitButton = React.memo(({ loading, label, disabled, onClick }) => (
     disabled={loading || disabled}
     onClick={onClick}
     sx={{
-      bgcolor: '#1a237e',
-      color: 'white',
+      bgcolor: 'primary.main',
+      color: 'primary.contrastText',
       textTransform: 'none',
       fontWeight: 500,
       fontSize: '14px',
       px: 3,
-      py: 1,
-      borderRadius: '4px',
-      float: 'right',
+      py: 1.5,
+      borderRadius: 2,
       '&:hover': { 
-        bgcolor: '#0d47a1' 
+        bgcolor: 'primary.dark' 
       },
       '&:disabled': { 
-        bgcolor: '#e0e0e0', 
-        color: '#999' 
+        bgcolor: 'action.disabled', 
+        color: 'text.disabled' 
       },
     }}
   >
-    {loading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : label}
+    {loading ? <CircularProgress size={20} sx={{ color: 'inherit' }} /> : label}
   </Button>
 ));
 
@@ -153,9 +155,9 @@ const Settings = () => {
     }
   }, [user]);
 
-  // Handle tab change with custom styling
-  const handleTabClick = (tabIndex) => {
-    setActiveTab(tabIndex);
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
     setErrors({});
     setProfileError(null);
     setPasswordError(null);
@@ -263,99 +265,107 @@ const Settings = () => {
   }, [passwordData, validatePasswordForm]);
 
   return (
-      <Box sx={{ backgroundColor: '#f8f9fa', minHeight: '100vh', p: 0 }}>
-        {/* Header */}
-        <Box sx={{ 
-          backgroundColor: 'white', 
-          borderBottom: '1px solid #e0e0e0',
+    <Box sx={{ 
+      bgcolor: 'background.default', 
+      minHeight: '100vh', 
+      p: 0 
+    }}>
+      {/* Header */}
+      <Paper 
+        elevation={0}
+        sx={{ 
+          bgcolor: 'background.paper', 
+          borderBottom: '1px solid',
+          borderColor: 'divider',
           px: 4,
           py: 3
-        }}>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              fontWeight: 400, 
-              color: '#333',
-              fontSize: '24px',
-              mb: 0.5
-            }}
-          >
-            Settings
-          </Typography>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: '#666',
-              fontSize: '14px'
-            }}
-          >
-            Manage your account preferences
-          </Typography>
-        </Box>
+        }}
+      >
+        <Typography 
+          variant="h4" 
+          sx={{ 
+            fontWeight: 600, 
+            color: 'text.primary',
+            fontSize: { xs: '1.5rem', sm: '2rem' },
+            mb: 0.5
+          }}
+        >
+          Settings
+        </Typography>
+        <Typography 
+          variant="body1" 
+          sx={{ 
+            color: 'text.secondary',
+            fontSize: '1rem'
+          }}
+        >
+          Manage your account preferences
+        </Typography>
+      </Paper>
 
-        {/* Tab Navigation */}
-        <Box sx={{ 
-          backgroundColor: 'white',
-          borderBottom: '1px solid #e0e0e0',
+      {/* Tab Navigation */}
+      <Paper
+        elevation={0}
+        sx={{
+          bgcolor: 'background.paper',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
           px: 4
-        }}>
-          <Box sx={{ display: 'flex', gap: 0 }}>
-            <Button
-              onClick={() => handleTabClick(0)}
-              sx={{
-                backgroundColor: activeTab === 0 ? '#e3f2fd' : 'transparent',
-                color: activeTab === 0 ? '#1976D2' : '#666',
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '14px',
-                px: 3,
-                py: 2,
-                borderRadius: 0,
-                borderBottom: activeTab === 0 ? '2px solid #1976D2' : '2px solid transparent',
-                '&:hover': {
-                  backgroundColor: '#f5f5f5'
-                }
-              }}
-            >
-              <PersonIcon sx={{ mr: 1, fontSize: '18px' }} />
-              Update Profile
-            </Button>
-            <Button
-              onClick={() => handleTabClick(1)}
-              sx={{
-                backgroundColor: activeTab === 1 ? '#e3f2fd' : 'transparent',
-                color: activeTab === 1 ? '#1976D2' : '#666',
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '14px',
-                px: 3,
-                py: 2,
-                borderRadius: 0,
-                borderBottom: activeTab === 1 ? '2px solid #1976D2' : '2px solid transparent',
-                '&:hover': {
-                  backgroundColor: '#f5f5f5'
-                }
-              }}
-            >
-              <LockIcon sx={{ mr: 1, fontSize: '18px' }} />
-              Change Password
-            </Button>
-          </Box>
-        </Box>
+        }}
+      >
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontWeight: 500,
+              fontSize: '14px',
+              minHeight: 60,
+              color: 'text.secondary',
+              '&.Mui-selected': {
+                color: 'primary.main',
+              }
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'primary.main',
+              height: 3,
+            }
+          }}
+        >
+          <Tab
+            icon={<PersonIcon sx={{ fontSize: '18px' }} />}
+            iconPosition="start"
+            label="Update Profile"
+            sx={{ px: 3 }}
+          />
+          <Tab
+            icon={<LockIcon sx={{ fontSize: '18px' }} />}
+            iconPosition="start"
+            label="Change Password"
+            sx={{ px: 3 }}
+          />
+        </Tabs>
+      </Paper>
 
-        {/* Content Area */}
-          <Box sx={{ 
-            backgroundColor: 'white',
-            borderRadius: '1px',
-            border: '1px solid #e0e0e0',
-            p: 4,
+      {/* Content Area */}
+      <Box sx={{ p: 4 }}>
+        <Card
+          sx={{
+            bgcolor: 'background.paper',
+            borderRadius: 3,
+            border: '1px solid',
+            borderColor: 'divider',
+            boxShadow: theme.shadows[1],
             maxWidth: '100%'
-          }}>
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
             {/* Success Message */}
             {successMessage && (
               <Alert 
                 severity="success" 
-                sx={{ mb: 3 }}
+                sx={{ mb: 3, borderRadius: 2 }}
                 onClose={() => setSuccessMessage(null)}
               >
                 {successMessage}
@@ -366,21 +376,30 @@ const Settings = () => {
             {activeTab === 0 && (
               <Box>
                 <Typography 
-                  variant="h6" 
+                  variant="h5" 
                   sx={{ 
-                    fontWeight: 500,
-                    color: '#333',
-                    fontSize: '18px',
-                    mb: 3
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    fontSize: '1.25rem',
+                    mb: 1
                   }}
                 >
                   Profile Information
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: 'text.secondary',
+                    mb: 4
+                  }}
+                >
+                  Update your personal information and contact details
                 </Typography>
 
                 {profileError && (
                   <Alert 
                     severity="error" 
-                    sx={{ mb: 3 }}
+                    sx={{ mb: 3, borderRadius: 2 }}
                     onClose={() => setProfileError(null)}
                   >
                     {profileError}
@@ -432,7 +451,9 @@ const Settings = () => {
                   </Grid>
                 </Grid>
                 
-                <Box sx={{ mt: 4, textAlign: 'right' }}>
+                <Divider sx={{ my: 4 }} />
+                
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <SubmitButton 
                     loading={loading} 
                     label="Update Profile" 
@@ -446,20 +467,30 @@ const Settings = () => {
             {activeTab === 1 && (
               <Box>
                 <Typography 
-                  variant="h6" 
+                  variant="h5" 
                   sx={{ 
-                    fontWeight: 500,
-                    color: '#333',
-                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    fontSize: '1.25rem',
+                    mb: 1
                   }}
                 >
                   Change Password
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    color: 'text.secondary',
+                    mb: 4
+                  }}
+                >
+                  Update your password to keep your account secure
                 </Typography>
 
                 {passwordError && (
                   <Alert 
                     severity="error" 
-                    sx={{ mb: 3 }}
+                    sx={{ mb: 3, borderRadius: 2 }}
                     onClose={() => setPasswordError(null)}
                   >
                     {passwordError}
@@ -501,7 +532,9 @@ const Settings = () => {
                   </Grid>
                 </Grid>
                 
-                <Box sx={{ mt: 4, textAlign: 'right' }}>
+                <Divider sx={{ my: 4 }} />
+                
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <SubmitButton 
                     loading={loading} 
                     label="Change Password" 
@@ -510,8 +543,10 @@ const Settings = () => {
                 </Box>
               </Box>
             )}
-          </Box>
-        </Box>
+          </CardContent>
+        </Card>
+      </Box>
+    </Box>
   );
 };
 
