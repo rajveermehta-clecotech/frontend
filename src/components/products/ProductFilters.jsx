@@ -35,14 +35,12 @@ export const ProductFilters = ({
   // Handle category change with proper event handling
   const handleCategorySelectChange = useCallback((e) => {
     const value = e.target.value;
-    console.log('Category filter changed to:', value);
     onCategoryChange(value);
   }, [onCategoryChange]);
 
   // Handle sort change with proper event handling
   const handleSortSelectChange = useCallback((e) => {
     const value = e.target.value;
-    console.log('Sort changed to:', value);
     onSortChange(value);
   }, [onSortChange]);
 

@@ -87,7 +87,6 @@ const ProductManagement = () => {
   const fetchProducts = useCallback(async (newFilters = {}, forceRefresh = false) => {
     // Prevent duplicate API calls
     if (isFetchingRef.current && !forceRefresh) {
-      console.log("Fetch already in progress, skipping...");
       return;
     }
 
@@ -96,7 +95,6 @@ const ProductManagement = () => {
 
     // Check if we're making the same request
     if (!forceRefresh && lastFetchParamsRef.current === filterSignature) {
-      console.log("Same request detected, skipping...");
       return;
     }
 
@@ -110,7 +108,6 @@ const ProductManagement = () => {
 
       if (useSearchAPI) {
         // Use search API when filters are applied
-        console.log("Using search API with filters:", currentFilters);
 
         const params = {
           page: currentFilters.page,
@@ -132,7 +129,6 @@ const ProductManagement = () => {
         response = await productService.searchProducts(params);
       } else {
         // Use basic vendor products API for simple listing
-        console.log("Using basic products API");
         
         const params = {
           page: currentFilters.page,
@@ -157,7 +153,6 @@ const ProductManagement = () => {
         // Update filters state only if successful
         setFilters(currentFilters);
         
-        console.log(`Successfully fetched ${response.data.products?.length || 0} products`);
       } else {
         throw new Error("Invalid response format");
       }
@@ -177,7 +172,6 @@ const ProductManagement = () => {
   // Initialize products on component mount
   useEffect(() => {
     const initializeProducts = async () => {
-      console.log("Initializing products...");
       await fetchProducts({}, true); // Force refresh on init
       setIsInitialized(true);
     };
@@ -189,7 +183,6 @@ const ProductManagement = () => {
 
   // Handle search input change with proper debouncing
   const handleSearchChange = useCallback((searchTerm) => {
-    console.log("Search term changed:", searchTerm);
     
     // Clear existing timeout
     if (searchTimeoutRef.current) {
@@ -209,14 +202,12 @@ const ProductManagement = () => {
         search: searchTerm, 
         page: 1 
       };
-      console.log("Executing debounced search:", newFilters);
       fetchProducts(newFilters);
     }, 500);
   }, [fetchProducts]);
 
   // Handle category filter change - immediate API call
   const handleCategoryChange = useCallback((category) => {
-    console.log("Category changed:", category);
     
     // Clear any pending search timeout
     if (searchTimeoutRef.current) {
@@ -236,7 +227,6 @@ const ProductManagement = () => {
 
   // Handle sort change - immediate API call
   const handleSortChange = useCallback((sortOption) => {
-    console.log("Sort changed:", sortOption);
     
     // Clear any pending search timeout
     if (searchTimeoutRef.current) {
@@ -259,7 +249,6 @@ const ProductManagement = () => {
 
   // Handle pagination - immediate API call
   const handlePageChange = useCallback((page) => {
-    console.log("Page changed:", page);
     
     const newFilters = { page };
     setFilters(prev => ({ ...prev, ...newFilters }));
@@ -268,7 +257,6 @@ const ProductManagement = () => {
 
   // Clear all filters
   const clearAllFilters = useCallback(() => {
-    console.log("Clearing all filters");
     
     // Clear any pending timeouts
     if (searchTimeoutRef.current) {
