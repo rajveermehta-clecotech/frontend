@@ -33,7 +33,6 @@ const VendorOnboarding = ({ onComplete }) => {
   const [completion, setCompletion] = useState(null);
   const { addToast } = useToast();
   
-  // FIXED: Use ref to prevent useEffect from running multiple times
   const hasLoadedProfile = useRef(false);
   const isNavigating = useRef(false);
 
@@ -108,7 +107,6 @@ const VendorOnboarding = ({ onComplete }) => {
   useEffect(() => {
     const loadVendorProfile = async () => {
       if (hasLoadedProfile.current) {
-        console.log("📋 Profile already loaded, skipping...");
         return;
       }
 
@@ -116,7 +114,6 @@ const VendorOnboarding = ({ onComplete }) => {
         setInitialLoading(true);
         hasLoadedProfile.current = true;
         
-        console.log("📋 Loading vendor profile...");
         const { vendor, completion } = await vendorService.getVendorProfile();
 
         if (vendor) {
@@ -134,16 +131,13 @@ const VendorOnboarding = ({ onComplete }) => {
             idNumber: vendor.idNumber || "",
             documentFile: vendor.documentFile || null,
           });
-          console.log("📋 Form data loaded:", vendor);
         }
 
         if (completion) {
           setCompletion(completion);
-          console.log("📊 Completion status loaded:", completion);
         }
 
         // Always start from step 1 for proper flow
-        console.log("🎯 Setting initial step to 1");
         setCurrentStep(1);
 
       } catch (error) {
@@ -160,11 +154,9 @@ const VendorOnboarding = ({ onComplete }) => {
 
   // FIXED: Monitor step changes
   useEffect(() => {
-    console.log("🎯 Current step changed to:", currentStep);
   }, [currentStep]);
 
   const handleInputChange = (field, value) => {
-    console.log("📝 Input change:", field, "=", value);
     
     setFormData((prev) => ({ 
       ...prev, 
@@ -205,7 +197,6 @@ const VendorOnboarding = ({ onComplete }) => {
   };
 
   const validateStep = (step) => {
-    console.log("🔍 Validating step:", step);
     const newErrors = {};
 
     switch (step) {
@@ -274,7 +265,6 @@ const VendorOnboarding = ({ onComplete }) => {
 
     setErrors(newErrors);
     const isValid = Object.keys(newErrors).length === 0;
-    console.log("✅ Step", step, "validation result:", isValid);
     return isValid;
   };
 
@@ -312,15 +302,10 @@ const VendorOnboarding = ({ onComplete }) => {
   // FIXED: Completely rewritten handleNext
   const handleNext = async () => {
     if (isNavigating.current) {
-      console.log("🔒 Already navigating, skipping...");
       return;
     }
-
-    console.log("🚀 handleNext called - Current step:", currentStep);
-    console.log("📋 Form data:", formData);
     
     if (!validateStep(currentStep)) {
-      console.log("❌ Validation failed for step:", currentStep);
       return;
     }
 
@@ -332,9 +317,7 @@ const VendorOnboarding = ({ onComplete }) => {
 
       switch (currentStep) {
         case 1:
-          console.log("📤 Sending step 1 data:", formData.vendorType);
           result = await vendorService.updateStep1(formData.vendorType);
-          console.log("✅ Step 1 result:", result);
           addToast("Vendor type updated successfully!", "success");
           break;
 
@@ -347,9 +330,7 @@ const VendorOnboarding = ({ onComplete }) => {
             state: formData.state,
             postalCode: formData.postalCode,
           };
-          console.log("📤 Sending step 2 data:", step2Data);
           result = await vendorService.updateStep2(step2Data);
-          console.log("✅ Step 2 result:", result);
           addToast("Business information updated successfully!", "success");
           break;
 
@@ -371,12 +352,9 @@ const VendorOnboarding = ({ onComplete }) => {
             step3Data.idNumber = formData.idNumber.trim();
           }
 
-          console.log("📤 Sending step 3 data:", step3Data);
           result = await vendorService.updateStep3(step3Data);
-          console.log("✅ Step 3 result:", result);
           addToast("Verification details updated successfully!", "success");
           
-          console.log("🏁 Completing onboarding...");
           setLoading(false);
           isNavigating.current = false;
           handleOnboardingComplete();
@@ -388,14 +366,12 @@ const VendorOnboarding = ({ onComplete }) => {
 
       // Update completion status without affecting navigation
       if (result && result.completion) {
-        console.log("📊 Updating completion:", result.completion);
         setCompletion(result.completion);
       }
 
       // FIXED: Simple step increment after successful API call
       if (currentStep < 3) {
         const nextStep = currentStep + 1;
-        console.log("➡️ Moving from step", currentStep, "to step", nextStep);
         setCurrentStep(nextStep);
       }
 
@@ -405,7 +381,6 @@ const VendorOnboarding = ({ onComplete }) => {
     } finally {
       setLoading(false);
       isNavigating.current = false;
-      console.log("🔄 Navigation completed");
     }
   };
 
@@ -485,14 +460,6 @@ const VendorOnboarding = ({ onComplete }) => {
   return (
     <div className="fixed inset-0 z-50 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto">
       <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl my-4 sm:my-0">
-        {/* Debug Section */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-            <div className="text-xs text-yellow-700">
-              <strong>Debug:</strong> Step {currentStep}/3 | Valid: {isStepValid() ? '✅' : '❌'} | Loading: {loading ? '⏳' : '✅'}
-            </div>
-          </div>
-        )}
 
         {/* Header */}
         <div className="text-center mb-4 sm:mb-6">
